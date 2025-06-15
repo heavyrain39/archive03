@@ -4,6 +4,8 @@
 
 [![Website](https://img.shields.io/badge/Website-Live-brightgreen?style=flat-square)](https://heavyrain39.github.io/archive03/)
 
+![Archive 03 Banner](static/images/mew-kurumi-mikael-banner.webp)
+
 딱딱하고 어려운 투자 콘텐츠를 탈피. 천사, 악마, 안드로이드라는 세 명의 인외 미소녀 캐릭터가 최신 데이터를 바탕으로 전하는 대화 형식의 투자 정보 연재 블로그. 데이터/성장성/리스크를 대표하는 세 캐릭터의 티키타카를 보다 보면 어느새 당신도 경제 전문가.
 
 ## 주요 기능 (Key Features)
