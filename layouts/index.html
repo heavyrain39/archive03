@@ -1,0 +1,55 @@
+{{ define "main" }}
+
+<div class="container">
+
+    {{/* 
+        [수정 사항 1]
+        헤더 영역과 중복으로 표시되던 페이지 제목과 부제를 삭제했습니다.
+        <header class="page-header">...</header> 블록 전체를 제거하여 깔끔하게 만듭니다.
+    */}}
+
+    <div class="report-grid"> 
+        {{/* [수정] .RelPermalink이 "/about/"이 아닌 페이지만 목록에 표시하도록 조건 추가 */}}
+        {{ range where .Site.RegularPages ".RelPermalink" "ne" "/about/" }}
+            {{ $post := . }}
+            
+            <article class="report-card-v2">
+
+                {{ with $post.Params.thumbnail }}
+                    {{ $original := $post.Resources.Get . }}
+
+                    {{ if $original }}
+                        {{/* 
+                            [정보]
+                            이 코드는 이미지를 800x450 (16:9 비율)으로 크롭하고 있습니다.
+                            현재 카드의 폭이 넓어서 이미지가 커 보이는 것 뿐이며,
+                            나중에 게시물이 여러 개 추가되면 카드의 폭이 줄어들면서
+                            이미지도 자연스럽게 의도한 크기로 보이게 됩니다.
+                        */}}
+                        {{ $thumbnail := $original.Fill "800x450" }}
+
+                        <a href="{{ $post.Permalink }}" class="card-thumbnail-link-v2" aria-label="Read more about {{ $post.Title }}">
+                            <img src="{{ $thumbnail.RelPermalink }}" alt="{{ $post.Title }} 썸네일" class="card-thumbnail-v2" loading="lazy" width="{{ $thumbnail.Width }}" height="{{ $thumbnail.Height }}">
+                        </a>
+                    {{ else }}
+                        {{/* 썸네일 이미지를 찾지 못했을 때를 대비한 영역 (현재는 비워둠) */}}
+                    {{ end }}
+                {{ end }}
+
+                <div class="card-content-v2">
+                    <div>
+                        <h2 class="card-title-v2">
+                            <a href="{{ .Permalink }}">{{ .Title }}</a>
+                        </h2>
+                    </div>
+                    <div class="card-meta-v2">
+                        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006. 01. 02" }}</time>
+                    </div>
+                </div>
+            </article>
+        {{ end }}
+    </div>
+
+</div>
+
+{{ end }}

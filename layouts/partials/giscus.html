@@ -1,0 +1,22 @@
+{{/*
+    Params를 사용하여 giscus 설정에 접근합니다.
+*/}}
+{{ with .Site.Params.giscus }}
+    {{ if and .repo (ne .repo "") }}
+        <script src="https://giscus.app/client.js"
+                data-repo="{{ .repo }}"
+                data-repo-id="{{ .repoId }}"
+                data-category="{{ .category }}"
+                data-category-id="{{ .categoryId }}"
+                data-mapping="{{ .mapping }}"
+                data-strict="{{ .strict }}"
+                data-reactions-enabled="{{ .reactionsEnabled }}"
+                data-emit-metadata="{{ .emitMetadata }}"
+                data-input-position="{{ .inputPosition }}"
+                data-theme="{{ .theme }}"
+                data-lang="{{ .lang }}"
+                crossorigin="anonymous"
+                async>
+        </script>
+    {{ end }}
+{{ end }}

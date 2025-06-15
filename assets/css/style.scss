@@ -1,0 +1,395 @@
+/* style.css for Archive 03 */
+
+/* --------------------------------------------------
+   1. 글로벌 설정: 폰트, 변수, 리셋
+   -------------------------------------------------- */
+@font-face {
+    font-family: 'Paperlogy';
+    src: url('{{ "fonts/Paperlogy-4Regular.woff2" | relURL }}') format('woff2');
+    font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+    font-family: 'Pretendard Variable';
+    src: url('{{ "fonts/PretendardVariable.woff2" | relURL }}') format('woff2-variations');
+    font-weight: 100 900; font-style: normal; font-display: swap;
+}
+:root {
+    --mint-green: #64F0C8; --mint-green-darker: #4BCDAA; --dark-bg: #1e2228;
+    --dark-surface: #262b33; --light-text: #e0e0e0; --secondary-text: #a8b2c0;
+    --border-color: #3a404d; --overlay-color: rgba(20, 22, 25, 0.75);
+    --font-heading: 'Paperlogy', sans-serif; --font-body: 'Pretendard Variable', sans-serif;
+    --base-font-size: 1.1rem;
+    --line-height-base: 1.8;
+    --spacing-sm: 0.625rem;
+    --spacing-md: 1.125rem;
+    --spacing-lg: 1.75rem;
+    --spacing-xl: 2.5rem;
+    --spacing-xxl: 3.75rem;
+    --border-radius-md: 10px; --border-width: 1px; --transition-speed: 0.3s;
+    --transition-timing: ease-in-out; --container-width: 1180px;
+    --post-container-width: 820px; --container-padding: 1.25rem;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: var(--base-font-size); }
+body {
+    background-color: var(--dark-bg); color: var(--light-text); font-family: var(--font-body);
+    line-height: var(--line-height-base); overflow-x: hidden; display: flex;
+    flex-direction: column; min-height: 100vh;
+}
+.container { width: 100%; max-width: var(--container-width); margin: 0 auto; padding: 0 var(--container-padding); }
+a { color: var(--mint-green); text-decoration: none; transition: color var(--transition-speed) var(--transition-timing); }
+a:hover { color: var(--mint-green-darker); }
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading); color: var(--light-text);
+    line-height: var(--line-height-heading); margin-bottom: var(--spacing-md);
+}
+
+/* --------------------------------------------------
+   2. 헤더 & 푸터 (공통 레이아웃)
+   -------------------------------------------------- */
+#main-header {
+    background-color: rgba(38, 43, 51, 0.85); backdrop-filter: blur(10px);
+    padding: var(--spacing-md) 0; position: sticky; top: 0; z-index: 1000;
+    border-bottom: var(--border-width) solid var(--border-color);
+}
+#main-header .container { display: flex; justify-content: space-between; align-items: center; }
+.logo a { color: var(--light-text); display: flex; flex-direction: column; }
+.logo a:hover { color: var(--light-text); }
+.logo .logo-main {
+    font-family: var(--font-heading); font-size: 1.8rem; font-weight: bold;
+    color: var(--mint-green); line-height: 1.1;
+}
+.logo .logo-sub { font-size: 0.8rem; color: var(--secondary-text); }
+#main-header nav ul { list-style: none; display: flex; gap: var(--spacing-lg); }
+#main-header nav ul li a {
+    color: var(--secondary-text); font-size: 1.05rem; padding-bottom: 5px;
+    border-bottom: 2px solid transparent; transition: color var(--transition-speed), border-color var(--transition-speed);
+}
+#main-header nav ul li a:hover,
+#main-header nav ul li a.active { color: var(--mint-green); border-bottom-color: var(--mint-green); }
+main { padding: var(--spacing-xxl) 0; flex-grow: 1; }
+#main-footer {
+    padding: var(--spacing-xl) 0; margin-top: var(--spacing-xxl); text-align: center;
+    color: var(--secondary-text); font-size: 0.9rem;
+    border-top: var(--border-width) solid var(--border-color); flex-shrink: 0;
+}
+
+/* --------------------------------------------------
+   3. 글 목록 (메인 페이지) 스타일
+   -------------------------------------------------- */
+.report-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--spacing-xl); }
+.report-card-v2 {
+    background-color: var(--dark-surface); border-radius: var(--border-radius-md); overflow: hidden;
+    display: flex; flex-direction: column; border: var(--border-width) solid transparent;
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed), border-color var(--transition-speed);
+}
+.report-card-v2:hover { transform: translateY(-8px); box-shadow: 0 10px 30px rgba(0,0,0,0.25); border-color: var(--mint-green); }
+.card-thumbnail-link-v2 { display: block; aspect-ratio: 16 / 9; overflow: hidden; background-color: var(--dark-bg); }
+.card-thumbnail-v2 { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease-out; }
+.report-card-v2:hover .card-thumbnail-v2 { transform: scale(1.05); }
+.card-content-v2 {
+    padding: var(--spacing-lg); background-color: var(--dark-surface); display: flex;
+    flex-direction: column; flex-grow: 1; justify-content: space-between;
+}
+.card-title-v2 {
+    font-size: 1.25rem; font-family: var(--font-body); font-weight: 600;
+    margin-bottom: var(--spacing-lg); line-height: 1.5;
+}
+.card-title-v2 a { color: var(--light-text); }
+.card-title-v2 a:hover { color: var(--mint-green); }
+.card-meta-v2 { font-size: 0.85rem; color: var(--secondary-text); text-align: right; }
+
+/* --------------------------------------------------
+   4. 개별 포스트 (single.html) 스타일
+   -------------------------------------------------- */
+.post .container { max-width: var(--post-container-width); }
+.post-header { text-align: center; margin-bottom: var(--spacing-xxl); }
+.post-title { font-size: 2.2rem; margin-bottom: var(--spacing-md); }
+.post-meta { color: var(--secondary-text); font-size: 0.95rem; }
+.post-content { font-size: 1rem; color: var(--light-text); }
+.post-content p { margin-bottom: var(--spacing-lg); text-align: justify; }
+.post-content ul,
+.post-content ol { margin-bottom: var(--spacing-lg); padding-left: 2em; text-align: justify; }
+.post-content strong,
+.post-content b { color: var(--mint-green); font-weight: 600; }
+.post-content blockquote {
+    border-left: 4px solid var(--mint-green); padding-left: 1.5em;
+    margin: var(--spacing-lg) 0; font-style: italic; color: var(--secondary-text);
+}
+/* [수정] :not()을 연달아 사용하여 .cast-icon도 이 규칙에서 제외합니다. */
+.post-content img:not(.char-icon):not(.cast-icon) { 
+    max-width: 100%; height: auto; border-radius: var(--border-radius-md); 
+    margin: var(--spacing-lg) 0; 
+}
+.post-comments { margin-top: var(--spacing-xxl); padding-top: var(--spacing-xxl); border-top: 1px solid var(--border-color); }
+.post-comments .container { max-width: var(--post-container-width); }
+
+/* --------------------------------------------------
+   5. 숏코드 (Shortcodes) 스타일
+   -------------------------------------------------- */
+.char-header {
+    /* 기존 text-align은 Flexbox로 대체하므로 삭제하거나 주석 처리합니다. */
+    /* text-align: center; */
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-md);
+
+    /* [해결책] Flexbox 적용 */
+    display: flex;
+    flex-direction: column; /* 자식 요소들을 세로로 쌓도록 설정 */
+    align-items: center;    /* 세로로 쌓인 아이템들을 수평 중앙 정렬 */
+}
+.char-icon {
+    width: 150px; height: 150px; border-radius: 50%;
+    border: 3px solid var(--border-color); object-fit: cover; background-color: var(--dark-bg);
+    margin-top: var(--spacing-sm);
+    animation: breathing 4s ease-in-out infinite;
+}
+.char-name {
+    font-family: var(--font-heading); font-size: 1.2rem; font-weight: 600;
+    color: var(--mint-green); margin: 0; padding: 0; border: none;
+}
+
+/* 최종 브리핑 박스 스타일 */
+.briefing-box {
+    background-color: var(--dark-surface); border: 1px solid var(--border-color);
+    border-left: 5px solid var(--mint-green); border-radius: var(--border-radius-md);
+    padding: var(--spacing-xl); margin-top: var(--spacing-xxl); margin-bottom: var(--spacing-xxl);
+}
+.briefing-box h3 {
+    font-family: var(--font-heading); font-size: 2.2rem; color: var(--light-text);
+    text-align: center; margin-top: 0; margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-lg); border-bottom: 1px solid var(--border-color);
+}
+.briefing-box h4 {
+    display: flex; align-items: center; font-family: var(--font-body);
+    font-size: 1.4rem; font-weight: 700; color: var(--mint-green);
+    margin-top: var(--spacing-xl); margin-bottom: var(--spacing-md);
+}
+.briefing-box h4:first-of-type { margin-top: 0; }
+.briefing-box .svg-icon {
+    display: inline-flex; align-items: center; width: 1.4em;
+    height: 1.4em; margin-right: 0.6em; flex-shrink: 0;
+}
+.briefing-box .svg-icon svg { width: 100%; height: 100%; }
+.briefing-box ul { list-style-type: none; padding-left: 0; margin-left: 0.5em; line-height: 1.8; }
+.briefing-box li { padding-left: 1.5em; position: relative; margin-bottom: var(--spacing-sm); }
+.briefing-box li::before {
+    content: "•"; color: var(--mint-green); font-weight: bold;
+    display: inline-block; position: absolute; left: 0;
+}
+.final-conclusion {
+    margin-top: var(--spacing-xl); padding-top: var(--spacing-lg);
+    border-top: 1px dashed var(--border-color); color: var(--secondary-text);
+}
+
+/* --------------------------------------------------
+   6. 애니메이션 (Animations)
+   -------------------------------------------------- */
+@keyframes breathing {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+    100% { transform: translateY(0); }
+}
+
+/* --------------------------------------------------
+   7. About 페이지 스타일 (v3 - 최종 레이아웃)
+   -------------------------------------------------- */
+.about-title-image {
+    display: block;
+    width: 100%; /* [변경] 너비를 부모 요소의 100%로 설정 */
+    max-width: 2000px; /* [유지] 이미지가 불필요하게 커지는 것을 막는 최대 한계선 */
+    margin: var(--spacing-lg) auto var(--spacing-xl);
+}
+
+.about-section {
+    max-width: var(--post-container-width);
+    margin: 0 auto var(--spacing-xxl);
+}
+
+.about-section h2 {
+    font-size: 2.2rem;
+    margin-bottom: var(--spacing-lg); /* [변경] 제목과 이미지 사이의 간격 */
+    text-align: center;
+    /* [변경] 밑줄(border-bottom) 제거 */
+}
+
+.about-section > p, .operator-card p {
+    text-align: justify; /* [변경] 양쪽 정렬 적용 */
+    color: var(--secondary-text);
+}
+
+.operator-card {
+    text-align: center; /* 운영자 카드는 중앙 정렬 유지 */
+}
+
+.operator-card strong {
+    color: var(--light-text);
+}
+
+.cast-grid-horizontal {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+}
+
+.cast-card-horizontal {
+    background-color: var(--dark-surface);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-xl);
+    border: 1px solid var(--border-color);
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    display: flex;
+    align-items: flex-start; /* [변경] 상단 정렬로 변경하여 텍스트가 위에서부터 시작되도록 */
+    gap: var(--spacing-xl);
+}
+.cast-card-horizontal:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* [추가] 이미지와 이름을 묶는 왼쪽 섹션 */
+.cast-identity {
+    flex-shrink: 0;
+    width: 150px; /* 고정 너비 지정 */
+    text-align: center;
+}
+
+.cast-icon {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--border-color);
+    display: block;
+    margin-bottom: var(--spacing-sm); /* [변경] 이름과의 간격 */
+    animation: breathing 4s ease-in-out infinite;
+}
+
+.cast-text-content {
+    flex-grow: 1; 
+}
+
+.cast-name {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    color: var(--mint-green);
+}
+
+.cast-role {
+    font-family: var(--font-heading); /* [변경] Paperlogy 폰트 적용 */
+    font-size: 1.1rem; /* [변경] 폰트 크기 살짝 키움 */
+    font-weight: 600;
+    color: var(--light-text);
+    text-align: left;
+}
+
+.cast-signature {
+    font-family: var(--font-body);
+    font-style: italic;
+    color: var(--mint-green);
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-sm) 0;
+    min-height: 3.2em; 
+    display: flex;
+    align-items: center;
+    /* [변경] 인용구도 양쪽 정렬을 위해 왼쪽 정렬로 초기화 */
+    text-align: left;
+}
+
+.cast-description {
+    font-size: 0.95rem;
+    color: var(--secondary-text);
+    line-height: 1.6;
+    text-align: justify; /* [변경] 설명 텍스트 양쪽 정렬 적용 */
+}
+
+.color-accent {
+    color: var(--mint-green);
+}
+
+/* style.scss 파일 맨 아래에 추가 */
+
+.disclaimer {
+    font-size: 0.8rem;
+    margin-top: var(--spacing-xl);
+    opacity: 0.7;
+}
+
+.cast-dialogue {
+    background-color: var(--dark-bg);
+    border-left: 3px solid var(--mint-green);
+    padding: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+    border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+    text-align: justify;
+}
+
+/* --------------------------------------------------
+   8. Operator 섹션 스타일 (v2 - 세로 정렬 버튼)
+   -------------------------------------------------- */
+.operator-card {
+    padding: var(--spacing-xl);
+    background-color: var(--dark-surface);
+    border-radius: var(--border-radius-md);
+    text-align: center;
+}
+
+.operator-card p {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: justify;
+    margin-bottom: var(--spacing-md);
+}
+.operator-card p:last-of-type {
+    margin-bottom: var(--spacing-xl);
+}
+
+/* [변경] 버튼들을 담는 컨테이너 */
+.operator-links {
+    display: flex;
+    flex-direction: column; /* 세로로 쌓도록 변경 */
+    align-items: center;    /* 수평 중앙 정렬 */
+    gap: var(--spacing-md); /* 버튼 사이의 간격 */
+    width: 100%;
+    max-width: 400px; /* 버튼들의 최대 너비 지정 */
+    margin: 0 auto; /* 컨테이너 자체를 중앙에 배치 */
+}
+
+/* [변경] 아이콘이 포함된 버튼 스타일 */
+.button-with-icon {
+    display: flex; /* 내부 요소 정렬을 위해 flex 유지 */
+    align-items: center;
+    width: 100%; /* 컨테이너 너비를 100% 채움 (너비 통일) */
+    padding: 0.7rem var(--spacing-lg); /* 패딩 재조정 */
+    gap: 0.8em; /* 아이콘과 텍스트 사이 간격 */
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    color: var(--secondary-text);
+    font-family: var(--font-body);
+    font-weight: 400;
+    transition: all var(--transition-speed) var(--transition-timing);
+}
+
+.button-with-icon:hover {
+    background-color: var(--mint-green);
+    color: var(--dark-bg);
+    border-color: var(--mint-green);
+    transform: translateY(-3px);
+}
+
+/* [추가] 버튼 내부 SVG 아이콘의 공간 고정 */
+.button-with-icon svg {
+    width: 1.2em;
+    height: 1.2em;
+    flex-shrink: 0; /* 아이콘이 찌그러지지 않도록 고정 */
+}
+
+/* [핵심] 버튼 내부 텍스트 영역 스타일 */
+.button-with-icon span {
+    flex-grow: 1; /* 남은 공간을 모두 차지하도록 설정 */
+    text-align: center; /* 자신의 영역 내에서 중앙 정렬 */
+}

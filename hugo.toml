@@ -1,0 +1,58 @@
+# 1. 기본 사이트 설정
+baseURL = 'https://heavyrain39.github.io/archive03/' # 프로젝트 이름에 맞게 수정
+languageCode = 'ko-KR'
+title = 'Archive 03' # 프로젝트 이름으로 수정
+[pagination]
+  pagerSize = 5
+
+# 2. 테마 설정 (우리는 직접 만들 것이므로 주석 처리)
+# theme = "..."
+
+# 3. 사이트 전체에서 사용할 추가 정보 (Params)
+[params]
+  subtitle = '세 명의 인외 소녀가 전하는 투자 인사이트'
+  author = '야차완'
+  description = "'Archive 03'은 천사, 악마, 안드로이드라는 세 명의 인외 소녀가 최신 경제 데이터를 바탕으로 투자에 대한 인사이트를 나누는 토크형 리포트 블로그입니다."
+  
+  # giscus 설정을 params 안에 넣기
+  [params.giscus]
+    repo = "temp/temp"
+    repoId = "temp"
+    category = "General"
+    categoryId = "temp"
+    mapping = "pathname"
+    strict = "0"
+    reactionsEnabled = "1"
+    emitMetadata = "0"
+    inputPosition = "top"
+    lang = "ko"
+    theme = "dark_dimmed"
+    loading = "lazy"
+
+# 4. 헤더 메뉴 설정
+[menu]
+  [[menu.main]]
+    identifier = "report"
+    name = "Report"
+    url = "/"
+    weight = 10
+  [[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 20
+
+# 5. 마크다운 렌더러 설정
+[markup.goldmark.renderer]
+  unsafe = true # HTML 태그를 마크다운에 직접 사용할 수 있도록 허용
+
+# 8. 미디어 타입 및 출력 포맷 설정 (추가)
+# .css 파일의 MIME 타입을 명시적으로 지정하여 "text/plain" 오류를 방지합니다.
+[mediaTypes]
+  [mediaTypes."text/css"]
+    suffixes = ["css"]
+
+[outputFormats]
+  [outputFormats.CSS]
+    mediaType = "text/css"
+    baseName = "style"

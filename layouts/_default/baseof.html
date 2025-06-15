@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ block "title" . }}{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}{{ end }}</title>
+    
+    <!-- 메타 태그 (SEO) -->
+    <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ if .IsPage }}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
+    <meta name="author" content="{{ .Site.Params.author }}">
+    
+    <!-- 스타일시트 링크 (나중에 만들 파일) -->
+    {{ $style := resources.Get "css/style.scss" }}
+    {{ if $style }}
+        {{ $style = $style | resources.ExecuteAsTemplate "style.scss" . | toCSS | resources.Minify | resources.Fingerprint }}
+        <link rel="stylesheet" href="{{ $style.Permalink }}">
+    {{ end }}
+
+    <!-- Favicon (나중에 추가할 파일) -->
+    <!-- <link rel="icon" type="image/png" href="/favicon.png"> -->
+</head>
+<body class="dark-mode">
+
+    {{/* ================== Header ================== */}}
+    <header id="main-header">
+        <div class="container">
+            <div class="logo">
+                <a href="{{ .Site.BaseURL }}">
+                    <span class="logo-main">{{ .Site.Title }}</span>
+                    <span class="logo-sub">{{ .Site.Params.subtitle }}</span>
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    {{ range .Site.Menus.main }}
+                    <li>
+                        <a href="{{ .URL }}" {{ if .Params.target }}target="{{ .Params.target }}" rel="noopener noreferrer"{{ end }}>
+                            {{ .Name }}
+                        </a>
+                    </li>
+                    {{ end }}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {{/* ================== Content Area ================== */}}
+        {{/* 이 블록이 각 페이지의 고유한 내용으로 채워집니다 */}}
+        {{ block "main" . }}
+        {{ end }}
+    </main>
+
+    {{/* ================== Footer ================== */}}
+    <footer id="main-footer">
+        <div class="container">
+            <p>© {{ now.Format "2006" }} {{ .Site.Title }}. All Rights Reserved.</p>
+            <!-- 개인정보처리방침 등 추가 링크가 필요하면 여기에 추가 -->
+            <!-- <p><a href="/privacy">개인정보처리방침</a></p> -->
+        </div>
+    </footer>
+
+</body>
+</html>
