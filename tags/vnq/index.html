@@ -11,13 +11,13 @@
     
     
         
-        <link rel="stylesheet" href="https://heavyrain39.github.io/archive03/style.min.ff8761fe3421c1a26e560f6ff36a93a51bce33e0e145ae3f539661fac6f11456.css">
+        <link rel="stylesheet" href="https://heavyrain39.github.io/archive03/style.min.7a64941b285615ae7a2a8c6fad3a2a634ceb98dfa3498d2e3e1d9426f46a7a7a.css">
     
 
       <link rel="icon" type="image/x-icon" href="/archive03/favicon.ico">
       <link rel="shortcut icon" type="image/x-icon" href="/archive03/favicon.ico">
 </head>
-<body data-theme="default">
+<body data-theme="default" class="">
 
     
     <header id="main-header">
@@ -57,12 +57,42 @@
         <h1 class="list-title">
             VNQ
             
-                <span class="post-count">(1)</span>
+                <span class="post-count">(4)</span>
             
         </h1>
     </header>
 
     <ul class="list-page-post-list">
+        
+            <li>
+                <a href="https://heavyrain39.github.io/archive03/reports/2025-06-17-reits-light-and-shadow---%EB%B3%B5%EC%82%AC%EB%B3%B8-2/">
+                    <span class="list-page-post-title">소액으로 월세 받기? 리츠(REITs) 투자의 빛과 그림자</span>
+                    <div class="list-page-post-meta">
+                        <time datetime="2025-06-16">2025년 6월 16일</time>
+                        <span class="summary">소액으로 건물주가 되어 월세를 받는 꿈, 리츠(REITs)로 가능할까? 높은 배당수익률의 이면에 숨겨진 금리 리스크와 원금 손...</span>
+                    </div>
+                </a>
+            </li>
+        
+            <li>
+                <a href="https://heavyrain39.github.io/archive03/reports/2025-06-17-reits-light-and-shadow---%EB%B3%B5%EC%82%AC%EB%B3%B8-3/">
+                    <span class="list-page-post-title">소액으로 월세 받기? 리츠(REITs) 투자의 빛과 그림자</span>
+                    <div class="list-page-post-meta">
+                        <time datetime="2025-06-16">2025년 6월 16일</time>
+                        <span class="summary">소액으로 건물주가 되어 월세를 받는 꿈, 리츠(REITs)로 가능할까? 높은 배당수익률의 이면에 숨겨진 금리 리스크와 원금 손...</span>
+                    </div>
+                </a>
+            </li>
+        
+            <li>
+                <a href="https://heavyrain39.github.io/archive03/reports/2025-06-17-reits-light-and-shadow---%EB%B3%B5%EC%82%AC%EB%B3%B8/">
+                    <span class="list-page-post-title">소액으로 월세 받기? 리츠(REITs) 투자의 빛과 그림자</span>
+                    <div class="list-page-post-meta">
+                        <time datetime="2025-06-16">2025년 6월 16일</time>
+                        <span class="summary">소액으로 건물주가 되어 월세를 받는 꿈, 리츠(REITs)로 가능할까? 높은 배당수익률의 이면에 숨겨진 금리 리스크와 원금 손...</span>
+                    </div>
+                </a>
+            </li>
         
             <li>
                 <a href="https://heavyrain39.github.io/archive03/reports/2025-06-17-reits-light-and-shadow/">
@@ -91,7 +121,7 @@
                 <p>© 2025 Archive 03. All Rights Reserved.</p>
                 
                 
-                <a href="/privacy/" class="footer-privacy-link">개인정보처리방침</a>
+                <a href="/archive03/privacy/" class="footer-privacy-link">개인정보처리방침</a>
             </div>
             
             <div class="footer-theme-selector">
@@ -119,32 +149,26 @@
         const themeButtons = document.querySelectorAll('.theme-btn');
         const body = document.body;
 
-        
         const giscusThemeMap = {
             'default': 'dark_dimmed',
-            'cosmic-indigo': 'dark_dimmed', 
-            'aetherial-light': 'light'      
+            'cosmic-indigo': 'dark_dimmed',
+            'aetherial-light': 'light'
         };
 
-        
         const updateGiscusTheme = (themeName) => {
-            
             const giscusFrame = document.querySelector('iframe.giscus-frame');
-            if (!giscusFrame) {
-                return;
-            }
+            if (!giscusFrame) return;
 
-            
             const giscusTheme = giscusThemeMap[themeName] || 'dark_dimmed';
-
             
-            giscusFrame.contentWindow.postMessage(
-                { giscus: { setConfig: { theme: giscusTheme } } },
-                'https://giscus.app'
-            );
+            setTimeout(() => {
+                giscusFrame.contentWindow.postMessage(
+                    { giscus: { setConfig: { theme: giscusTheme } } },
+                    'https://giscus.app'
+                );
+            }, 100); 
         };
 
-        
         const applyTheme = (themeName) => {
             if (!themeName) return;
             body.setAttribute('data-theme', themeName);
@@ -167,6 +191,38 @@
                 localStorage.setItem('archive03-theme', selectedTheme);
             });
         });
+
+        
+        const commentsSection = document.querySelector('.post-comments');
+        if (commentsSection) {
+            const observer = new IntersectionObserver((entries, obs) => {
+                
+                if (entries[0].isIntersecting) {
+                    
+                    
+                    const applyGiscusThemeOnLoad = () => {
+                        const giscusFrame = document.querySelector('iframe.giscus-frame');
+                        if (giscusFrame) {
+                           const currentTheme = localStorage.getItem('archive03-theme') || 'default';
+                           updateGiscusTheme(currentTheme);
+                        } else {
+                            
+                            setTimeout(applyGiscusThemeOnLoad, 200);
+                        }
+                    };
+                    applyGiscusThemeOnLoad();
+
+                    
+                    obs.disconnect();
+                }
+            }, {
+                
+                threshold: 0.01
+            });
+
+            
+            observer.observe(commentsSection);
+        }
     });
     </script>
 </body>

@@ -11,13 +11,13 @@
     
     
         
-        <link rel="stylesheet" href="https://heavyrain39.github.io/archive03/style.min.ff8761fe3421c1a26e560f6ff36a93a51bce33e0e145ae3f539661fac6f11456.css">
+        <link rel="stylesheet" href="https://heavyrain39.github.io/archive03/style.min.7a64941b285615ae7a2a8c6fad3a2a634ceb98dfa3498d2e3e1d9426f46a7a7a.css">
     
 
       <link rel="icon" type="image/x-icon" href="/archive03/favicon.ico">
       <link rel="shortcut icon" type="image/x-icon" href="/archive03/favicon.ico">
 </head>
-<body data-theme="default">
+<body data-theme="default" class="">
 
     
     <header id="main-header">
@@ -51,21 +51,20 @@
     <main>
         
         
-<article class="post">
-    
-    <div class="container">
-        <header class="post-header">
-            <h1 class="post-title">SCHD와 QQQ의 조합, 정말 강력할까? (ft. 장단점 완벽 분석)</h1>
-            <div class="post-meta">
-                <time datetime="2025-06-17">2025년 6월 17일</time>
-            </div>
-        </header>
-    </div>
+
+
+
 
     
-    <div class="container post-body-container">
-        <div class="post-content">
-            <p>뮤? 좋은 아침, 마스터.</p>
+    <article class="post">
+        <div class="container">
+            <header class="post-header">
+                <h1 class="post-title">SCHD와 QQQ의 조합, 정말 강력할까? (ft. 장단점 완벽 분석)</h1>
+            </header>
+        </div>
+        <div class="container post-body-container">
+            <div class="post-content">
+                <p>뮤? 좋은 아침, 마스터.</p>
 <p>오늘의 주제는…… <strong>SCHD와 QQQ의 조합이 강력한 이유</strong>인가뮤. 좋다고 생각해뮤. 서로 다른 성격의 ETF를 조합하는 건 늘 흥미로운 주제뮤. SCHD와 QQQ는 둘 다 인기지만 서로 확연히 다르다뮤. 그럼 데이터를 준비할게뮤.</p>
 <div class="char-header">
     
@@ -168,58 +167,16 @@
 
 </div>
 
+            </div>
         </div>
-    </div>
+    </article>
 
-    <a href="#" id="share-fab" class="share-fab" title="Share this post" aria-label="Share this post">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5-.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"/>
-            <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"/>
-        </svg>
-    </a>
 
-</article>
 
-<section class="post-comments">
-    <div class="container">
-        
 
-    
-        <script src="https://giscus.app/client.js"
-                data-repo="heavyrain39/archive03"
-                data-repo-id="R_kgDOO7KqJQ"
-                data-category="General"
-                data-category-id="DIC_kwDOO7KqJc4CrlEO"
-                data-mapping="pathname"
-                data-strict="0"
-                data-reactions-enabled="0"
-                data-emit-metadata="0"
-                data-input-position="bottom"
-                data-theme="dark_dimmed"
-                data-lang="ko"
-                crossorigin="anonymous"
-                async>
-        </script>
-    
 
-    </div>
-</section>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const shareButton = document.getElementById('share-fab');
-    if (shareButton) {
-        shareButton.addEventListener('click', function(event) {
-            event.preventDefault();
-            if (navigator.share) {
-                navigator.share({ title: document.title, text: '이 글을 확인해보세요!', url: window.location.href, }).catch(console.error);
-            } else {
-                navigator.clipboard.writeText(window.location.href).then(() => { alert('게시글 주소가 클립보드에 복사되었습니다.'); }).catch(err => { console.error('클립보드 복사 실패:', err); alert('주소 복사에 실패했습니다.'); });
-            }
-        });
-    }
-});
-</script>
+
 
     </main>
 
@@ -231,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <p>© 2025 Archive 03. All Rights Reserved.</p>
                 
                 
-                <a href="/privacy/" class="footer-privacy-link">개인정보처리방침</a>
+                <a href="/archive03/privacy/" class="footer-privacy-link">개인정보처리방침</a>
             </div>
             
             <div class="footer-theme-selector">
@@ -259,32 +216,26 @@ document.addEventListener('DOMContentLoaded', function() {
         const themeButtons = document.querySelectorAll('.theme-btn');
         const body = document.body;
 
-        
         const giscusThemeMap = {
             'default': 'dark_dimmed',
-            'cosmic-indigo': 'dark_dimmed', 
-            'aetherial-light': 'light'      
+            'cosmic-indigo': 'dark_dimmed',
+            'aetherial-light': 'light'
         };
 
-        
         const updateGiscusTheme = (themeName) => {
-            
             const giscusFrame = document.querySelector('iframe.giscus-frame');
-            if (!giscusFrame) {
-                return;
-            }
+            if (!giscusFrame) return;
 
-            
             const giscusTheme = giscusThemeMap[themeName] || 'dark_dimmed';
-
             
-            giscusFrame.contentWindow.postMessage(
-                { giscus: { setConfig: { theme: giscusTheme } } },
-                'https://giscus.app'
-            );
+            setTimeout(() => {
+                giscusFrame.contentWindow.postMessage(
+                    { giscus: { setConfig: { theme: giscusTheme } } },
+                    'https://giscus.app'
+                );
+            }, 100); 
         };
 
-        
         const applyTheme = (themeName) => {
             if (!themeName) return;
             body.setAttribute('data-theme', themeName);
@@ -307,6 +258,38 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('archive03-theme', selectedTheme);
             });
         });
+
+        
+        const commentsSection = document.querySelector('.post-comments');
+        if (commentsSection) {
+            const observer = new IntersectionObserver((entries, obs) => {
+                
+                if (entries[0].isIntersecting) {
+                    
+                    
+                    const applyGiscusThemeOnLoad = () => {
+                        const giscusFrame = document.querySelector('iframe.giscus-frame');
+                        if (giscusFrame) {
+                           const currentTheme = localStorage.getItem('archive03-theme') || 'default';
+                           updateGiscusTheme(currentTheme);
+                        } else {
+                            
+                            setTimeout(applyGiscusThemeOnLoad, 200);
+                        }
+                    };
+                    applyGiscusThemeOnLoad();
+
+                    
+                    obs.disconnect();
+                }
+            }, {
+                
+                threshold: 0.01
+            });
+
+            
+            observer.observe(commentsSection);
+        }
     });
     </script>
 </body>

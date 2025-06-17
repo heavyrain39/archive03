@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>배당금 | Archive 03</title>
+    <title>Search Results | Archive 03</title>
     
-    <meta name="description" content="&#39;Archive 03&#39;은 천사, 악마, 안드로이드라는 세 명의 인외 소녀가 최신 경제 데이터를 바탕으로 투자에 대한 인사이트를 나누는 토크형 리포트 블로그입니다.">
+    <meta name="description" content="">
     <meta name="author" content="야차완">
     
     
@@ -17,7 +17,7 @@
       <link rel="icon" type="image/x-icon" href="/archive03/favicon.ico">
       <link rel="shortcut icon" type="image/x-icon" href="/archive03/favicon.ico">
 </head>
-<body data-theme="default" class="">
+<body data-theme="default" class="is-search-page">
 
     
     <header id="main-header">
@@ -52,62 +52,112 @@
         
         
 
-<div class="list-page-container">
-    <header class="list-header">
-        <h1 class="list-title">
-            배당금
+
+
+
+    
+    <div class="list-page-container">
+        <header class="list-header">
+            <h1 class="list-title" id="search-page-title"></h1>
+        </header>
+        <div id="search-page-results">
             
-                <span class="post-count">(4)</span>
+        </div>
+        <nav id="search-page-pagination" class="pagination-nav">
             
-        </h1>
-    </header>
-
-    <ul class="list-page-post-list">
-        
-            <li>
-                <a href="https://heavyrain39.github.io/archive03/reports/2025-06-17-reits-light-and-shadow---%EB%B3%B5%EC%82%AC%EB%B3%B8-2/">
-                    <span class="list-page-post-title">소액으로 월세 받기? 리츠(REITs) 투자의 빛과 그림자</span>
-                    <div class="list-page-post-meta">
-                        <time datetime="2025-06-16">2025년 6월 16일</time>
-                        <span class="summary">소액으로 건물주가 되어 월세를 받는 꿈, 리츠(REITs)로 가능할까? 높은 배당수익률의 이면에 숨겨진 금리 리스크와 원금 손...</span>
-                    </div>
-                </a>
-            </li>
-        
-            <li>
-                <a href="https://heavyrain39.github.io/archive03/reports/2025-06-17-reits-light-and-shadow---%EB%B3%B5%EC%82%AC%EB%B3%B8-3/">
-                    <span class="list-page-post-title">소액으로 월세 받기? 리츠(REITs) 투자의 빛과 그림자</span>
-                    <div class="list-page-post-meta">
-                        <time datetime="2025-06-16">2025년 6월 16일</time>
-                        <span class="summary">소액으로 건물주가 되어 월세를 받는 꿈, 리츠(REITs)로 가능할까? 높은 배당수익률의 이면에 숨겨진 금리 리스크와 원금 손...</span>
-                    </div>
-                </a>
-            </li>
-        
-            <li>
-                <a href="https://heavyrain39.github.io/archive03/reports/2025-06-17-reits-light-and-shadow---%EB%B3%B5%EC%82%AC%EB%B3%B8/">
-                    <span class="list-page-post-title">소액으로 월세 받기? 리츠(REITs) 투자의 빛과 그림자</span>
-                    <div class="list-page-post-meta">
-                        <time datetime="2025-06-16">2025년 6월 16일</time>
-                        <span class="summary">소액으로 건물주가 되어 월세를 받는 꿈, 리츠(REITs)로 가능할까? 높은 배당수익률의 이면에 숨겨진 금리 리스크와 원금 손...</span>
-                    </div>
-                </a>
-            </li>
-        
-            <li>
-                <a href="https://heavyrain39.github.io/archive03/reports/2025-06-17-reits-light-and-shadow/">
-                    <span class="list-page-post-title">소액으로 월세 받기? 리츠(REITs) 투자의 빛과 그림자</span>
-                    <div class="list-page-post-meta">
-                        <time datetime="2025-06-16">2025년 6월 16일</time>
-                        <span class="summary">소액으로 건물주가 되어 월세를 받는 꿈, 리츠(REITs)로 가능할까? 높은 배당수익률의 이면에 숨겨진 금리 리스크와 원금 손...</span>
-                    </div>
-                </a>
-            </li>
-        
-    </ul>
-</div>
+        </nav>
+    </div>
 
 
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    const titleEl = document.getElementById('search-page-title');
+    const resultsEl = document.getElementById('search-page-results');
+    const paginationEl = document.getElementById('search-page-pagination');
+    let searchData = [];
+
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get('q');
+    
+    if (!query) {
+        titleEl.textContent = "검색어가 없습니다.";
+        return;
+    }
+
+    titleEl.innerHTML = `「<span class="color-accent">${query}</span>」에 대한 검색 결과`;
+
+    try {
+        const response = await fetch('\/archive03\/index.json');
+        searchData = await response.json();
+    } catch (e) {
+        resultsEl.innerHTML = "<p>검색 데이터를 불러오는 데 실패했습니다.</p>";
+        return;
+    }
+
+    const lowerCaseQuery = query.toLowerCase();
+    const allResults = searchData.filter(post => 
+        post.title.toLowerCase().includes(lowerCaseQuery) ||
+        post.content.toLowerCase().includes(lowerCaseQuery)
+    );
+
+    const resultsPerPage = 20;
+    const totalPages = Math.ceil(allResults.length / resultsPerPage);
+    let currentPage = 1;
+
+    const renderPage = (page) => {
+        currentPage = page;
+        resultsEl.innerHTML = '';
+        paginationEl.innerHTML = '';
+
+        if (allResults.length === 0) {
+            resultsEl.innerHTML = '<p class="no-results" style="text-align: center; padding: 2rem 0;">검색 결과가 없습니다.</p>';
+            return;
+        }
+
+        const start = (page - 1) * resultsPerPage;
+        const end = start + resultsPerPage;
+        const pageResults = allResults.slice(start, end);
+
+        const resultList = document.createElement('ul');
+        resultList.className = 'list-page-post-list';
+        pageResults.forEach(post => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <a href="${post.permalink}">
+                    <span class="list-page-post-title">${post.title}</span>
+                    <div class="list-page-post-meta">
+                        <span class="summary">${post.content.substring(0, 100)}...</span>
+                    </div>
+                </a>
+            `;
+            resultList.appendChild(li);
+        });
+        resultsEl.appendChild(resultList);
+
+        if (totalPages > 1) {
+            paginationEl.innerHTML = `
+                <a href="#" class="pagination-arrow prev ${currentPage === 1 ? 'disabled' : ''}" data-page="${currentPage - 1}">◀</a>
+                <span class="page-indicator">${currentPage} / ${totalPages}</span>
+                <a href="#" class="pagination-arrow next ${currentPage === totalPages ? 'disabled' : ''}" data-page="${currentPage + 1}">▶</a>
+            `;
+        }
+    };
+
+    paginationEl.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = e.target.closest('.pagination-arrow');
+        if (target && !target.classList.contains('disabled')) {
+            renderPage(parseInt(target.dataset.page));
+        }
+    });
+
+    renderPage(1);
+});
+</script>
 
 
 
