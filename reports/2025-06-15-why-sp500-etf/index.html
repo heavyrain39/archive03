@@ -13,7 +13,7 @@
     
     
         
-        <link rel="stylesheet" href="https://heavyrain39.github.io/archive03/style.min.939e604b39a2d8fbfe8b25abf51e1fc08f6d49388f0bcd73abe304e53521b4bf.css">
+        <link rel="stylesheet" href="https://heavyrain39.github.io/archive03/style.min.0aecb900013b24fd680fa2648dc86037c33c66e50f77a821ad16f4e2c0e91136.css">
     
 
       <link rel="icon" type="image/x-icon" href="/archive03/favicon.ico">
@@ -54,16 +54,19 @@
         
         
         
-<div class="container">
-    <article class="post">
-        
+<article class="post">
+    
+    <div class="container">
         <header class="post-header">
             <h1 class="post-title">투자 초보에게 누구나 S&amp;P 500 ETF를 추천하는 이유</h1>
             <div class="post-meta">
                 <time datetime="2025-06-15">2025년 6월 15일</time>
             </div>
         </header>
+    </div>
 
+    
+    <div class="container post-body-container">
         <div class="post-content">
             <div class="char-header">
     
@@ -136,7 +139,7 @@
 <p>마지막으로 한 가지. S&P 500은 <strong>'미국'이라는 국가에 모든 것을 거는 투자</strong>입니다. 물론 지금까지 미국이 세계 경제의 중심이었지만, 앞으로 수십 년 뒤에도 그럴 것이라는 보장은 없어요. 제 리스크 점수는 100점 만점에 <strong>30점</strong>입니다. 위험이 크진 않아요. 하지만 '무조건 안전하다'는 맹신은 금물이라는 뜻이에요.</p>
 <div class="briefing-box">
     
-<h3><strong>[최종 브리핑]</strong></h3>
+<h3><strong>〔 최종 브리핑 〕</strong></h3>
 <p>마스터, 우리 셋의 이야기를 정리해 주겠다뮤.</p>
 
 <h4><span class="svg-icon">
@@ -179,19 +182,19 @@
 </div>
 
         </div>
+    </div>
 
-        
-        <a href="#" id="share-fab" class="share-fab" title="Share this post" aria-label="Share this post">
-            
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"/>
-                <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"/>
-            </svg>
-        </a>
+    <a href="#" id="share-fab" class="share-fab" title="Share this post" aria-label="Share this post">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5-.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"/>
+            <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"/>
+        </svg>
+    </a>
 
-    </article>
+</article>
 
-    <section class="post-comments">
+<section class="post-comments">
+    <div class="container">
         
 
     
@@ -212,32 +215,19 @@
         </script>
     
 
-    </section>
-</div>
-
+    </div>
+</section>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const shareButton = document.getElementById('share-fab');
     if (shareButton) {
         shareButton.addEventListener('click', function(event) {
-            event.preventDefault(); 
-
-            
+            event.preventDefault();
             if (navigator.share) {
-                navigator.share({
-                    title: document.title,
-                    text: '이 글을 확인해보세요!',
-                    url: window.location.href,
-                }).catch(console.error);
+                navigator.share({ title: document.title, text: '이 글을 확인해보세요!', url: window.location.href, }).catch(console.error);
             } else {
-                
-                navigator.clipboard.writeText(window.location.href).then(() => {
-                    alert('게시글 주소가 클립보드에 복사되었습니다.');
-                }).catch(err => {
-                    console.error('클립보드 복사 실패:', err);
-                    alert('주소 복사에 실패했습니다.');
-                });
+                navigator.clipboard.writeText(window.location.href).then(() => { alert('게시글 주소가 클립보드에 복사되었습니다.'); }).catch(err => { console.error('클립보드 복사 실패:', err); alert('주소 복사에 실패했습니다.'); });
             }
         });
     }
