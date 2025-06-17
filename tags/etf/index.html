@@ -5,21 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ETF | Archive 03</title>
     
-    
     <meta name="description" content="&#39;Archive 03&#39;은 천사, 악마, 안드로이드라는 세 명의 인외 소녀가 최신 경제 데이터를 바탕으로 투자에 대한 인사이트를 나누는 토크형 리포트 블로그입니다.">
     <meta name="author" content="야차완">
     
     
     
-    
         
-        <link rel="stylesheet" href="https://heavyrain39.github.io/archive03/style.min.6f7f8821856ff6aa3e65060a71aaa4db81c979c555fa5e30d7cbfd878b3898e6.css">
+        <link rel="stylesheet" href="https://heavyrain39.github.io/archive03/style.min.40b52897c4a396f277b1274c23c2622ad831ff1e25ef6959908b2c57573618f0.css">
     
 
       <link rel="icon" type="image/x-icon" href="/archive03/favicon.ico">
       <link rel="shortcut icon" type="image/x-icon" href="/archive03/favicon.ico">
 </head>
-<body class="dark-mode">
+<body data-theme="default">
 
     
     <header id="main-header">
@@ -53,12 +51,11 @@
     <main>
         
         
-        
-<div class="container">
+
+<div class="list-page-container">
     <header class="list-header">
         <h1 class="list-title">
             ETF
-            
             
                 <span class="post-count">(2)</span>
             
@@ -79,7 +76,7 @@
         
             <li>
                 <a href="https://heavyrain39.github.io/archive03/reports/2025-06-15-why-sp500-etf/">
-                    <span class="list-page-post-title">투자 초보에게 누구나 S&amp;P 500 ETF를 추천하는 이유</span>
+                    <span class="list-page-post-title">투자 초보에게 S&amp;P 500 ETF를 추천하는 이유</span>
                     <div class="list-page-post-meta">
                         <time datetime="2025-06-15">2025년 6월 15일</time>
                         <span class="summary">투자의 시작, 막막하신가요? 워런 버핏도 추천한 S&amp;P 500 ETF. &lsquo;시장을 사라&rsquo;는 말의 진...</span>
@@ -99,11 +96,85 @@
     
     <footer id="main-footer">
         <div class="container">
-            <p>© 2025 Archive 03. All Rights Reserved.</p>
             
+            <div class="footer-info">
+                <p>© 2025 Archive 03. All Rights Reserved.</p>
+            </div>
             
+            <div class="footer-theme-selector">
+                <div class="theme-buttons">
+                    
+                    <button class="theme-btn" data-theme="default" aria-label="Default Theme">
+                        <span class="color-patch" style="background-color: #282c34;"></span>
+                        <span class="color-patch" style="background-color: #64F0C8;"></span>
+                    </button>
+                    <button class="theme-btn" data-theme="cosmic-indigo" aria-label="Cosmic Indigo Theme">
+                        <span class="color-patch" style="background-color: #1A182F;"></span>
+                        <span class="color-patch" style="background-color: #F0C419;"></span>
+                    </button>
+                    <button class="theme-btn" data-theme="aetherial-light" aria-label="Aetherial Light Theme">
+                        <span class="color-patch" style="background-color: #F8F9FA;"></span>
+                        <span class="color-patch" style="background-color: #A0D2DB;"></span>
+                    </button>
+                </div>
+            </div>
         </div>
     </footer>
 
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeButtons = document.querySelectorAll('.theme-btn');
+        const body = document.body;
+
+        
+        const giscusThemeMap = {
+            'default': 'dark_dimmed',
+            'cosmic-indigo': 'dark_dimmed', 
+            'aetherial-light': 'light'      
+        };
+
+        
+        const updateGiscusTheme = (themeName) => {
+            
+            const giscusFrame = document.querySelector('iframe.giscus-frame');
+            if (!giscusFrame) {
+                return;
+            }
+
+            
+            const giscusTheme = giscusThemeMap[themeName] || 'dark_dimmed';
+
+            
+            giscusFrame.contentWindow.postMessage(
+                { giscus: { setConfig: { theme: giscusTheme } } },
+                'https://giscus.app'
+            );
+        };
+
+        
+        const applyTheme = (themeName) => {
+            if (!themeName) return;
+            body.setAttribute('data-theme', themeName);
+            themeButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === themeName);
+            });
+            
+            updateGiscusTheme(themeName);
+        };
+
+        
+        const savedTheme = localStorage.getItem('archive03-theme') || 'default';
+        applyTheme(savedTheme);
+
+        
+        themeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const selectedTheme = button.dataset.theme;
+                applyTheme(selectedTheme);
+                localStorage.setItem('archive03-theme', selectedTheme);
+            });
+        });
+    });
+    </script>
 </body>
 </html>
