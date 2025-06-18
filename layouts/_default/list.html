@@ -1,31 +1,131 @@
 {{ define "main" }}
-<!-- [수정] 일반 container div 대신, 너비를 제어할 전용 list-page-container 를 사용합니다. -->
-<div class="list-page-container">
-    <header class="list-header">
-        <h1 class="list-title">
-            {{ .Title }}
-            {{ if ne .Kind "taxonomy" }}
-                <span class="post-count">({{ len .Pages }})</span>
+
+<!-- [핵심] 현재 페이지의 종류(Kind)가 'section'이고, 섹션 이름이 'search'인지 확인합니다. -->
+{{ if and (eq .Kind "section") (eq .Section "search") }}
+
+    <!-- ======================================================== -->
+    <!-- 1. 여기는 '검색 결과 페이지'일 때 보여줄 모습입니다.      -->
+    <!-- ======================================================== -->
+    <div class="list-page-container">
+        <header class="list-header">
+            <!-- JavaScript가 채워줄 비어있는 제목 -->
+            <h1 class="list-title" id="search-page-title"></h1>
+        </header>
+        <!-- JavaScript가 채워줄 비어있는 결과 영역 -->
+        <div id="search-page-results"></div>
+        <nav id="search-page-pagination" class="pagination-nav"></nav>
+    </div>
+
+    <!-- 검색 페이지 전용 JavaScript -->
+    <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const titleEl = document.getElementById('search-page-title');
+        const resultsEl = document.getElementById('search-page-results');
+        const paginationEl = document.getElementById('search-page-pagination');
+        let searchData = [];
+        const params = new URLSearchParams(window.location.search);
+        const query = params.get('q');
+        
+        if (!query) {
+            titleEl.textContent = "검색어가 없습니다.";
+            return;
+        }
+
+        // 낫표(「」)와 함께 멋진 제목을 생성합니다.
+        titleEl.innerHTML = `「<span class="color-accent">${query}</span>」에 대한 검색 결과`;
+
+        try {
+            const response = await fetch('{{ (site.Home.OutputFormats.Get "JSON").RelPermalink }}');
+            searchData = await response.json();
+        } catch (e) {
+            resultsEl.innerHTML = "<p>검색 데이터를 불러오는 데 실패했습니다.</p>";
+            return;
+        }
+
+        const lowerCaseQuery = query.toLowerCase();
+        const allResults = searchData.filter(post => 
+            post.title.toLowerCase().includes(lowerCaseQuery) || 
+            post.content.toLowerCase().includes(lowerCaseQuery)
+        );
+
+        const resultsPerPage = 20;
+        const totalPages = Math.ceil(allResults.length / resultsPerPage);
+        let currentPage = 1;
+
+        const renderPage = (page) => {
+            currentPage = page;
+            resultsEl.innerHTML = '';
+            paginationEl.innerHTML = '';
+
+            if (allResults.length === 0) {
+                resultsEl.innerHTML = '<p class="no-results" style="text-align: center; padding: 2rem 0;">검색 결과가 없습니다.</p>';
+                return;
+            }
+
+            const start = (page - 1) * resultsPerPage;
+            const end = start + resultsPerPage;
+            const pageResults = allResults.slice(start, end);
+
+            const resultList = document.createElement('ul');
+            // 태그 목록 페이지와 동일한 UI를 사용하기 위해 클래스 이름을 맞춰줍니다.
+            resultList.className = 'list-page-post-list'; 
+            
+            pageResults.forEach(post => {
+                const li = document.createElement('li');
+                // 태그 목록 페이지와 동일한 HTML 구조를 사용합니다.
+                li.innerHTML = `<a href="${post.permalink}"><span class="list-page-post-title">${post.title}</span><div class="list-page-post-meta"><span class="summary">${post.content.substring(0, 70)}...</span></div></a>`;
+                resultList.appendChild(li);
+            });
+            resultsEl.appendChild(resultList);
+
+            if (totalPages > 1) {
+                paginationEl.innerHTML = `<a href="#" class="pagination-arrow prev ${currentPage === 1 ? 'disabled' : ''}" data-page="${currentPage - 1}">◀</a><span class="page-indicator">${currentPage} / ${totalPages}</span><a href="#" class="pagination-arrow next ${currentPage === totalPages ? 'disabled' : ''}" data-page="${currentPage + 1}">▶</a>`;
+            }
+        };
+
+        paginationEl.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = e.target.closest('.pagination-arrow');
+            if (target && !target.classList.contains('disabled')) {
+                renderPage(parseInt(target.dataset.page));
+            }
+        });
+
+        renderPage(1);
+    });
+    </script>
+
+{{ else }}
+
+    <!-- ======================================================== -->
+    <!-- 2. 여기는 '일반 태그 목록 페이지'일 때 보여줄 모습입니다. -->
+    <!-- ======================================================== -->
+    <div class="list-page-container">
+        <header class="list-header">
+            <h1 class="list-title">
+                {{ .Title }}
+                <!-- [수정] Taxonomy 페이지일 때만 포스트 개수를 표시하도록 변경 -->
+                {{ if eq .Kind "taxonomy" }}
+                    <span class="post-count">({{ len .Pages }})</span>
+                {{ end }}
+            </h1>
+        </header>
+
+        <ul class="list-page-post-list">
+            {{ range .Pages }}
+                <li>
+                    <a href="{{ .Permalink }}">
+                        <span class="list-page-post-title">{{ .Title }}</span>
+                        <div class="list-page-post-meta">
+                            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006년 1월 2일" }}</time>
+                            <span class="summary">{{ .Summary | truncate 70 "..." }}</span>
+                        </div>
+                    </a>
+                </li>
             {{ end }}
-        </h1>
-    </header>
-
-    <ul class="list-page-post-list">
-        {{ range .Pages }}
-            <li>
-                <a href="{{ .Permalink }}">
-                    <span class="list-page-post-title">{{ .Title }}</span>
-                    <div class="list-page-post-meta">
-                        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006년 1월 2일" }}</time>
-                        <span class="summary">{{ .Summary | truncate 70 "..." }}</span>
-                    </div>
-                </a>
-            </li>
-        {{ end }}
-    </ul>
-</div>
-
-{{/* 페이지네이션이 필요하다면 여기에 추가할 수 있습니다. */}}
-{{/* {{ partial "pagination.html" . }} */}}
+        </ul>
+    </div>
+    
+{{ end }}
 
 {{ end }}
