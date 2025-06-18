@@ -578,7 +578,19 @@ body[data-theme="aetherial-light"] .share-fab:hover {
 }
 .latest-post-title a { color: var(--light-text); }
 .latest-post-title a:hover { color: var(--mint-green); }
-.latest-post-summary { font-size: 0.95rem; color: var(--secondary-text); line-height: 1.7; }
+.latest-post-summary { 
+    font-size: 0.95rem; 
+    color: var(--secondary-text); 
+    line-height: 1.7;
+
+    /* --- 여기에 아래 5줄을 추가 또는 수정합니다 --- */
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* 텍스트를 두 줄로 제한 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* --- 여기까지 --- */
+}
 /* 기존의 .post-list-card, .post-list, .post-list a 규칙을 모두 삭제하고 아래 내용으로 교체 */
 
 .post-list-card { 

@@ -23,7 +23,7 @@
         {{ range $latestPost }}
             <div class="latest-post-content">
                 <h3 class="latest-post-title"><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
-                <p class="latest-post-summary">{{ .Summary | truncate 100 "..." }}</p>
+                <p class="latest-post-summary">{{ .Summary | truncate 120 "..." }}</p>
             </div>
         {{ end }}
 
