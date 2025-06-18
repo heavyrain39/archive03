@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko-KR">
-<head>
+<head><script src="/archive03/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=archive03/livereload" data-no-instant defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Results | Archive 03</title>
@@ -10,9 +10,8 @@
     
     
     
-    
         
-        <link rel="stylesheet" href="https://heavyrain39.github.io/archive03/style.scss.min.7dffab1ad02ee025e5cccd89e389bae54ba7a98b26392e8a4c755110f03a9a5e.css">
+        <link rel="stylesheet" href="http://localhost:1313/archive03/style.scss.min.7dffab1ad02ee025e5cccd89e389bae54ba7a98b26392e8a4c755110f03a9a5e.css">
     
 
       <link rel="icon" type="image/x-icon" href="/archive03/favicon.ico">
@@ -20,11 +19,10 @@
 </head>
 <body data-theme="default" class="is-search-page">
 
-    
     <header id="main-header">
         <div class="container">
             <div class="logo">
-                <a href="https://heavyrain39.github.io/archive03/">
+                <a href="http://localhost:1313/archive03/">
                     <span class="logo-main">Archive 03</span>
                     <span class="logo-sub">세 명의 인외 소녀가 전하는 투자 인사이트</span>
                 </a>
@@ -51,25 +49,16 @@
 
     <main>
         
-        
 
 
 
-
-    
     <div class="list-page-container">
         <header class="list-header">
             <h1 class="list-title" id="search-page-title"></h1>
         </header>
-        <div id="search-page-results">
-            
-        </div>
-        <nav id="search-page-pagination" class="pagination-nav">
-            
-        </nav>
+        <div id="search-page-results"></div>
+        <nav id="search-page-pagination" class="pagination-nav"></nav>
     </div>
-
-
 
 
 
@@ -80,82 +69,42 @@ document.addEventListener('DOMContentLoaded', async () => {
     const resultsEl = document.getElementById('search-page-results');
     const paginationEl = document.getElementById('search-page-pagination');
     let searchData = [];
-
     const params = new URLSearchParams(window.location.search);
     const query = params.get('q');
-    
-    if (!query) {
-        titleEl.textContent = "검색어가 없습니다.";
-        return;
-    }
-
+    if (!query) { titleEl.textContent = "검색어가 없습니다."; return; }
     titleEl.innerHTML = `「<span class="color-accent">${query}</span>」에 대한 검색 결과`;
-
     try {
         const response = await fetch('\/archive03\/index.json');
         searchData = await response.json();
-    } catch (e) {
-        resultsEl.innerHTML = "<p>검색 데이터를 불러오는 데 실패했습니다.</p>";
-        return;
-    }
-
+    } catch (e) { resultsEl.innerHTML = "<p>검색 데이터를 불러오는 데 실패했습니다.</p>"; return; }
     const lowerCaseQuery = query.toLowerCase();
-    const allResults = searchData.filter(post => 
-        post.title.toLowerCase().includes(lowerCaseQuery) ||
-        post.content.toLowerCase().includes(lowerCaseQuery)
-    );
-
+    const allResults = searchData.filter(post => post.title.toLowerCase().includes(lowerCaseQuery) || post.content.toLowerCase().includes(lowerCaseQuery));
     const resultsPerPage = 20;
     const totalPages = Math.ceil(allResults.length / resultsPerPage);
     let currentPage = 1;
-
     const renderPage = (page) => {
         currentPage = page;
         resultsEl.innerHTML = '';
         paginationEl.innerHTML = '';
-
-        if (allResults.length === 0) {
-            resultsEl.innerHTML = '<p class="no-results" style="text-align: center; padding: 2rem 0;">검색 결과가 없습니다.</p>';
-            return;
-        }
-
+        if (allResults.length === 0) { resultsEl.innerHTML = '<p class="no-results" style="text-align: center; padding: 2rem 0;">검색 결과가 없습니다.</p>'; return; }
         const start = (page - 1) * resultsPerPage;
         const end = start + resultsPerPage;
         const pageResults = allResults.slice(start, end);
-
         const resultList = document.createElement('ul');
         resultList.className = 'list-page-post-list';
         pageResults.forEach(post => {
             const li = document.createElement('li');
-            li.innerHTML = `
-                <a href="${post.permalink}">
-                    <span class="list-page-post-title">${post.title}</span>
-                    <div class="list-page-post-meta">
-                        <span class="summary">${post.content.substring(0, 100)}...</span>
-                    </div>
-                </a>
-            `;
+            li.innerHTML = `<a href="${post.permalink}"><span class="list-page-post-title">${post.title}</span><div class="list-page-post-meta"><span class="summary">${post.content.substring(0, 100)}...</span></div></a>`;
             resultList.appendChild(li);
         });
         resultsEl.appendChild(resultList);
-
-        if (totalPages > 1) {
-            paginationEl.innerHTML = `
-                <a href="#" class="pagination-arrow prev ${currentPage === 1 ? 'disabled' : ''}" data-page="${currentPage - 1}">◀</a>
-                <span class="page-indicator">${currentPage} / ${totalPages}</span>
-                <a href="#" class="pagination-arrow next ${currentPage === totalPages ? 'disabled' : ''}" data-page="${currentPage + 1}">▶</a>
-            `;
-        }
+        if (totalPages > 1) { paginationEl.innerHTML = `<a href="#" class="pagination-arrow prev ${currentPage === 1 ? 'disabled' : ''}" data-page="${currentPage - 1}">◀</a><span class="page-indicator">${currentPage} / ${totalPages}</span><a href="#" class="pagination-arrow next ${currentPage === totalPages ? 'disabled' : ''}" data-page="${currentPage + 1}">▶</a>`; }
     };
-
     paginationEl.addEventListener('click', (e) => {
         e.preventDefault();
         const target = e.target.closest('.pagination-arrow');
-        if (target && !target.classList.contains('disabled')) {
-            renderPage(parseInt(target.dataset.page));
-        }
+        if (target && !target.classList.contains('disabled')) { renderPage(parseInt(target.dataset.page)); }
     });
-
     renderPage(1);
 });
 </script>
@@ -164,7 +113,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     </main>
 
-    
     <footer id="main-footer">
         <div class="container">
             <div class="footer-info">
@@ -174,60 +122,33 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             <div class="footer-theme-selector">
                 <div class="theme-buttons">
-                    <button class="theme-btn" data-theme="default" aria-label="Default Theme">
-                        <span class="color-patch" style="background-color: #282c34;"></span>
-                        <span class="color-patch" style="background-color: #64F0C8;"></span>
-                    </button>
-                    <button class="theme-btn" data-theme="cosmic-indigo" aria-label="Cosmic Indigo Theme">
-                        <span class="color-patch" style="background-color: #1A182F;"></span>
-                        <span class="color-patch" style="background-color: #F0C419;"></span>
-                    </button>
-                    <button class="theme-btn" data-theme="aetherial-light" aria-label="Aetherial Light Theme">
-                        <span class="color-patch" style="background-color: #F8F9FA;"></span>
-                        <span class="color-patch" style="background-color: #A0D2DB;"></span>
-                    </button>
+                    <button class="theme-btn" data-theme="default" aria-label="Default Theme"><span class="color-patch" style="background-color: #282c34;"></span><span class="color-patch" style="background-color: #64F0C8;"></span></button>
+                    <button class="theme-btn" data-theme="cosmic-indigo" aria-label="Cosmic Indigo Theme"><span class="color-patch" style="background-color: #1A182F;"></span><span class="color-patch" style="background-color: #F0C419;"></span></button>
+                    <button class="theme-btn" data-theme="aetherial-light" aria-label="Aetherial Light Theme"><span class="color-patch" style="background-color: #F8F9FA;"></span><span class="color-patch" style="background-color: #A0D2DB;"></span></button>
                 </div>
             </div>
         </div>
     </footer>
 
-    
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         const themeButtons = document.querySelectorAll('.theme-btn');
         const body = document.body;
-
-        const giscusThemeMap = {
-            'default': 'dark_dimmed',
-            'cosmic-indigo': 'dark_dimmed',
-            'aetherial-light': 'light'
-        };
-
+        const giscusThemeMap = { 'default': 'dark_dimmed', 'cosmic-indigo': 'dark_dimmed', 'aetherial-light': 'light' };
         const updateGiscusTheme = (themeName) => {
             const giscusFrame = document.querySelector('iframe.giscus-frame');
             if (!giscusFrame) return;
-
             const giscusTheme = giscusThemeMap[themeName] || 'dark_dimmed';
-            setTimeout(() => {
-                giscusFrame.contentWindow.postMessage(
-                    { giscus: { setConfig: { theme: giscusTheme } } },
-                    'https://giscus.app'
-                );
-            }, 100);
+            setTimeout(() => { giscusFrame.contentWindow.postMessage({ giscus: { setConfig: { theme: giscusTheme } } }, 'https://giscus.app'); }, 100);
         };
-
         const applyTheme = (themeName) => {
             if (!themeName) return;
             body.setAttribute('data-theme', themeName);
-            themeButtons.forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.theme === themeName);
-            });
+            themeButtons.forEach(btn => { btn.classList.toggle('active', btn.dataset.theme === themeName); });
             updateGiscusTheme(themeName);
         };
-
         const savedTheme = localStorage.getItem('archive03-theme') || 'default';
         applyTheme(savedTheme);
-
         themeButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const selectedTheme = button.dataset.theme;
@@ -235,26 +156,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                 localStorage.setItem('archive03-theme', selectedTheme);
             });
         });
-
         const commentsSection = document.querySelector('.post-comments');
         if (commentsSection) {
             const observer = new IntersectionObserver((entries, obs) => {
                 if (entries[0].isIntersecting) {
                     const applyGiscusThemeOnLoad = () => {
                         const giscusFrame = document.querySelector('iframe.giscus-frame');
-                        if (giscusFrame) {
-                           const currentTheme = localStorage.getItem('archive03-theme') || 'default';
-                           updateGiscusTheme(currentTheme);
-                        } else {
-                            setTimeout(applyGiscusThemeOnLoad, 200);
-                        }
+                        if (giscusFrame) { const currentTheme = localStorage.getItem('archive03-theme') || 'default'; updateGiscusTheme(currentTheme); } 
+                        else { setTimeout(applyGiscusThemeOnLoad, 200); }
                     };
                     applyGiscusThemeOnLoad();
                     obs.disconnect();
                 }
-            }, {
-                threshold: 0.01
-            });
+            }, { threshold: 0.01 });
             observer.observe(commentsSection);
         }
     });

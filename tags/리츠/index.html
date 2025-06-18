@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko-KR">
-<head>
+<head><script src="/archive03/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=archive03/livereload" data-no-instant defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>리츠 | Archive 03</title>
@@ -10,9 +10,8 @@
     
     
     
-    
         
-        <link rel="stylesheet" href="https://heavyrain39.github.io/archive03/style.scss.min.7dffab1ad02ee025e5cccd89e389bae54ba7a98b26392e8a4c755110f03a9a5e.css">
+        <link rel="stylesheet" href="http://localhost:1313/archive03/style.scss.min.7dffab1ad02ee025e5cccd89e389bae54ba7a98b26392e8a4c755110f03a9a5e.css">
     
 
       <link rel="icon" type="image/x-icon" href="/archive03/favicon.ico">
@@ -20,11 +19,10 @@
 </head>
 <body data-theme="default" class="">
 
-    
     <header id="main-header">
         <div class="container">
             <div class="logo">
-                <a href="https://heavyrain39.github.io/archive03/">
+                <a href="http://localhost:1313/archive03/">
                     <span class="logo-main">Archive 03</span>
                     <span class="logo-sub">세 명의 인외 소녀가 전하는 투자 인사이트</span>
                 </a>
@@ -51,7 +49,6 @@
 
     <main>
         
-        
 
 <div class="list-page-container">
     <header class="list-header">
@@ -66,7 +63,7 @@
     <ul class="list-page-post-list">
         
             <li>
-                <a href="https://heavyrain39.github.io/archive03/reports/2025-06-17-reits-light-and-shadow/">
+                <a href="http://localhost:1313/archive03/reports/2025-06-17-reits-light-and-shadow/">
                     <span class="list-page-post-title">소액으로 월세 받기? 리츠(REITs) 투자의 빛과 그림자</span>
                     <div class="list-page-post-meta">
                         <time datetime="2025-06-16">2025년 6월 16일</time>
@@ -84,7 +81,6 @@
 
     </main>
 
-    
     <footer id="main-footer">
         <div class="container">
             <div class="footer-info">
@@ -94,60 +90,33 @@
             
             <div class="footer-theme-selector">
                 <div class="theme-buttons">
-                    <button class="theme-btn" data-theme="default" aria-label="Default Theme">
-                        <span class="color-patch" style="background-color: #282c34;"></span>
-                        <span class="color-patch" style="background-color: #64F0C8;"></span>
-                    </button>
-                    <button class="theme-btn" data-theme="cosmic-indigo" aria-label="Cosmic Indigo Theme">
-                        <span class="color-patch" style="background-color: #1A182F;"></span>
-                        <span class="color-patch" style="background-color: #F0C419;"></span>
-                    </button>
-                    <button class="theme-btn" data-theme="aetherial-light" aria-label="Aetherial Light Theme">
-                        <span class="color-patch" style="background-color: #F8F9FA;"></span>
-                        <span class="color-patch" style="background-color: #A0D2DB;"></span>
-                    </button>
+                    <button class="theme-btn" data-theme="default" aria-label="Default Theme"><span class="color-patch" style="background-color: #282c34;"></span><span class="color-patch" style="background-color: #64F0C8;"></span></button>
+                    <button class="theme-btn" data-theme="cosmic-indigo" aria-label="Cosmic Indigo Theme"><span class="color-patch" style="background-color: #1A182F;"></span><span class="color-patch" style="background-color: #F0C419;"></span></button>
+                    <button class="theme-btn" data-theme="aetherial-light" aria-label="Aetherial Light Theme"><span class="color-patch" style="background-color: #F8F9FA;"></span><span class="color-patch" style="background-color: #A0D2DB;"></span></button>
                 </div>
             </div>
         </div>
     </footer>
 
-    
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         const themeButtons = document.querySelectorAll('.theme-btn');
         const body = document.body;
-
-        const giscusThemeMap = {
-            'default': 'dark_dimmed',
-            'cosmic-indigo': 'dark_dimmed',
-            'aetherial-light': 'light'
-        };
-
+        const giscusThemeMap = { 'default': 'dark_dimmed', 'cosmic-indigo': 'dark_dimmed', 'aetherial-light': 'light' };
         const updateGiscusTheme = (themeName) => {
             const giscusFrame = document.querySelector('iframe.giscus-frame');
             if (!giscusFrame) return;
-
             const giscusTheme = giscusThemeMap[themeName] || 'dark_dimmed';
-            setTimeout(() => {
-                giscusFrame.contentWindow.postMessage(
-                    { giscus: { setConfig: { theme: giscusTheme } } },
-                    'https://giscus.app'
-                );
-            }, 100);
+            setTimeout(() => { giscusFrame.contentWindow.postMessage({ giscus: { setConfig: { theme: giscusTheme } } }, 'https://giscus.app'); }, 100);
         };
-
         const applyTheme = (themeName) => {
             if (!themeName) return;
             body.setAttribute('data-theme', themeName);
-            themeButtons.forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.theme === themeName);
-            });
+            themeButtons.forEach(btn => { btn.classList.toggle('active', btn.dataset.theme === themeName); });
             updateGiscusTheme(themeName);
         };
-
         const savedTheme = localStorage.getItem('archive03-theme') || 'default';
         applyTheme(savedTheme);
-
         themeButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const selectedTheme = button.dataset.theme;
@@ -155,26 +124,19 @@
                 localStorage.setItem('archive03-theme', selectedTheme);
             });
         });
-
         const commentsSection = document.querySelector('.post-comments');
         if (commentsSection) {
             const observer = new IntersectionObserver((entries, obs) => {
                 if (entries[0].isIntersecting) {
                     const applyGiscusThemeOnLoad = () => {
                         const giscusFrame = document.querySelector('iframe.giscus-frame');
-                        if (giscusFrame) {
-                           const currentTheme = localStorage.getItem('archive03-theme') || 'default';
-                           updateGiscusTheme(currentTheme);
-                        } else {
-                            setTimeout(applyGiscusThemeOnLoad, 200);
-                        }
+                        if (giscusFrame) { const currentTheme = localStorage.getItem('archive03-theme') || 'default'; updateGiscusTheme(currentTheme); } 
+                        else { setTimeout(applyGiscusThemeOnLoad, 200); }
                     };
                     applyGiscusThemeOnLoad();
                     obs.disconnect();
                 }
-            }, {
-                threshold: 0.01
-            });
+            }, { threshold: 0.01 });
             observer.observe(commentsSection);
         }
     });
