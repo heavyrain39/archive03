@@ -5,27 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ block "title" . }}{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}{{ end }}</title>
     
-    <!-- 메타 태그 (SEO) -->
     <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ if .IsPage }}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
     <meta name="author" content="{{ .Site.Params.author }}">
     
-    <!-- 스타일시트 링크 (나중에 만들 파일) -->
-    {{ $style := resources.Get "css/style.scss" }}
-    {{ if $style }}
-        {{ $style = $style | resources.ExecuteAsTemplate "style.scss" . | toCSS | resources.Minify | resources.Fingerprint }}
-        <link rel="stylesheet" href="{{ $style.Permalink }}">
-    {{ end }}
+    {{ $style := resources.Get "css/style.scss" | resources.ExecuteAsTemplate "style.scss.tpl" . | toCSS | resources.Minify | resources.Fingerprint }}
+    <link rel="stylesheet" href="{{ $style.Permalink }}">
 
-    <!-- Favicon (나중에 추가할 파일) -->
-    <!-- <link rel="icon" type="image/png" href="/favicon.png"> -->
+      <link rel="icon" type="image/x-icon" href="{{ "favicon.ico" | relURL }}">
+      <link rel="shortcut icon" type="image/x-icon" href="{{ "favicon.ico" | relURL }}">
 </head>
-<body class="dark-mode">
+<body data-theme="default" class="{{ if and .File (eq .File.BaseFileName "search") }}is-search-page{{ end }}">
 
-    {{/* ================== Header ================== */}}
     <header id="main-header">
         <div class="container">
             <div class="logo">
-                <a href="{{ .Site.BaseURL }}">
+                <a href="{{ "/" | relURL }}">
                     <span class="logo-main">{{ .Site.Title }}</span>
                     <span class="logo-sub">{{ .Site.Params.subtitle }}</span>
                 </a>
@@ -34,7 +28,7 @@
                 <ul>
                     {{ range .Site.Menus.main }}
                     <li>
-                        <a href="{{ .URL }}" {{ if .Params.target }}target="{{ .Params.target }}" rel="noopener noreferrer"{{ end }}>
+                        <a href="{{ .URL | relURL }}" {{ if .Params.target }}target="{{ .Params.target }}" rel="noopener noreferrer"{{ end }}>
                             {{ .Name }}
                         </a>
                     </li>
@@ -45,20 +39,83 @@
     </header>
 
     <main>
-        {{/* ================== Content Area ================== */}}
-        {{/* 이 블록이 각 페이지의 고유한 내용으로 채워집니다 */}}
-        {{ block "main" . }}
-        {{ end }}
+        {{ block "main" . }}{{ end }}
     </main>
 
-    {{/* ================== Footer ================== */}}
     <footer id="main-footer">
         <div class="container">
-            <p>© {{ now.Format "2006" }} {{ .Site.Title }}. All Rights Reserved.</p>
-            <!-- 개인정보처리방침 등 추가 링크가 필요하면 여기에 추가 -->
-            <!-- <p><a href="/privacy">개인정보처리방침</a></p> -->
+            <div class="footer-info">
+                <p>© {{ now.Format "2006" }} {{ .Site.Title }}. All Rights Reserved.</p>
+                <a href="{{ (.Site.GetPage "privacy.html").RelPermalink }}" class="footer-privacy-link">개인정보처리방침</a>
+            </div>
+            
+            <div class="footer-theme-selector">
+                <div class="theme-buttons">
+                    <button class="theme-btn" data-theme="default" aria-label="Default Theme"><span class="color-patch" style="background-color: #282c34;"></span><span class="color-patch" style="background-color: #64F0C8;"></span></button>
+                    <button class="theme-btn" data-theme="cosmic-indigo" aria-label="Cosmic Indigo Theme"><span class="color-patch" style="background-color: #1A182F;"></span><span class="color-patch" style="background-color: #F0C419;"></span></button>
+                    <button class="theme-btn" data-theme="aetherial-light" aria-label="Aetherial Light Theme"><span class="color-patch" style="background-color: #F8F9FA;"></span><span class="color-patch" style="background-color: #A0D2DB;"></span></button>
+                </div>
+            </div>
         </div>
     </footer>
 
+    <!-- 원래의 정상 작동하던 스크립트로 완전 복구 -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeButtons = document.querySelectorAll('.theme-btn');
+        const body = document.body;
+        const giscusThemeMap = { 'default': 'dark_dimmed', 'cosmic-indigo': 'dark_dimmed', 'aetherial-light': 'light' };
+        
+        const updateGiscusTheme = (themeName) => {
+            const giscusFrame = document.querySelector('iframe.giscus-frame');
+            if (!giscusFrame) return;
+            const giscusTheme = giscusThemeMap[themeName] || 'dark_dimmed';
+            // setTimeout을 추가하여 giscus 프레임이 메시지를 받을 준비가 될 때까지 약간의 시간을 줍니다.
+            setTimeout(() => { 
+                giscusFrame.contentWindow.postMessage({ giscus: { setConfig: { theme: giscusTheme } } }, 'https://giscus.app');
+            }, 100);
+        };
+        
+        const applyTheme = (themeName) => {
+            if (!themeName) return;
+            body.setAttribute('data-theme', themeName);
+            themeButtons.forEach(btn => { 
+                btn.classList.toggle('active', btn.dataset.theme === themeName); 
+            });
+            updateGiscusTheme(themeName);
+        };
+
+        const savedTheme = localStorage.getItem('archive03-theme') || 'default';
+        applyTheme(savedTheme);
+
+        themeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const selectedTheme = button.dataset.theme;
+                applyTheme(selectedTheme);
+                localStorage.setItem('archive03-theme', selectedTheme);
+            });
+        });
+
+        const commentsSection = document.querySelector('.post-comments');
+        if (commentsSection) {
+            const observer = new IntersectionObserver((entries, obs) => {
+                if (entries[0].isIntersecting) {
+                    const applyGiscusThemeOnLoad = () => {
+                        const giscusFrame = document.querySelector('iframe.giscus-frame');
+                        if (giscusFrame) {
+                            const currentTheme = localStorage.getItem('archive03-theme') || 'default';
+                            updateGiscusTheme(currentTheme);
+                        } else {
+                            setTimeout(applyGiscusThemeOnLoad, 200); // 프레임이 없으면 0.2초 후 재시도
+                        }
+                    };
+                    applyGiscusThemeOnLoad();
+                    obs.disconnect();
+                }
+            }, { threshold: 0.01 });
+            observer.observe(commentsSection);
+        }
+    });
+    </script>
 </body>
 </html>

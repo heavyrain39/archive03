@@ -1,0 +1,7 @@
+{{- $.Scratch.Add "index" slice -}}
+{{- range .Site.RegularPages -}}
+    {{- if eq .Section "reports" -}}
+        {{- $.Scratch.Add "index" (dict "title" .Title "tags" .Params.tags "permalink" .RelPermalink "content" (.Content | plainify)) -}}
+    {{- end -}}
+{{- end -}}
+{{- $.Scratch.Get "index" | jsonify -}}

@@ -1,0 +1,26 @@
+{{ $paginator := .Paginator }}
+
+{{ if gt $paginator.TotalPages 1 }}
+<nav class="pagination-nav" aria-label="Pagination">
+    
+    <!-- 이전 페이지 링크 -->
+    {{ if $paginator.HasPrev }}
+        <a href="{{ $paginator.Prev.URL }}" class="pagination-arrow" aria-label="Previous Page">◀</a>
+    {{ else }}
+        <span class="pagination-arrow disabled" aria-hidden="true">◀</span>
+    {{ end }}
+
+    <!-- 현재 페이지 / 전체 페이지 -->
+    <span class="page-indicator">
+        {{ $paginator.PageNumber }} / {{ $paginator.TotalPages }}
+    </span>
+
+    <!-- 다음 페이지 링크 -->
+    {{ if $paginator.HasNext }}
+        <a href="{{ $paginator.Next.URL }}" class="pagination-arrow" aria-label="Next Page">▶</a>
+    {{ else }}
+        <span class="pagination-arrow disabled" aria-hidden="true">▶</span>
+    {{ end }}
+
+</nav>
+{{ end }}

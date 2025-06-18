@@ -1,21 +1,50 @@
 {{ define "main" }}
-<div class="container">
-    <article class="post">
+<article class="post">
+    <div class="container">
         <header class="post-header">
             <h1 class="post-title">{{ .Title }}</h1>
+            {{ if not .Params.hide_date }}
             <div class="post-meta">
                 <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006년 1월 2일" }}</time>
             </div>
+            {{ end }}
         </header>
+    </div>
 
+    <div class="container post-body-container">
         <div class="post-content">
             {{ .Content }}
         </div>
-    </article>
+    </div>
 
-    {{/* 댓글 기능 영역 */}}
-    <section class="post-comments">
+    <a href="#" id="share-fab" class="share-fab" title="Share this post" aria-label="Share this post">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5-.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"/>
+            <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"/>
+        </svg>
+    </a>
+</article>
+
+<!-- [논리적 수정] article과 section은 형제 관계여야 합니다. -->
+<section class="post-comments">
+    <div class="container">
         {{ partial "giscus.html" . }}
-    </section>
-</div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const shareButton = document.getElementById('share-fab');
+    if (shareButton) {
+        shareButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            if (navigator.share) {
+                navigator.share({ title: document.title, text: '이 글을 확인해보세요!', url: window.location.href, }).catch(console.error);
+            } else {
+                navigator.clipboard.writeText(window.location.href).then(() => { alert('게시글 주소가 클립보드에 복사되었습니다.'); }).catch(err => { console.error('클립보드 복사 실패:', err); alert('주소 복사에 실패했습니다.'); });
+            }
+        });
+    }
+});
+</script>
 {{ end }}

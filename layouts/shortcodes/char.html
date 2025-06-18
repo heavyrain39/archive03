@@ -1,4 +1,6 @@
 <div class="char-header">
-    <img src="{{ (printf "images/profiles/%s.png" (.Get "name")) | relURL }}" alt="{{ .Get "name" }} 프로필 아이콘" class="char-icon">
+    <div class="char-icon-wrapper">
+        <img src="{{ printf "images/profiles/%s.png" (.Get "name") | relURL }}" alt="{{ .Get "name" }} 프로필 아이콘" class="char-icon">
+    </div>
     <div class="char-name">{{ .Get "title" }}</div>
 </div>

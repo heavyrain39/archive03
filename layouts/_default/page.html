@@ -1,0 +1,79 @@
+{{ define "main" }}
+
+{{ if eq .File.BaseFileName "search" }}
+
+    <div class="list-page-container">
+        <header class="list-header">
+            <h1 class="list-title" id="search-page-title"></h1>
+        </header>
+        <div id="search-page-results"></div>
+        <nav id="search-page-pagination" class="pagination-nav"></nav>
+    </div>
+
+{{ else }}
+
+    <article class="post">
+        <div class="container">
+            <header class="post-header">
+                <h1 class="post-title">{{ .Title }}</h1>
+            </header>
+        </div>
+        <div class="container post-body-container">
+            <div class="post-content">
+                {{ .Content }}
+            </div>
+        </div>
+    </article>
+
+{{ end }}
+
+
+{{ if eq .File.BaseFileName "search" }}
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    const titleEl = document.getElementById('search-page-title');
+    const resultsEl = document.getElementById('search-page-results');
+    const paginationEl = document.getElementById('search-page-pagination');
+    let searchData = [];
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get('q');
+    if (!query) { titleEl.textContent = "검색어가 없습니다."; return; }
+    titleEl.innerHTML = `「<span class="color-accent">${query}</span>」에 대한 검색 결과`;
+    try {
+        const response = await fetch('{{ (site.Home.OutputFormats.Get "JSON").RelPermalink }}');
+        searchData = await response.json();
+    } catch (e) { resultsEl.innerHTML = "<p>검색 데이터를 불러오는 데 실패했습니다.</p>"; return; }
+    const lowerCaseQuery = query.toLowerCase();
+    const allResults = searchData.filter(post => post.title.toLowerCase().includes(lowerCaseQuery) || post.content.toLowerCase().includes(lowerCaseQuery));
+    const resultsPerPage = 20;
+    const totalPages = Math.ceil(allResults.length / resultsPerPage);
+    let currentPage = 1;
+    const renderPage = (page) => {
+        currentPage = page;
+        resultsEl.innerHTML = '';
+        paginationEl.innerHTML = '';
+        if (allResults.length === 0) { resultsEl.innerHTML = '<p class="no-results" style="text-align: center; padding: 2rem 0;">검색 결과가 없습니다.</p>'; return; }
+        const start = (page - 1) * resultsPerPage;
+        const end = start + resultsPerPage;
+        const pageResults = allResults.slice(start, end);
+        const resultList = document.createElement('ul');
+        resultList.className = 'list-page-post-list';
+        pageResults.forEach(post => {
+            const li = document.createElement('li');
+            li.innerHTML = `<a href="${post.permalink}"><span class="list-page-post-title">${post.title}</span><div class="list-page-post-meta"><span class="summary">${post.content.substring(0, 100)}...</span></div></a>`;
+            resultList.appendChild(li);
+        });
+        resultsEl.appendChild(resultList);
+        if (totalPages > 1) { paginationEl.innerHTML = `<a href="#" class="pagination-arrow prev ${currentPage === 1 ? 'disabled' : ''}" data-page="${currentPage - 1}">◀</a><span class="page-indicator">${currentPage} / ${totalPages}</span><a href="#" class="pagination-arrow next ${currentPage === totalPages ? 'disabled' : ''}" data-page="${currentPage + 1}">▶</a>`; }
+    };
+    paginationEl.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = e.target.closest('.pagination-arrow');
+        if (target && !target.classList.contains('disabled')) { renderPage(parseInt(target.dataset.page)); }
+    });
+    renderPage(1);
+});
+</script>
+{{ end }}
+
+{{ end }}

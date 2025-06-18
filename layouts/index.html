@@ -1,55 +1,248 @@
 {{ define "main" }}
 
-<div class="container">
+{{/* =====================================================================
+    [Archive 03 v2.0] 메인 페이지 레이아웃
+========================================================================= */}}
 
-    {{/* 
-        [수정 사항 1]
-        헤더 영역과 중복으로 표시되던 페이지 제목과 부제를 삭제했습니다.
-        <header class="page-header">...</header> 블록 전체를 제거하여 깔끔하게 만듭니다.
-    */}}
+<div class="dashboard-container">
 
-    <div class="report-grid"> 
-        {{/* [수정] .RelPermalink이 "/about/"이 아닌 페이지만 목록에 표시하도록 조건 추가 */}}
-        {{ range where .Site.RegularPages ".RelPermalink" "ne" "/about/" }}
-            {{ $post := . }}
-            
-            <article class="report-card-v2">
+    <!-- ====================== 섹션 1: 좌상단 (랜덤 섬네일 + 최신글) ====================== -->
+    <section class="dashboard-card latest-post-card">
+        
+        {{ $thumbnails := readDir "static/images/thumbnails" }}
+        {{ $randomThumbnail := index ($thumbnails | shuffle) 0 }}
 
-                {{ with $post.Params.thumbnail }}
-                    {{ $original := $post.Resources.Get . }}
+        <div class="latest-post-thumbnail-wrapper">
+            <!-- [수정] printf와 relURL을 사용하여 경로를 더 명확하게 생성합니다. -->
+            <img src="{{ (printf "images/thumbnails/%s" $randomThumbnail.Name) | relURL }}" alt="Random Thumbnail" class="latest-post-thumbnail">
+        </div>
 
-                    {{ if $original }}
-                        {{/* 
-                            [정보]
-                            이 코드는 이미지를 800x450 (16:9 비율)으로 크롭하고 있습니다.
-                            현재 카드의 폭이 넓어서 이미지가 커 보이는 것 뿐이며,
-                            나중에 게시물이 여러 개 추가되면 카드의 폭이 줄어들면서
-                            이미지도 자연스럽게 의도한 크기로 보이게 됩니다.
-                        */}}
-                        {{ $thumbnail := $original.Fill "800x450" }}
+        {{ $allReportPages := (where .Site.RegularPages "Section" "reports").ByDate.Reverse }}
+        {{ $latestPost := (first 1 $allReportPages) }}
 
-                        <a href="{{ $post.Permalink }}" class="card-thumbnail-link-v2" aria-label="Read more about {{ $post.Title }}">
-                            <img src="{{ $thumbnail.RelPermalink }}" alt="{{ $post.Title }} 썸네일" class="card-thumbnail-v2" loading="lazy" width="{{ $thumbnail.Width }}" height="{{ $thumbnail.Height }}">
-                        </a>
-                    {{ else }}
-                        {{/* 썸네일 이미지를 찾지 못했을 때를 대비한 영역 (현재는 비워둠) */}}
-                    {{ end }}
-                {{ end }}
-
-                <div class="card-content-v2">
-                    <div>
-                        <h2 class="card-title-v2">
-                            <a href="{{ .Permalink }}">{{ .Title }}</a>
-                        </h2>
-                    </div>
-                    <div class="card-meta-v2">
-                        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006. 01. 02" }}</time>
-                    </div>
-                </div>
-            </article>
+        {{ range $latestPost }}
+            <div class="latest-post-content">
+                <h3 class="latest-post-title"><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+                <p class="latest-post-summary">{{ .Summary | truncate 100 "..." }}</p>
+            </div>
         {{ end }}
-    </div>
+
+    </section>
+
+    <!-- ====================== 섹션 2: 우상단 (글 목록 + 페이지네이션) ====================== -->
+    <section class="dashboard-card post-list-card">
+        <h3 class="card-header">All Articles</h3>
+        
+        <div class="post-list-container">
+            <ul class="post-list">
+                {{ $otherPosts := (after 1 $allReportPages) }}
+                {{ $paginator := .Paginate $otherPosts 5 }}
+                
+                {{ range $paginator.Pages }}
+                    <li>
+                        <a href="{{ .Permalink }}">
+                            <span>{{ .Title }}</span>
+                            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006.01.02" }}</time>
+                        </a>
+                    </li>
+                {{ end }}
+            </ul>
+        </div>
+        
+        {{ partial "pagination.html" . }}
+    </section>
+
+    <!-- ====================== 섹션 3: 하단 좌측 (랜덤 태그) ====================== -->
+    <section class="dashboard-card tag-cloud-card">
+        <div class="card-header-with-action">
+            <h3 class="card-header">Tags</h3>
+            <a href="#" class="refresh-button" aria-label="Refresh Tags">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
+                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+                </svg>
+            </a>
+        </div>
+
+        <div class="tag-cloud">
+            {{ $tags := .Site.Taxonomies.tags.ByCount }}
+            {{ $shuffledTags := $tags | shuffle }}
+            {{ $tagsToShow := first 30 $shuffledTags }}
+            
+            {{ $tagsCount := len $tagsToShow }}
+            
+            {{ $half := math.Ceil (div (float $tagsCount) 2.0) }}
+
+            {{ $row1 := first (int $half) $tagsToShow }}
+            {{ $row2 := after (int $half) $tagsToShow }}
+
+            <div class="tag-row">
+                <div class="tag-scroller">
+                    {{ range $row1 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title }}</a>{{ end }}
+                    {{ range $row1 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title }}</a>{{ end }}
+                </div>
+            </div>
+            <div class="tag-row tag-row-reverse">
+                <div class="tag-scroller">
+                    {{ range $row2 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title }}</a>{{ end }}
+                    {{ range $row2 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title }}</a>{{ end }}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====================== 섹션 4: 하단 우측 (검색) ====================== -->
+    <section class="dashboard-card search-card">
+        <h3 class="card-header">Search</h3>
+        <div class="search-wrapper">
+            <input type="search" id="search-input" placeholder="검색어를 입력하세요...">
+            <button id="search-button" aria-label="Search">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                </svg>
+            </button>
+        </div>
+        <div id="search-results"></div>
+    </section>
 
 </div>
+
+<!-- 태그 클라우드 동적 리프레시를 위한 JavaScript (최종 균등 배분 버전) -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const allTags = [
+        {{- range $i, $tagPage := .Site.Taxonomies.tags.ByCount -}}
+            {{- if $i -}},{{- end -}}
+            { "title": "{{ .Page.Title | safeJS }}", "permalink": "{{ .Page.Permalink | safeJS }}" }
+        {{- end -}}
+    ];
+
+    const tagCloudContainer = document.querySelector('.tag-cloud');
+    const refreshButton = document.querySelector('.refresh-button');
+
+    if (!tagCloudContainer || !refreshButton || !allTags || allTags.length === 0) {
+        return; 
+    }
+
+    const shuffleArray = (array) => {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    };
+
+    const createAnimatedTagCloudHTML = (tags) => {
+        const tagsCount = tags.length;
+        const half = Math.ceil(tagsCount / 2);
+
+        const row1Tags = tags.slice(0, half);
+        const row2Tags = tags.slice(half);
+
+        const createRowHTML = (tagArray) => 
+            tagArray.map(tag => `<a href="${tag.permalink}" class="tag-item">#${tag.title}</a>`).join('');
+
+        const row1Links = createRowHTML(row1Tags);
+        const row2Links = createRowHTML(row2Tags);
+
+        return `
+            <div class="tag-row">
+                <div class="tag-scroller">${row1Links}${row1Links}</div>
+            </div>
+            <div class="tag-row tag-row-reverse">
+                <div class="tag-scroller">${row2Links}${row2Links}</div>
+            </div>
+        `;
+    };
+
+    refreshButton.addEventListener('click', (e) => {
+        e.preventDefault(); 
+        
+        const newShuffledTags = shuffleArray([...allTags]).slice(0, 30);
+        const newHTML = createAnimatedTagCloudHTML(newShuffledTags);
+
+        tagCloudContainer.innerHTML = newHTML;
+    });
+});
+</script>
+
+<!-- 검색 기능을 위한 JavaScript (최종 버전) -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('search-input');
+    const searchButton = document.getElementById('search-button');
+    const searchResults = document.getElementById('search-results');
+    let searchData = [];
+    let dataLoaded = false;
+
+    const loadSearchData = async () => {
+        try {
+            // [수정] .RelPermalink을 사용하여 어떤 baseURL에서도 올바른 경로를 찾도록 합니다.
+            const response = await fetch('{{ (site.Home.OutputFormats.Get "JSON").RelPermalink }}');
+            if (!response.ok) throw new Error('데이터 로드 실패');
+            searchData = await response.json();
+            dataLoaded = true;
+        } catch (error) {
+            console.error(error);
+            searchResults.innerHTML = '<p>검색 기능을 사용할 수 없습니다.</p>';
+        }
+    };
+
+    const performSearch = (query) => {
+        if (!query || query.trim().length < 2) {
+            searchResults.innerHTML = '';
+            return;
+        }
+        if (!dataLoaded) return;
+        const lowerCaseQuery = query.toLowerCase();
+        const results = searchData.filter(post =>
+            post.title.toLowerCase().includes(lowerCaseQuery) ||
+            post.content.toLowerCase().includes(lowerCaseQuery)
+        );
+        displayResults(results, query);
+    };
+
+    const displayResults = (results, query) => {
+        searchResults.innerHTML = '';
+        if (results.length === 0) {
+            searchResults.innerHTML = '<p class="no-results">검색 결과가 없습니다.</p>';
+            return;
+        }
+        const resultList = document.createElement('ul');
+        resultList.className = 'search-result-list';
+        const itemsToShow = results.slice(0, 3);
+        itemsToShow.forEach(post => {
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = post.permalink;
+            link.textContent = post.title;
+            listItem.appendChild(link);
+            resultList.appendChild(listItem);
+        });
+        searchResults.appendChild(resultList);
+
+        if (results.length > 3) {
+            const moreLink = document.createElement('a');
+            moreLink.href = `{{ (.Site.GetPage "search.md").RelPermalink }}?q=${encodeURIComponent(query)}`;
+            moreLink.className = 'more-results-link';
+            moreLink.textContent = `전체 검색 결과 보기 (${results.length}개)`;
+            searchResults.appendChild(moreLink);
+        }
+    };
+
+    searchInput.addEventListener('input', (e) => {
+        performSearch(e.target.value);
+    });
+
+    searchButton.addEventListener('click', () => {
+        const query = searchInput.value;
+        if (query.trim()) {
+            window.location.href = `{{ (.Site.GetPage "search.md").RelPermalink }}?q=${encodeURIComponent(query)}`;
+        }
+    });
+
+    loadSearchData();
+});
+</script>
 
 {{ end }}

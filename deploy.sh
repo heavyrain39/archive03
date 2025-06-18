@@ -2,8 +2,8 @@
 
 echo -e "\033[0;32mDeploying updates to GitHub...\033[0m"
 
-# 1. 사이트를 빌드합니다. (hugo 명령어)
-hugo # -t <theme_name> # 테마를 쓴다면 이 주석을 해제하세요.
+# 1. 사이트를 빌드합니다.
+hugo
 
 # 2. 빌드된 public 폴더로 이동합니다.
 cd public
@@ -19,8 +19,8 @@ if [ -n "$*" ]; then
 fi
 git commit -m "$msg"
 
-# 5. gh-pages 브랜치로 강제 푸시합니다.
-git push -f git@github.com:heavyrain39/archive03.git main:gh-pages
+# 5. gh-pages 브랜치로 강제 푸시합니다. (main -> master 로 수정됨)
+git push -f git@github.com:heavyrain39/archive03.git master:gh-pages
 
 # 6. 원래 폴더로 돌아옵니다.
 cd ..

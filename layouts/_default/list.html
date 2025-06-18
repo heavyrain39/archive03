@@ -1,0 +1,31 @@
+{{ define "main" }}
+<!-- [수정] 일반 container div 대신, 너비를 제어할 전용 list-page-container 를 사용합니다. -->
+<div class="list-page-container">
+    <header class="list-header">
+        <h1 class="list-title">
+            {{ .Title }}
+            {{ if ne .Kind "taxonomy" }}
+                <span class="post-count">({{ len .Pages }})</span>
+            {{ end }}
+        </h1>
+    </header>
+
+    <ul class="list-page-post-list">
+        {{ range .Pages }}
+            <li>
+                <a href="{{ .Permalink }}">
+                    <span class="list-page-post-title">{{ .Title }}</span>
+                    <div class="list-page-post-meta">
+                        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006년 1월 2일" }}</time>
+                        <span class="summary">{{ .Summary | truncate 70 "..." }}</span>
+                    </div>
+                </a>
+            </li>
+        {{ end }}
+    </ul>
+</div>
+
+{{/* 페이지네이션이 필요하다면 여기에 추가할 수 있습니다. */}}
+{{/* {{ partial "pagination.html" . }} */}}
+
+{{ end }}
