@@ -960,9 +960,11 @@ body[data-theme="aetherial-light"] #search-button {
 }
 
 /* --------------------------------------------------
-   15. PC용 읽기 영역 박스 스타일
+   15. PC용 읽기 영역 박스 스타일 (최종 복원)
    -------------------------------------------------- */
 @media (min-width: 1024px) {
+    /* [핵심] 모든 스타일을 다시 .post-body-container로 되돌립니다. */
+    /* 이것이 원래의 올바른 방식이며, 이제는 정상적으로 작동합니다. */
     .post-body-container {
         background-color: var(--dark-surface);
         border: 1px solid var(--border-color);

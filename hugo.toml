@@ -63,7 +63,8 @@ timeZone = "Asia/Seoul"
 
 # 6. 홈페이지(Home)의 출력 포맷 설정
 [outputs]
-  home = ["HTML", "JSON"]
+  home = ["HTML", "JSON", "RSS"] # RSS를 추가하면 더 좋습니다.
+  section = ["HTML", "RSS"]
 
 # 7. JSON 포맷의 세부 설정
 [outputFormats.JSON]
