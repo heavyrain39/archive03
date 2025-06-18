@@ -10,8 +10,9 @@
     
     
     
+    
         
-        <link rel="stylesheet" href="https://heavyrain39.github.io/archive03/style.min.7dffab1ad02ee025e5cccd89e389bae54ba7a98b26392e8a4c755110f03a9a5e.css">
+        <link rel="stylesheet" href="https://heavyrain39.github.io/archive03/style.scss.min.7dffab1ad02ee025e5cccd89e389bae54ba7a98b26392e8a4c755110f03a9a5e.css">
     
 
       <link rel="icon" type="image/x-icon" href="/archive03/favicon.ico">
@@ -106,17 +107,13 @@
     
     <footer id="main-footer">
         <div class="container">
-            
             <div class="footer-info">
                 <p>© 2025 Archive 03. All Rights Reserved.</p>
-                
-                
                 <a href="/archive03/privacy/" class="footer-privacy-link">개인정보처리방침</a>
             </div>
             
             <div class="footer-theme-selector">
                 <div class="theme-buttons">
-                    
                     <button class="theme-btn" data-theme="default" aria-label="Default Theme">
                         <span class="color-patch" style="background-color: #282c34;"></span>
                         <span class="color-patch" style="background-color: #64F0C8;"></span>
@@ -134,6 +131,7 @@
         </div>
     </footer>
 
+    
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         const themeButtons = document.querySelectorAll('.theme-btn');
@@ -150,13 +148,12 @@
             if (!giscusFrame) return;
 
             const giscusTheme = giscusThemeMap[themeName] || 'dark_dimmed';
-            
             setTimeout(() => {
                 giscusFrame.contentWindow.postMessage(
                     { giscus: { setConfig: { theme: giscusTheme } } },
                     'https://giscus.app'
                 );
-            }, 100); 
+            }, 100);
         };
 
         const applyTheme = (themeName) => {
@@ -165,15 +162,12 @@
             themeButtons.forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.theme === themeName);
             });
-            
             updateGiscusTheme(themeName);
         };
 
-        
         const savedTheme = localStorage.getItem('archive03-theme') || 'default';
         applyTheme(savedTheme);
 
-        
         themeButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const selectedTheme = button.dataset.theme;
@@ -182,35 +176,25 @@
             });
         });
 
-        
         const commentsSection = document.querySelector('.post-comments');
         if (commentsSection) {
             const observer = new IntersectionObserver((entries, obs) => {
-                
                 if (entries[0].isIntersecting) {
-                    
-                    
                     const applyGiscusThemeOnLoad = () => {
                         const giscusFrame = document.querySelector('iframe.giscus-frame');
                         if (giscusFrame) {
                            const currentTheme = localStorage.getItem('archive03-theme') || 'default';
                            updateGiscusTheme(currentTheme);
                         } else {
-                            
                             setTimeout(applyGiscusThemeOnLoad, 200);
                         }
                     };
                     applyGiscusThemeOnLoad();
-
-                    
                     obs.disconnect();
                 }
             }, {
-                
                 threshold: 0.01
             });
-
-            
             observer.observe(commentsSection);
         }
     });
