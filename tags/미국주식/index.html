@@ -9,10 +9,7 @@
     <meta name="author" content="야차완">
     
     
-    
-        
-        <link rel="stylesheet" href="https://archive03.online/style.scss.min.626b0c2eb8f5fbf17c612469b4d0a7b18679cfd95ea5431b85abdace146ce447.css">
-    
+    <link rel="stylesheet" href="/style.scss.min.626b0c2eb8f5fbf17c612469b4d0a7b18679cfd95ea5431b85abdace146ce447.css">
 
       <link rel="icon" type="image/x-icon" href="/favicon.ico">
       <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
@@ -22,7 +19,7 @@
     <header id="main-header">
         <div class="container">
             <div class="logo">
-                <a href="https://archive03.online/">
+                <a href="/">
                     <span class="logo-main">Archive 03</span>
                     <span class="logo-sub">세 명의 인외 소녀가 전하는 투자 인사이트</span>
                 </a>
@@ -63,7 +60,7 @@
     <ul class="list-page-post-list">
         
             <li>
-                <a href="https://archive03.online/reports/content/reports/2025-06-17-schd-and-qqq-combo/">
+                <a href="/reports/2025-06-17-schd-and-qqq-combo/">
                     <span class="list-page-post-title">SCHD와 QQQ의 조합, 정말 강력할까? (ft. 장단점 완벽 분석)</span>
                     <div class="list-page-post-meta">
                         <time datetime="2025-06-17">2025년 6월 17일</time>
@@ -73,7 +70,7 @@
             </li>
         
             <li>
-                <a href="https://archive03.online/reports/2025-06-17-reits-light-and-shadow/">
+                <a href="/reports/2025-06-17-reits-light-and-shadow/">
                     <span class="list-page-post-title">소액으로 월세 받기? 리츠(REITs) 투자의 빛과 그림자</span>
                     <div class="list-page-post-meta">
                         <time datetime="2025-06-16">2025년 6월 16일</time>
@@ -83,7 +80,7 @@
             </li>
         
             <li>
-                <a href="https://archive03.online/reports/2025-06-15-why-sp500-etf/">
+                <a href="/reports/2025-06-15-why-sp500-etf/">
                     <span class="list-page-post-title">투자 초보에게 S&amp;P 500 ETF를 추천하는 이유</span>
                     <div class="list-page-post-meta">
                         <time datetime="2025-06-15">2025년 6월 15일</time>
@@ -118,25 +115,35 @@
         </div>
     </footer>
 
+    
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         const themeButtons = document.querySelectorAll('.theme-btn');
         const body = document.body;
         const giscusThemeMap = { 'default': 'dark_dimmed', 'cosmic-indigo': 'dark_dimmed', 'aetherial-light': 'light' };
+        
         const updateGiscusTheme = (themeName) => {
             const giscusFrame = document.querySelector('iframe.giscus-frame');
             if (!giscusFrame) return;
             const giscusTheme = giscusThemeMap[themeName] || 'dark_dimmed';
-            setTimeout(() => { giscusFrame.contentWindow.postMessage({ giscus: { setConfig: { theme: giscusTheme } } }, 'https://giscus.app'); }, 100);
+            
+            setTimeout(() => { 
+                giscusFrame.contentWindow.postMessage({ giscus: { setConfig: { theme: giscusTheme } } }, 'https://giscus.app');
+            }, 100);
         };
+        
         const applyTheme = (themeName) => {
             if (!themeName) return;
             body.setAttribute('data-theme', themeName);
-            themeButtons.forEach(btn => { btn.classList.toggle('active', btn.dataset.theme === themeName); });
+            themeButtons.forEach(btn => { 
+                btn.classList.toggle('active', btn.dataset.theme === themeName); 
+            });
             updateGiscusTheme(themeName);
         };
+
         const savedTheme = localStorage.getItem('archive03-theme') || 'default';
         applyTheme(savedTheme);
+
         themeButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const selectedTheme = button.dataset.theme;
@@ -144,14 +151,19 @@
                 localStorage.setItem('archive03-theme', selectedTheme);
             });
         });
+
         const commentsSection = document.querySelector('.post-comments');
         if (commentsSection) {
             const observer = new IntersectionObserver((entries, obs) => {
                 if (entries[0].isIntersecting) {
                     const applyGiscusThemeOnLoad = () => {
                         const giscusFrame = document.querySelector('iframe.giscus-frame');
-                        if (giscusFrame) { const currentTheme = localStorage.getItem('archive03-theme') || 'default'; updateGiscusTheme(currentTheme); } 
-                        else { setTimeout(applyGiscusThemeOnLoad, 200); }
+                        if (giscusFrame) {
+                            const currentTheme = localStorage.getItem('archive03-theme') || 'default';
+                            updateGiscusTheme(currentTheme);
+                        } else {
+                            setTimeout(applyGiscusThemeOnLoad, 200); 
+                        }
                     };
                     applyGiscusThemeOnLoad();
                     obs.disconnect();
