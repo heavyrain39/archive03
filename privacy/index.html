@@ -33,7 +33,7 @@
     <meta name="author" content="야차완">
     
     
-    <link rel="stylesheet" href="/style.scss.min.626b0c2eb8f5fbf17c612469b4d0a7b18679cfd95ea5431b85abdace146ce447.css">
+    <link rel="stylesheet" href="https://archive03.online/style.scss.min.626b0c2eb8f5fbf17c612469b4d0a7b18679cfd95ea5431b85abdace146ce447.css">
 
       <link rel="icon" type="image/x-icon" href="/favicon.ico">
       <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
@@ -70,18 +70,20 @@
 
     <main>
         
+<article class="post">
+    <div class="container">
+        <header class="post-header">
+            <h1 class="post-title">개인정보처리방침</h1>
+            
+            
+            
 
+        </header>
+    </div>
 
-
-    <article class="post">
-        <div class="container">
-            <header class="post-header">
-                <h1 class="post-title">개인정보처리방침</h1>
-            </header>
-        </div>
-        <div class="container post-body-container">
-            <div class="post-content">
-                
+    <div class="container post-body-container">
+        <div class="post-content">
+            
 <p><strong>시행일자: 2025년 6월 17일</strong></p> <!-- [수정] 코드를 실제 날짜로 변경 -->
 
 <p>'Archive 03'(이하 '블로그')는 정보통신망 이용촉진 및 정보보호 등에 관한 법률, 개인정보보호법 등 관련 법령상의 개인정보보호 규정을 준수하며, 관련 법령에 의거한 개인정보처리방침을 정하여 이용자 권익 보호에 최선을 다하고 있습니다.</p>
@@ -132,15 +134,35 @@
 
 <h3>제6조 (개인정보처리방침의 변경)</h3>
 <p>본 개인정보처리방침은 시행일로부터 적용되며, 법령 및 방침에 따른 변경내용의 추가, 삭제 및 정정이 있는 경우에는 변경사항의 시행 7일 전부터 공지사항을 통하여 고지할 것입니다.</p>
-            </div>
         </div>
-    </article>
+    </div>
+
+    <a href="#" id="share-fab" class="share-fab" title="Share this post" aria-label="Share this post">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5-.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"/>
+            <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"/>
+        </svg>
+    </a>
+</article>
 
 
 
 
-
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const shareButton = document.getElementById('share-fab');
+    if (shareButton) {
+        shareButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            if (navigator.share) {
+                navigator.share({ title: document.title, text: '이 글을 확인해보세요!', url: window.location.href, }).catch(console.error);
+            } else {
+                navigator.clipboard.writeText(window.location.href).then(() => { alert('게시글 주소가 클립보드에 복사되었습니다.'); }).catch(err => { console.error('클립보드 복사 실패:', err); alert('주소 복사에 실패했습니다.'); });
+            }
+        });
+    }
+});
+</script>
 
     </main>
 

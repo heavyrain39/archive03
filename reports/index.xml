@@ -2,38 +2,38 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Reports on Archive 03</title>
-    <link>/reports/</link>
+    <link>https://archive03.online/reports/</link>
     <description>Recent content in Reports on Archive 03</description>
     <generator>Hugo</generator>
     <language>ko-KR</language>
     <lastBuildDate>Wed, 18 Jun 2025 00:00:00 +0900</lastBuildDate>
-    <atom:link href="/reports/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://archive03.online/reports/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>2025 하반기엔 &#39;알트 시즌&#39; 올까? 희망편 vs. 절망편</title>
-      <link>/reports/2025-06-18-altcoin-season-outlook/</link>
+      <link>https://archive03.online/reports/2025-06-18-altcoin-season-outlook/</link>
       <pubDate>Wed, 18 Jun 2025 00:00:00 +0900</pubDate>
-      <guid>/reports/2025-06-18-altcoin-season-outlook/</guid>
+      <guid>https://archive03.online/reports/2025-06-18-altcoin-season-outlook/</guid>
       <description>월가의 자금이 몰리는 RWA, AI 테마에 대한 쿠루미의 뜨거운 낙관론과, 거시 경제의 불확실성과 규제 리스크를 경고하는 미카엘의 냉철한 비관론이 정면으로 충돌합니다. 과연 2025년 하반기, 알트코인 투자자들은 웃을 수 있을까요?</description>
     </item>
     <item>
       <title>SCHD와 QQQ의 조합, 정말 강력할까? (ft. 장단점 완벽 분석)</title>
-      <link>/reports/2025-06-17-schd-and-qqq-combo/</link>
+      <link>https://archive03.online/reports/2025-06-17-schd-and-qqq-combo/</link>
       <pubDate>Tue, 17 Jun 2025 00:00:00 +0900</pubDate>
-      <guid>/reports/2025-06-17-schd-and-qqq-combo/</guid>
+      <guid>https://archive03.online/reports/2025-06-17-schd-and-qqq-combo/</guid>
       <description>성장주의 대표주자 QQQ와 가치주의 상징 SCHD. 이 둘의 조합은 정말 완벽할까요? 폭발적인 성장성과 안정적인 현금흐름의 시너지부터, 미국 집중 리스크와 가치 함정의 위험까지. 세 명의 소녀가 명쾌하게 토론합니다.</description>
     </item>
     <item>
       <title>소액으로 월세 받기? 리츠(REITs) 투자의 빛과 그림자</title>
-      <link>/reports/2025-06-17-reits-light-and-shadow/</link>
+      <link>https://archive03.online/reports/2025-06-17-reits-light-and-shadow/</link>
       <pubDate>Mon, 16 Jun 2025 00:00:00 +0900</pubDate>
-      <guid>/reports/2025-06-17-reits-light-and-shadow/</guid>
+      <guid>https://archive03.online/reports/2025-06-17-reits-light-and-shadow/</guid>
       <description>소액으로 건물주가 되어 월세를 받는 꿈, 리츠(REITs)로 가능할까? 높은 배당수익률의 이면에 숨겨진 금리 리스크와 원금 손실 가능성까지, 세 명의 소녀가 리츠 투자의 모든 것을 파헤친다.</description>
     </item>
     <item>
       <title>투자 초보에게 S&amp;P 500 ETF를 추천하는 이유</title>
-      <link>/reports/2025-06-15-why-sp500-etf/</link>
+      <link>https://archive03.online/reports/2025-06-15-why-sp500-etf/</link>
       <pubDate>Sun, 15 Jun 2025 00:00:00 +0900</pubDate>
-      <guid>/reports/2025-06-15-why-sp500-etf/</guid>
+      <guid>https://archive03.online/reports/2025-06-15-why-sp500-etf/</guid>
       <description>투자의 시작, 막막하신가요? 워런 버핏도 추천한 S&amp;amp;P 500 ETF. &amp;lsquo;시장을 사라&amp;rsquo;는 말의 진짜 의미부터 고평가 리스크까지, 세 명의 소녀가 투자의 정석을 쉽고 명쾌하게 알려드립니다.</description>
     </item>
   </channel>
