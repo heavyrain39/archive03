@@ -836,6 +836,8 @@ body[data-theme="aetherial-light"] #search-button {
 
     .dashboard-container {
         grid-template-columns: 1fr;
+        /* 이 한 줄을 추가하여, 좌우에만 패딩을 줍니다. */
+        padding: 0 var(--spacing-md);
     }
 }
 

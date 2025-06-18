@@ -40,7 +40,8 @@
                 
                 {{ range $paginator.Pages }}
                     <li>
-                        <a href="{{ .Permalink }}">
+                        <!-- [핵심 수정] a 태그에 title 속성을 추가합니다. -->
+                        <a href="{{ .Permalink }}" title="{{ .Title }}">
                             <span>{{ .Title }}</span>
                             <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006.01.02" }}</time>
                         </a>
