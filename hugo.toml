@@ -71,3 +71,6 @@ timeZone = "Asia/Seoul"
   baseName = "index"
   isPlainText = true
   mediaType = "application/json"
+
+# [추가] robots.txt 생성을 활성화합니다.
+enableRobotsTXT = true
