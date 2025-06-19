@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Results | Archive 03</title>
     
-    <meta name="description" content="&#39;Archive 03&#39;은 천사, 악마, 안드로이드라는 세 명의 인외 소녀가 최신 경제 데이터를 바탕으로 투자에 대한 인사이트를 나누는 토크형 리포트 블로그입니다.">
+    <meta name="description" content="">
     <meta name="author" content="야차완">
     
     
@@ -14,7 +14,7 @@
       <link rel="icon" type="image/x-icon" href="/favicon.ico">
       <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 </head>
-<body data-theme="default" class="">
+<body data-theme="default" class="is-search-page">
 
     <header id="main-header">
         <div class="container">
@@ -46,104 +46,78 @@
 
     <main>
         
-
-
-
-
-    
-    
-    
-    <div class="list-page-container">
-        <header class="list-header">
+<article class="post">
+    <div class="container">
+        <header class="post-header">
+            <h1 class="post-title">Search Results</h1>
             
-            <h1 class="list-title" id="search-page-title"></h1>
+            
+            
+            <div class="post-meta">
+                <time datetime="0001-01-01">0001년 1월 1일</time>
+            </div>
+            
+
         </header>
-        
-        <div id="search-page-results"></div>
-        <nav id="search-page-pagination" class="pagination-nav"></nav>
     </div>
 
+    <div class="container post-body-container">
+        <div class="post-content">
+            
+        </div>
+    </div>
+
+    <a href="#" id="share-fab" class="share-fab" title="Share this post" aria-label="Share this post">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5-.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"/>
+            <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"/>
+        </svg>
+    </a>
+</article>
+
+
+
+<section class="post-comments">
+    <div class="container">
+        
+
     
-    <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-        const titleEl = document.getElementById('search-page-title');
-        const resultsEl = document.getElementById('search-page-results');
-        const paginationEl = document.getElementById('search-page-pagination');
-        let searchData = [];
-        const params = new URLSearchParams(window.location.search);
-        const query = params.get('q');
-        
-        if (!query) {
-            titleEl.textContent = "검색어가 없습니다.";
-            return;
-        }
+        <script src="https://giscus.app/client.js"
+                data-repo="heavyrain39/archive03"
+                data-repo-id="R_kgDOO7KqJQ"
+                data-category="General"
+                data-category-id="DIC_kwDOO7KqJc4CrlEO"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="0"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="dark_dimmed"
+                data-lang="ko"
+                crossorigin="anonymous"
+                async>
+        </script>
+    
 
-        
-        titleEl.innerHTML = `「<span class="color-accent">${query}</span>」에 대한 검색 결과`;
+    </div>
+</section>
 
-        try {
-            const response = await fetch('\/index.json');
-            searchData = await response.json();
-        } catch (e) {
-            resultsEl.innerHTML = "<p>검색 데이터를 불러오는 데 실패했습니다.</p>";
-            return;
-        }
 
-        const lowerCaseQuery = query.toLowerCase();
-        const allResults = searchData.filter(post => 
-            post.title.toLowerCase().includes(lowerCaseQuery) || 
-            post.content.toLowerCase().includes(lowerCaseQuery)
-        );
-
-        const resultsPerPage = 20;
-        const totalPages = Math.ceil(allResults.length / resultsPerPage);
-        let currentPage = 1;
-
-        const renderPage = (page) => {
-            currentPage = page;
-            resultsEl.innerHTML = '';
-            paginationEl.innerHTML = '';
-
-            if (allResults.length === 0) {
-                resultsEl.innerHTML = '<p class="no-results" style="text-align: center; padding: 2rem 0;">검색 결과가 없습니다.</p>';
-                return;
-            }
-
-            const start = (page - 1) * resultsPerPage;
-            const end = start + resultsPerPage;
-            const pageResults = allResults.slice(start, end);
-
-            const resultList = document.createElement('ul');
-            
-            resultList.className = 'list-page-post-list'; 
-            
-            pageResults.forEach(post => {
-                const li = document.createElement('li');
-                
-                li.innerHTML = `<a href="${post.permalink}"><span class="list-page-post-title">${post.title}</span><div class="list-page-post-meta"><span class="summary">${post.content.substring(0, 70)}...</span></div></a>`;
-                resultList.appendChild(li);
-            });
-            resultsEl.appendChild(resultList);
-
-            if (totalPages > 1) {
-                paginationEl.innerHTML = `<a href="#" class="pagination-arrow prev ${currentPage === 1 ? 'disabled' : ''}" data-page="${currentPage - 1}">◀</a><span class="page-indicator">${currentPage} / ${totalPages}</span><a href="#" class="pagination-arrow next ${currentPage === totalPages ? 'disabled' : ''}" data-page="${currentPage + 1}">▶</a>`;
-            }
-        };
-
-        paginationEl.addEventListener('click', (e) => {
-            e.preventDefault();
-            const target = e.target.closest('.pagination-arrow');
-            if (target && !target.classList.contains('disabled')) {
-                renderPage(parseInt(target.dataset.page));
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const shareButton = document.getElementById('share-fab');
+    if (shareButton) {
+        shareButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            if (navigator.share) {
+                navigator.share({ title: document.title, text: '이 글을 확인해보세요!', url: window.location.href, }).catch(console.error);
+            } else {
+                navigator.clipboard.writeText(window.location.href).then(() => { alert('게시글 주소가 클립보드에 복사되었습니다.'); }).catch(err => { console.error('클립보드 복사 실패:', err); alert('주소 복사에 실패했습니다.'); });
             }
         });
-
-        renderPage(1);
-    });
-    </script>
-
-
-
+    }
+});
+</script>
 
     </main>
 
