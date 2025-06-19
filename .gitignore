@@ -8,7 +8,6 @@
 Thumbs.db
 
 # 개인 문서 및 기획서
-*.txt
 *.pdf
 *.docx
 *.psd
