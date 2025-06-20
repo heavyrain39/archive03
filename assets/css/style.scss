@@ -880,6 +880,11 @@ body[data-theme="aetherial-light"] #search-button {
         /* 이 한 줄을 추가하여, 좌우에만 패딩을 줍니다. */
         padding: 0 var(--spacing-md);
     }
+
+     /* [추가] 모바일 화면에서 메인 페이지 글 목록의 날짜를 숨깁니다. */
+    .post-list time {
+        display: none;
+    }
 }
 
 /* --------------------------------------------------
