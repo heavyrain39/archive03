@@ -93,7 +93,7 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--secondary-text);
     transition: font-size var(--transition-speed);
 }
-#main-header nav ul { list-style: none; display: flex; gap: var(--spacing-lg); }
+#main-header nav ul { list-style: none; display: flex; gap: var(--spacing-md); }
 #main-header nav ul li a {
     color: var(--secondary-text); font-size: 1.05rem; padding-bottom: 5px;
     border-bottom: 2px solid transparent; transition: all var(--transition-speed);
@@ -610,6 +610,7 @@ body[data-theme="aetherial-light"] .share-fab:hover {
     font-size: 0.95rem; 
     color: var(--secondary-text); 
     line-height: 1.7;
+    text-align: justify;
 
     /* --- 여기에 아래 5줄을 추가 또는 수정합니다 --- */
     display: -webkit-box;

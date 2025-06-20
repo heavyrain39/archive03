@@ -32,12 +32,12 @@ timeZone = "Asia/Seoul"
 [menu]
   [[menu.main]]
     identifier = "article"
-    name = "Article"
+    name = "HOME"
     url = "/"
     weight = 10
   [[menu.main]]
     identifier = "about"
-    name = "About"
+    name = "ABOUT"
     url = "/about/"
     weight = 20
 
