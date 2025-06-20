@@ -197,7 +197,7 @@ main {
     max-width: var(--post-container-width);
 }
 
-.post-header { text-align: center; margin-bottom: var(--spacing-xxl); }
+.post-header { text-align: center; margin-bottom: var(--spacing-xl); }
 .post-title { font-size: 2.2rem; margin-bottom: var(--spacing-md); }
 .post-meta { color: var(--secondary-text); font-size: 0.95rem; }
 .post-content p { margin-bottom: var(--spacing-lg); text-align: justify; }
@@ -984,6 +984,100 @@ body[data-theme="aetherial-light"] #search-button {
         border: 1px solid var(--border-color);
         border-radius: var(--border-radius-md);
         padding: var(--spacing-xl);
-        margin-top: var(--spacing-xl);
+        margin-top: var(--spacing-lg);
+    }
+}
+
+/* --------------------------------------------------
+   16. 이전/다음 글 내비게이션 스타일 (v7 - Final Perfected)
+   -------------------------------------------------- */
+
+.post-navigation {
+    width: 100%;
+    margin: var(--spacing-md) auto 0;
+}
+
+.nav-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    padding: 0.9rem var(--spacing-sm);
+    border-radius: var(--border-radius-md);
+    transition: background-color var(--transition-speed);
+}
+
+.nav-item:hover {
+    background-color: var(--dark-surface);
+}
+
+/* [핵심 수정 1] '다음 글' 링크에만 position:relative와 margin-bottom을 적용합니다. */
+.nav-next {
+    position: relative; /* ::after 유사 요소를 배치하기 위한 기준점 */
+    margin-bottom: 0.2rem; /* 구분선을 위한 공간을 명확하게 확보 */
+}
+
+/* [핵심 수정 2] ::after 유사 요소를 사용해 '다음 글' 아래에 독립적인 구분선을 만듭니다. */
+.nav-next::after {
+    content: '';
+    position: absolute;
+    
+    /* 위치: '다음 글' 영역의 바로 아래, margin으로 만든 공간의 중앙에 배치 */
+    bottom: calc(0.2rem / -2);
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 96%; /* 가로 폭을 살짝 줄여 양 끝에 여백을 줌 */
+    height: 1px;
+    background-color: var(--border-color);
+}
+
+
+.nav-title {
+    color: var(--light-text);
+    font-weight: 400;
+    line-height: 1.5;
+    flex-grow: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: var(--spacing-lg);
+    transition: color var(--transition-speed);
+}
+
+.nav-item:hover .nav-title {
+    color: var(--mint-green);
+}
+
+.nav-label {
+    font-size: 0.85rem;
+    color: var(--secondary-text);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.nav-label::after {
+    display: inline-block;
+    margin-left: 0.5em;
+    font-family: sans-serif;
+}
+
+.nav-next .nav-label::after {
+    content: '▲';
+}
+.nav-prev .nav-label::after {
+    content: '▼';
+}
+
+/* =============================================================
+   데스크탑용 스타일 (화면 너비 768px 이상)
+   ============================================================= */
+@media (min-width: 768px) {
+    .post-navigation {
+        max-width: 520px;
+    }
+    .nav-title {
+        font-size: 1rem;
     }
 }

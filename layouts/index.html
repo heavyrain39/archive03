@@ -31,12 +31,12 @@
 
     <!-- ====================== 섹션 2: 우상단 (글 목록 + 페이지네이션) ====================== -->
     <section class="dashboard-card post-list-card">
-        <h3 class="card-header">All Articles</h3>
+        <h3 class="card-header">Articles</h3>
         
         <div class="post-list-container">
             <ul class="post-list">
                 {{ $otherPosts := (after 1 $allReportPages) }}
-                {{ $paginator := .Paginate $otherPosts 5 }}
+                {{ $paginator := .Paginate $otherPosts 12 }}
                 
                 {{ range $paginator.Pages }}
                     <li>

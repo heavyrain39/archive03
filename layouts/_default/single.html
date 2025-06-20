@@ -4,7 +4,7 @@
         <header class="post-header">
             <h1 class="post-title">{{ .Title }}</h1>
             
-            <!-- [수정] hide_date 파라미터가 true가 아닐 때만 날짜를 표시합니다. -->
+            <!-- hide_date 파라미터가 true가 아닐 때만 날짜를 표시합니다. -->
             {{ if not .Params.hide_date }}
             <div class="post-meta">
                 <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006년 1월 2일" }}</time>
@@ -26,9 +26,31 @@
             <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"/>
         </svg>
     </a>
+
+    <!-- [이전/다음 글 내비게이션] -->
+    {{ if or .PrevInSection .NextInSection }}
+    <div class="container">
+        <nav class="post-navigation">
+            {{ with .NextInSection }}
+                <a href="{{ .Permalink }}" class="nav-item nav-next">
+                    <span class="nav-title">{{ .Title }}</span>
+                    <span class="nav-label">다음글</span>
+                </a>
+            {{ end }}
+
+            {{ with .PrevInSection }}
+                <a href="{{ .Permalink }}" class="nav-item nav-prev">
+                    <span class="nav-title">{{ .Title }}</span>
+                    <span class="nav-label">이전글</span>
+                </a>
+            {{ end }}
+        </nav>
+    </div>
+    {{ end }}
+    
 </article>
 
-<!-- [핵심 수정] hide_comments 파라미터가 true가 아닐 때만 댓글 섹션을 표시합니다. -->
+<!-- hide_comments 파라미터가 true가 아닐 때만 댓글 섹션을 표시합니다. -->
 {{ if not .Params.hide_comments }}
 <section class="post-comments">
     <div class="container">
@@ -44,9 +66,18 @@ document.addEventListener('DOMContentLoaded', function() {
         shareButton.addEventListener('click', function(event) {
             event.preventDefault();
             if (navigator.share) {
-                navigator.share({ title: document.title, text: '이 글을 확인해보세요!', url: window.location.href, }).catch(console.error);
+                navigator.share({
+                    title: document.title,
+                    text: '이 글을 확인해보세요!',
+                    url: window.location.href,
+                }).catch(console.error);
             } else {
-                navigator.clipboard.writeText(window.location.href).then(() => { alert('게시글 주소가 클립보드에 복사되었습니다.'); }).catch(err => { console.error('클립보드 복사 실패:', err); alert('주소 복사에 실패했습니다.'); });
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    alert('게시글 주소가 클립보드에 복사되었습니다.');
+                }).catch(err => {
+                    console.error('클립보드 복사 실패:', err);
+                    alert('주소 복사에 실패했습니다.');
+                });
             }
         });
     }
