@@ -191,35 +191,59 @@ main {
 /* --------------------------------------------------
    4. 개별 포스트 (single.html) 스타일
    -------------------------------------------------- */
+
+/* [복원] PC 환경에서 본문, 헤더, 댓글의 너비를 제한하는 핵심 규칙입니다. */
 .post-header .container,
 .post-body-container,
 .post-comments .container {
     max-width: var(--post-container-width);
 }
-
-.post-header { text-align: center; margin-bottom: var(--spacing-xl); }
-.post-title { font-size: 2.2rem; margin-bottom: var(--spacing-md); }
-.post-meta { color: var(--secondary-text); font-size: 0.95rem; }
-.post-content p { margin-bottom: var(--spacing-lg); text-align: justify; }
+.post-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+.post-title {
+    font-size: 2.2rem;
+    margin-bottom: var(--spacing-md);
+}
+.post-meta {
+    color: var(--secondary-text);
+    font-size: 0.95rem;
+}
+.post-content p {
+    margin-bottom: var(--spacing-lg);
+    text-align: justify;
+}
 .post-content ul,
-.post-content ol { margin-bottom: var(--spacing-lg); padding-left: 1.4em; text-align: justify; }
-/* 하위 리스트(2단계 이상)의 들여쓰기를 줄여주는 규칙 추가 */
+.post-content ol {
+    margin-bottom: var(--spacing-lg);
+    padding-left: 1.4em;
+    text-align: justify;
+}
 .post-content ul ul,
 .post-content ol ol,
 .post-content ul ol,
 .post-content ol ul {
-    padding-left: 1em; /* 기본값 2em보다 작은 값으로 조정 */
+    padding-left: 1em;
     margin-top: var(--spacing-sm);
     margin-bottom: var(--spacing-sm);
 }
 .post-content strong,
-.post-content b { color: var(--mint-green); font-weight: 600; }
+.post-content b {
+    color: var(--mint-green);
+    font-weight: 600;
+}
 .post-content blockquote {
-    border-left: 4px solid var(--mint-green); padding-left: 1.5em;
-    margin: var(--spacing-lg) 0; font-style: italic; color: var(--secondary-text);
+    border-left: 4px solid var(--mint-green);
+    padding-left: 1.5em;
+    margin: var(--spacing-lg) 0;
+    font-style: italic;
+    color: var(--secondary-text);
 }
 .post-content img:not(.char-icon):not(.cast-icon) {
-    max-width: 100%; height: auto; border-radius: var(--border-radius-md);
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-md);
     margin: var(--spacing-lg) 0;
 }
 .post-comments {
@@ -279,12 +303,12 @@ main {
     background-color: var(--dark-surface); border: 1px solid var(--border-color);
     border-left: 5px solid var(--mint-green); border-radius: var(--border-radius-md);
     padding: var(--spacing-md);
-    margin-top: var(--spacing-xxl); margin-bottom: var(--spacing-xxl);
+    margin-top: var(--spacing-xxl); margin-bottom: var(--spacing-md);
     transition: padding var(--transition-speed);
 }
 .briefing-box h3 {
     font-family: var(--font-heading); font-size: 1.6rem; color: var(--light-text);
-    text-align: center; margin-top: 5px; margin-bottom: var(--spacing-lg);
+    text-align: center; margin-top: 2px; margin-bottom: var(--spacing-lg);
     padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--border-color);
 }
 .briefing-box h4 {
@@ -528,8 +552,12 @@ body[data-theme="aetherial-light"] .button-with-icon:hover {
     z-index: 999;
     align-items: center;
     justify-content: center;
-    font-size: 1.4rem;
     transition: all var(--transition-speed) var(--transition-timing);
+}
+/* [추가] 플로팅 버튼 내부의 SVG 크기를 명시적으로 지정 */
+.share-fab svg {
+    width: 24px;
+    height: 24px;
 }
 body[data-theme="aetherial-light"] .share-fab {
     color: var(--light-text);
@@ -989,7 +1017,45 @@ body[data-theme="aetherial-light"] #search-button {
 }
 
 /* --------------------------------------------------
-   16. 이전/다음 글 내비게이션 스타일 (v7 - Final Perfected)
+   16. 고정형 공유 버튼 스타일
+   -------------------------------------------------- */
+.post-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-sm);
+}
+
+.static-share-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+    padding: 0.6rem 1.2rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    color: var(--secondary-text);
+    background-color: transparent;
+    transition: all var(--transition-speed);
+}
+/* [추가] 고정형 버튼 내부의 SVG 크기를 텍스트 크기에 비례하도록 지정 */
+.static-share-button svg {
+    width: 1.1em;
+    height: 1.1em;
+}
+
+.static-share-button:hover {
+    background-color: var(--mint-green);
+    border-color: var(--mint-green);
+    color: var(--dark-bg);
+    transform: translateY(-3px);
+}
+
+body[data-theme="aetherial-light"] .static-share-button:hover {
+    color: var(--light-text);
+}
+
+/* --------------------------------------------------
+   17. 이전/다음 글 내비게이션 스타일 (v7 - Final Perfected)
    -------------------------------------------------- */
 
 .post-navigation {

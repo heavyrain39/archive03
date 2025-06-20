@@ -69,14 +69,14 @@ tags: ["채권", "채권ETF", "금리", "TLT", "IEF", "SHY", "AGG", "자산배�
     <li><strong>금리 인하 시 자본 차익:</strong> 향후 경기가 둔화되고 중앙은행이 금리를 내릴 경우, 이자 수익과 더불어 시세 차익까지 얻을 수 있는 매력적인 시점입니다.</li>
 </ul>
 
-<h4><span class="svg-icon">{{< icon "risk" >}}</span> 성장을 가로막는 족쇄 (쿠루미의 관점)</h4>
+<h4><span class="svg-icon">{{< icon "risk" >}}</span> 성장 가로막는 족쇄 (쿠루미의 관점)</h4>
 <ul>
     <li><strong>치명적인 금리 리스크:</strong> 예상과 달리 금리가 상승하면 채권 가격은 크게 하락할 수 있어데비! 특히 장기채는 위험천만하다데비!</li>
     <li><strong>낮은 기대수익률:</strong> 하락장은 최고의 주식들을 싸게 살 기회인데, 수익률도 낮은 채권에 돈을 묶어두는 건 큰 기회비용을 낭비하는 짓이야데비!</li>
     <li><strong>인플레이션의 적:</strong> 고정된 이자는 물가 상승률을 따라가지 못해 실질적인 내 돈의 가치를 갉아먹을 수 있다데비!</li>
 </ul>
 
-<h4><span class="svg-icon">{{< icon "checklist" >}}</span> 핵심 데이터 및 주요 ETF (뮤의 관점)</h4>
+<h4><span class="svg-icon">{{< icon "checklist" >}}</span> 핵심 데이터 및 ETF (뮤의 관점)</h4>
 <ul>
     <li><strong>핵심 개념:</strong> 금리와 채권 가격은 반대로 움직이며, '듀레이션'이 길수록 가격 변동성이 크다뮤.</li>
     <li><strong>공격적 투자 (금리 하락 베팅):</strong> <strong>TLT</strong> (미국 20년+ 국채)</li>
