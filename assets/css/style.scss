@@ -486,7 +486,8 @@ main {
 }
 .operator-card p {
     max-width: 600px;
-    margin-left: auto; margin-right: auto;
+    margin-left: auto;
+    margin-right: auto;
     text-align: justify;
     margin-bottom: var(--spacing-md);
 }
@@ -502,6 +503,7 @@ main {
     max-width: 400px;
     margin: 0 auto;
 }
+
 .button-with-icon {
     display: flex;
     align-items: center;
@@ -525,6 +527,8 @@ main {
 body[data-theme="aetherial-light"] .button-with-icon:hover {
     color: var(--light-text);
 }
+
+/* 1. 아이콘과 텍스트의 기본 크기와 정렬을 정의합니다. (원래의 좋은 상태) */
 .button-with-icon svg {
     width: 1.2em;
     height: 1.2em;
@@ -532,7 +536,20 @@ body[data-theme="aetherial-light"] .button-with-icon:hover {
 }
 .button-with-icon span {
     flex-grow: 1;
-    text-align: center;
+    text-align: center; /* 텍스트를 중앙 정렬하는 핵심 규칙 */
+}
+
+/* 2. [최종 수정] 파셜로 불러온 아이콘(.svg-icon)만 별도로 정렬합니다. */
+.button-with-icon .svg-icon {
+    width: 1.2em;
+    height: 1.2em;
+    flex-shrink: 0;
+    flex-grow: 0; /* 텍스트와 달리 공간을 차지하지 않도록 설정 */
+    text-align: initial; /* 텍스트 중앙 정렬 상속을 막음 */
+    
+    /* 아이콘 내부의 SVG를 완벽하게 중앙 정렬시킵니다. */
+    display: inline-flex;
+    align-items: center;
 }
 
 /* --------------------------------------------------
@@ -1176,4 +1193,5 @@ body[data-theme="aetherial-light"] .static-share-button:hover {
 .post-tags-list a:hover {
     color: var(--mint-green);
     text-decoration: underline;
+    text-underline-offset: 5px;
 }

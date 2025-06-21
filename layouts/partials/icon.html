@@ -1,0 +1,10 @@
+{{/*
+    파셜로서, (dict "iconName" "이름") 형식으로 데이터를 받습니다.
+*/}}
+<span class="svg-icon">
+    {{- $iconName := .iconName -}}
+    {{- $iconResource := resources.Get (printf "icons/%s.svg" $iconName) -}}
+    {{- with $iconResource -}}
+        {{- .Content | safeHTML -}}
+    {{- end -}}
+</span>
