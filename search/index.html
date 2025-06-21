@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Results | Archive 03</title>
     
-    <meta name="description" content="Archive 03은 세 명의 인외(人外) 소녀가 최신 데이터를 바탕으로 투자에 대한 인사이트를 전하는 연재형 블로그입니다.">
+    <meta name="description" content="">
     <meta name="author" content="야차완">
     
     
@@ -20,7 +20,7 @@
         <meta property="og:title" content="Search Results | Archive 03">
         <meta property="og:type" content="article">
     
-    <meta property="og:description" content="Archive 03은 세 명의 인외(人外) 소녀가 최신 데이터를 바탕으로 투자에 대한 인사이트를 전하는 연재형 블로그입니다.">
+    <meta property="og:description" content="">
     <meta property="og:url" content="https://archive03.online/search/">
     
     
@@ -32,11 +32,11 @@
     
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Search Results">
-    <meta name="twitter:description" content="Archive 03은 세 명의 인외(人外) 소녀가 최신 데이터를 바탕으로 투자에 대한 인사이트를 전하는 연재형 블로그입니다.">
+    <meta name="twitter:description" content="">
     
     
 </head>
-<body data-theme="default" class="">
+<body data-theme="default" class="is-search-page">
 
     <header id="main-header">
         <div class="container">
@@ -68,104 +68,122 @@
 
     <main>
         
-
-
-
-
-    
-    
-    
-    <div class="list-page-container">
-        <header class="list-header">
+<article class="post">
+    <div class="container">
+        <header class="post-header">
+            <h1 class="post-title">Search Results</h1>
             
-            <h1 class="list-title" id="search-page-title"></h1>
+            
+            <div class="post-meta">
+                <time datetime="0001-01-01">0001년 1월 1일</time>
+            </div>
+            
+
         </header>
-        
-        <div id="search-page-results"></div>
-        <nav id="search-page-pagination" class="pagination-nav"></nav>
+    </div>
+
+    <div class="container post-body-container">
+        <div class="post-content">
+            
+        </div>
     </div>
 
     
-    <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-        const titleEl = document.getElementById('search-page-title');
-        const resultsEl = document.getElementById('search-page-results');
-        const paginationEl = document.getElementById('search-page-pagination');
-        let searchData = [];
-        const params = new URLSearchParams(window.location.search);
-        const query = params.get('q');
-        
-        if (!query) {
-            titleEl.textContent = "검색어가 없습니다.";
-            return;
-        }
+    <a href="#" id="share-fab" class="share-fab" title="Share this post" aria-label="Share this post">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" fill="currentColor">
+            <path d="M 4 4 L 4 44 A 2.0002 2.0002 0 0 0 6 46 L 44 46 A 2.0002 2.0002 0 0 0 46 44 L 46 32 L 42 32 L 42 42 L 8 42 L 8 4 L 4 4 z M 35.978516 4.9804688 A 2.0002 2.0002 0 0 0 34.585938 8.4140625 L 37.171875 11 L 36.048828 11 C 25.976906 10.74934 19.618605 12.315463 15.953125 16.726562 C 12.287645 21.137662 11.831327 27.512697 12 36.039062 A 2.0003814 2.0003814 0 1 0 16 35.960938 C 15.835673 27.654299 16.533777 22.2844 19.029297 19.28125 C 21.524817 16.2781 26.334094 14.76066 35.951172 15 L 35.974609 15 L 37.171875 15 L 34.585938 17.585938 A 2.0002 2.0002 0 1 0 37.414062 20.414062 L 43.236328 14.591797 A 2.0002 2.0002 0 0 0 43.619141 14.208984 L 44.828125 13 L 43.619141 11.791016 A 2.0002 2.0002 0 0 0 43.228516 11.400391 L 37.414062 5.5859375 A 2.0002 2.0002 0 0 0 35.978516 4.9804688 z"/>
+        </svg>
+    </a>
 
-        
-        titleEl.innerHTML = `「<span class="color-accent">${query}</span>」에 대한 검색 결과`;
-
-        try {
-            const response = await fetch('\/index.json');
-            searchData = await response.json();
-        } catch (e) {
-            resultsEl.innerHTML = "<p>검색 데이터를 불러오는 데 실패했습니다.</p>";
-            return;
-        }
-
-        const lowerCaseQuery = query.toLowerCase();
-        const allResults = searchData.filter(post => 
-            post.title.toLowerCase().includes(lowerCaseQuery) || 
-            post.content.toLowerCase().includes(lowerCaseQuery)
-        );
-
-        const resultsPerPage = 20;
-        const totalPages = Math.ceil(allResults.length / resultsPerPage);
-        let currentPage = 1;
-
-        const renderPage = (page) => {
-            currentPage = page;
-            resultsEl.innerHTML = '';
-            paginationEl.innerHTML = '';
-
-            if (allResults.length === 0) {
-                resultsEl.innerHTML = '<p class="no-results" style="text-align: center; padding: 2rem 0;">검색 결과가 없습니다.</p>';
-                return;
-            }
-
-            const start = (page - 1) * resultsPerPage;
-            const end = start + resultsPerPage;
-            const pageResults = allResults.slice(start, end);
-
-            const resultList = document.createElement('ul');
+    <div class="container">
+        <div class="post-actions">
             
-            resultList.className = 'list-page-post-list'; 
+            <a href="#" id="static-share-button" class="static-share-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" fill="currentColor">
+                    <path d="M 4 4 L 4 44 A 2.0002 2.0002 0 0 0 6 46 L 44 46 A 2.0002 2.0002 0 0 0 46 44 L 46 32 L 42 32 L 42 42 L 8 42 L 8 4 L 4 4 z M 35.978516 4.9804688 A 2.0002 2.0002 0 0 0 34.585938 8.4140625 L 37.171875 11 L 36.048828 11 C 25.976906 10.74934 19.618605 12.315463 15.953125 16.726562 C 12.287645 21.137662 11.831327 27.512697 12 36.039062 A 2.0003814 2.0003814 0 1 0 16 35.960938 C 15.835673 27.654299 16.533777 22.2844 19.029297 19.28125 C 21.524817 16.2781 26.334094 14.76066 35.951172 15 L 35.974609 15 L 37.171875 15 L 34.585938 17.585938 A 2.0002 2.0002 0 1 0 37.414062 20.414062 L 43.236328 14.591797 A 2.0002 2.0002 0 0 0 43.619141 14.208984 L 44.828125 13 L 43.619141 11.791016 A 2.0002 2.0002 0 0 0 43.228516 11.400391 L 37.414062 5.5859375 A 2.0002 2.0002 0 0 0 35.978516 4.9804688 z"/>
+                </svg>
+                <span>이 글 공유하기</span>
+            </a>
+        </div>
+    </div>
+    
+    
+    <div class="container">
+        <nav class="post-navigation">
             
-            pageResults.forEach(post => {
-                const li = document.createElement('li');
-                
-                li.innerHTML = `<a href="${post.permalink}"><span class="list-page-post-title">${post.title}</span><div class="list-page-post-meta"><span class="summary">${post.content.substring(0, 70)}...</span></div></a>`;
-                resultList.appendChild(li);
+                <a href="https://archive03.online/about/" class="nav-item nav-next">
+                    <span class="nav-title">About Archive 03</span>
+                    <span class="nav-label">다음 글</span>
+                </a>
+            
+            
+                <a href="https://archive03.online/privacy/" class="nav-item nav-prev">
+                    <span class="nav-title">개인정보처리방침</span>
+                    <span class="nav-label">이전 글</span>
+                </a>
+            
+        </nav>
+    </div>
+    
+
+</article>
+
+
+<section class="post-comments">
+    <div class="container">
+        
+
+    
+        <script src="https://giscus.app/client.js"
+                data-repo="heavyrain39/archive03"
+                data-repo-id="R_kgDOO7KqJQ"
+                data-category="General"
+                data-category-id="DIC_kwDOO7KqJc4CrlEO"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="0"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="dark_dimmed"
+                data-lang="ko"
+                crossorigin="anonymous"
+                async>
+        </script>
+    
+
+    </div>
+</section>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const shareAction = function(event) {
+        event.preventDefault();
+        if (navigator.share) {
+            navigator.share({
+                title: document.title,
+                text: '이 글을 확인해보세요!',
+                url: window.location.href,
+            }).catch(console.error);
+        } else {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('게시글 주소가 클립보드에 복사되었습니다.');
+            }).catch(err => {
+                console.error('클립보드 복사 실패:', err);
+                alert('주소 복사에 실패했습니다.');
             });
-            resultsEl.appendChild(resultList);
+        }
+    };
 
-            if (totalPages > 1) {
-                paginationEl.innerHTML = `<a href="#" class="pagination-arrow prev ${currentPage === 1 ? 'disabled' : ''}" data-page="${currentPage - 1}">◀</a><span class="page-indicator">${currentPage} / ${totalPages}</span><a href="#" class="pagination-arrow next ${currentPage === totalPages ? 'disabled' : ''}" data-page="${currentPage + 1}">▶</a>`;
-            }
-        };
-
-        paginationEl.addEventListener('click', (e) => {
-            e.preventDefault();
-            const target = e.target.closest('.pagination-arrow');
-            if (target && !target.classList.contains('disabled')) {
-                renderPage(parseInt(target.dataset.page));
-            }
-        });
-
-        renderPage(1);
+    const shareButtons = document.querySelectorAll('#share-fab, #static-share-button');
+    
+    shareButtons.forEach(button => {
+        if (button) {
+            button.addEventListener('click', shareAction);
+        }
     });
-    </script>
-
-
-
+});
+</script>
 
     </main>
 
