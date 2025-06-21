@@ -13,11 +13,12 @@
         {{ $randomThumbnail := index ($thumbnails | shuffle) 0 }}
 
         <div class="latest-post-thumbnail-wrapper">
-            <!-- [수정] printf와 relURL을 사용하여 경로를 더 명확하게 생성합니다. -->
             <img src="{{ (printf "images/thumbnails/%s" $randomThumbnail.Name) | relURL }}" alt="Random Thumbnail" class="latest-post-thumbnail">
         </div>
 
-        {{ $allReportPages := (where .Site.RegularPages "Section" "reports").ByDate.Reverse }}
+        {{/* [최종 수정] 올바른 sort 함수 구문을 사용합니다. */}}
+        {{ $allReportPages := sort (where .Site.RegularPages "Params.exclude_from_list" "ne" true) "Date" "desc" }}
+
         {{ $latestPost := (first 1 $allReportPages) }}
 
         {{ range $latestPost }}
@@ -40,10 +41,9 @@
                 
                 {{ range $paginator.Pages }}
                     <li>
-                        <!-- [핵심 수정] a 태그에 title 속성을 추가합니다. -->
                         <a href="{{ .Permalink }}" title="{{ .Title }}">
                             <span>{{ .Title }}</span>
-                            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006.01.02" }}</time>
+                            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "06.01.02" }}</time>
                         </a>
                     </li>
                 {{ end }}
@@ -178,7 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadSearchData = async () => {
         try {
-            // [수정] .RelPermalink을 사용하여 어떤 baseURL에서도 올바른 경로를 찾도록 합니다.
             const response = await fetch('{{ (site.Home.OutputFormats.Get "JSON").RelPermalink }}');
             if (!response.ok) throw new Error('데이터 로드 실패');
             searchData = await response.json();
