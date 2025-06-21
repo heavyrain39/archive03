@@ -1153,3 +1153,27 @@ body[data-theme="aetherial-light"] .static-share-button:hover {
         font-size: 1rem;
     }
 }
+
+/* --------------------------------------------------
+   18. 게시물 하단 태그 스타일 (텍스트 기반)
+   -------------------------------------------------- */
+.post-tags-list {
+    margin-top: var(--spacing-lg); /* 본문 내용과 충분한 간격을 줍니다. */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.6rem; /* 태그 사이의 간격을 설정합니다. */
+    justify-content: center; 
+}
+
+.post-tags-list a {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--secondary-text);
+    text-decoration: none;
+    transition: color var(--transition-speed);
+}
+
+.post-tags-list a:hover {
+    color: var(--mint-green);
+    text-decoration: underline;
+}
