@@ -37,7 +37,7 @@
         <div class="post-list-container">
             <ul class="post-list">
                 {{ $otherPosts := (after 1 $allReportPages) }}
-                {{ $paginator := .Paginate $otherPosts 12 }}
+                {{ $paginator := .Paginate $otherPosts 11 }}
                 
                 {{ range $paginator.Pages }}
                     <li>
