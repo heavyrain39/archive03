@@ -1,40 +1,45 @@
 #!/bin/bash
 
+# ==============================================================================
+# Archive 03: 자동 배포 스크립트 (v2.1 - 증분 업데이트 버전)
+# ==============================================================================
+
 echo -e "\033[0;32mDeploying updates to GitHub...\033[0m"
 
-readonly BASE_URL="https://archive03.online/"
-
-# 1. 사이트를 빌드합니다.
+# Step 1: Hugo로 사이트를 빌드합니다.
+# 빌드된 결과물은 이미 'gh-pages' 브랜치의 복사본인 'public' 폴더 안으로 들어갑니다.
 echo "Building site with Hugo..."
-hugo -b "$BASE_URL"
+hugo
 
-# 2. 빌드된 public 폴더로 이동합니다.
-cd public || { echo "Hugo build failed. 'public' directory not found."; exit 1; }
+# Step 2: 배포 폴더(서브모듈)로 이동합니다.
+cd public || { echo "'public' directory not found. Did you run the one-time setup?"; exit 1; }
 
-# 3. 이 폴더를 Git 저장소로 만들고, 변경사항을 추가합니다.
-git init
+# Step 3: 변경된 모든 파일 (추가, 수정, 삭제)을 스테이징합니다.
 git add .
 
-# 4. 커밋 메시지를 작성합니다.
+# Step 4: 커밋 메시지를 작성합니다. 기본 메시지 또는 인자로 받은 메시지를 사용합니다.
 msg="rebuilding site $(date)"
 if [ -n "$*" ]; then
     msg="$*"
 fi
-git commit -m "$msg"
 
-# 5. gh-pages 브랜치로 강제 푸시합니다.
-# [수정] 'main' 대신 'HEAD'를 사용합니다.
-# HEAD는 현재 작업 중인 브랜치를 가리키는 포인터이므로,
-# 기본 브랜치 이름이 main이든 master든 상관없이 항상 올바르게 작동합니다.
-echo "Pushing to gh-pages branch..."
-git push -f git@github.com:heavyrain39/archive03.git HEAD:gh-pages
-
-# 6. 푸시 성공 여부를 확인하고 원래 폴더로 돌아갑니다.
-if [ $? -eq 0 ]; then
-    cd ..
-    echo -e "\033[0;32mDeployment successful! ✅\033[0m"
+# 변경 사항이 있을 때만 커밋을 진행합니다.
+if git diff-index --quiet HEAD; then
+    echo "No changes to commit. Everything is up to date."
 else
-    cd ..
-    echo -e "\033[0;31mDeployment failed. ❌\033[0m"
-    exit 1
+    git commit -m "$msg"
+    # Step 5: 'gh-pages' 브랜치로 변경사항을 푸시합니다. '-f' 옵션이 필요 없습니다.
+    echo "Pushing updates to gh-pages branch..."
+    git push origin gh-pages
 fi
+
+# Step 6: 메인 프로젝트 폴더로 돌아옵니다.
+cd ..
+
+# Step 7: [선택 사항] 메인 프로젝트에 서브모듈의 변경사항을 기록합니다.
+# 이 과정을 통해, 메인 브랜치는 항상 어떤 버전의 사이트가 배포되었는지 알 수 있습니다.
+git add public
+git commit -m "Update public submodule to latest commit"
+git push
+
+echo -e "\033[0;32mDeployment successful! ✅\033[0m"
