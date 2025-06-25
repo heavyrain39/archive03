@@ -20,7 +20,7 @@ tags: ["ETF", "SCHD", "QQQ", "미국주식", "포트폴리오"]
             <li><strong>주요 섹터:</strong> 금융(약 21%), 산업(약 17%), 헬스케어(약 16%), 필수소비재(약 13%)</li>
             <li><strong>운용 보수:</strong> 0.06%</li>
         </ul>
-    </li>
+    </li><br>
     <li><strong>QQQ (Invesco QQQ Trust)</strong>
         <ul>
             <li><strong>추종 지수:</strong> NASDAQ-100 Index</li>

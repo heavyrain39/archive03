@@ -312,10 +312,23 @@ main {
 }
 .briefing-box .svg-icon svg { width: 100%; height: 100%; }
 .briefing-box ul { list-style-type: none; padding-left: 0; margin-left: 0.5em; line-height: 1.8; }
-.briefing-box li { padding-left: 1.5em; position: relative; margin-bottom: var(--spacing-sm); }
+.briefing-box li { padding-left: 1.2em; position: relative; margin-bottom: var(--spacing-sm); }
 .briefing-box li::before {
     content: "•"; color: var(--mint-green); font-weight: bold;
     display: inline-block; position: absolute; left: 0;
+}
+/* =======================================================
+   [BUG FIX] 브리핑 박스 안의 '중첩 목록' 들여쓰기 문제 해결
+   ======================================================= */
+.briefing-box ul ul {
+    /* 
+     * 기존에 적용된 margin을 초기화하고, 
+     * 중첩 목록의 들여쓰기를 이 값으로 새로 지정합니다.
+     */
+    margin-left: 0;
+    padding-left: 0.2em; 
+    margin-top: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
 }
 .final-conclusion {
     margin-top: var(--spacing-xl); padding-top: var(--spacing-lg);
