@@ -105,10 +105,6 @@ main {
     padding-top: var(--spacing-md);
 }
 
-/* ==================================================
-   푸터 레이아웃 최종 수정 (margin-left: auto 기법 적용)
-   ================================================== */
-
 #main-footer {
     position: fixed;
     bottom: 0;
@@ -120,24 +116,21 @@ main {
     border-top: var(--border-width) solid var(--border-color);
 }
 
-/* 1. 푸터 컨테이너는 flex만 선언. 정렬은 자식에게 맡김. */
 #main-footer .container {
     display: flex;
-    align-items: center; /* 수직 중앙 정렬은 유지 */
+    align-items: center;
 }
 
-/* 새 코드 (적용) */
 .footer-info {
     display: flex;
-    flex-direction: column;   /* 1. 세로로 쌓기 */
-    align-items: flex-start;  /* 2. 왼쪽으로 정렬 */
-    gap: 0.1em;               /* 3. 줄 간격 좁게 조정 */
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.1em;
 }
 
-/* 새 코드 (적용) */
 .footer-info p,
 .footer-info a {
-    font-size: 0.6rem; /* 폰트 크기를 0.8rem으로 줄임 (0.6rem은 너무 작을 수 있어 0.8로 제안) */
+    font-size: 0.6rem;
     color: var(--secondary-text);
     margin: 0;
 }
@@ -150,13 +143,11 @@ main {
     color: var(--mint-green);
 }
 
-/* 3. 테마 셀렉터에 margin-left: auto를 적용하여 오른쪽 끝으로 밀어냄 */
 .footer-theme-selector {
-    margin-left: auto; /* 핵심 변경점! */
-    flex-shrink: 0; /* 혹시 모를 상황을 대비해 유지 */
+    margin-left: auto;
+    flex-shrink: 0;
 }
 
-/* 4. 테마 버튼 그룹과 내부 스타일은 이전과 동일 */
 .theme-buttons {
     display: flex;
     border: 1px solid var(--border-color);
@@ -191,8 +182,6 @@ main {
 /* --------------------------------------------------
    4. 개별 포스트 (single.html) 스타일
    -------------------------------------------------- */
-
-/* [복원] PC 환경에서 본문, 헤더, 댓글의 너비를 제한하는 핵심 규칙입니다. */
 .post-header .container,
 .post-body-container,
 .post-comments .container {
@@ -528,7 +517,6 @@ body[data-theme="aetherial-light"] .button-with-icon:hover {
     color: var(--light-text);
 }
 
-/* 1. 아이콘과 텍스트의 기본 크기와 정렬을 정의합니다. (원래의 좋은 상태) */
 .button-with-icon svg {
     width: 1.2em;
     height: 1.2em;
@@ -536,18 +524,15 @@ body[data-theme="aetherial-light"] .button-with-icon:hover {
 }
 .button-with-icon span {
     flex-grow: 1;
-    text-align: center; /* 텍스트를 중앙 정렬하는 핵심 규칙 */
+    text-align: center;
 }
 
-/* 2. [최종 수정] 파셜로 불러온 아이콘(.svg-icon)만 별도로 정렬합니다. */
 .button-with-icon .svg-icon {
     width: 1.2em;
     height: 1.2em;
     flex-shrink: 0;
-    flex-grow: 0; /* 텍스트와 달리 공간을 차지하지 않도록 설정 */
-    text-align: initial; /* 텍스트 중앙 정렬 상속을 막음 */
-    
-    /* 아이콘 내부의 SVG를 완벽하게 중앙 정렬시킵니다. */
+    flex-grow: 0;
+    text-align: initial;
     display: inline-flex;
     align-items: center;
 }
@@ -571,7 +556,6 @@ body[data-theme="aetherial-light"] .button-with-icon:hover {
     justify-content: center;
     transition: all var(--transition-speed) var(--transition-timing);
 }
-/* [추가] 플로팅 버튼 내부의 SVG 크기를 명시적으로 지정 */
 .share-fab svg {
     width: 24px;
     height: 24px;
@@ -628,28 +612,22 @@ body[data-theme="aetherial-light"] .share-fab:hover {
     color: var(--secondary-text); 
     line-height: 1.7;
     text-align: justify;
-
-    /* --- 여기에 아래 5줄을 추가 또는 수정합니다 --- */
     display: -webkit-box;
-    -webkit-line-clamp: 3; /* 텍스트를 두 줄로 제한 */
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    /* --- 여기까지 --- */
 }
-/* 기존의 .post-list-card, .post-list, .post-list a 규칙을 모두 삭제하고 아래 내용으로 교체 */
-
 .post-list-card { 
     justify-content: space-between; 
 }
 
-/* [추가] 목록을 감싸는 새로운 컨테이너 스타일 */
 .post-list-container {
-    background-color: var(--dark-bg); /* 제안하신 대로, 호버 색상과 유사한 배경 적용 */
+    background-color: var(--dark-bg);
     border-radius: var(--border-radius-md);
-    padding: var(--spacing-sm);
-    flex-grow: 1; /* 카드의 남은 공간을 모두 채움 */
-    overflow-y: auto; /* 내용이 길어지면 스크롤바 생성 */
+    flex-grow: 1;
+    overflow-y: hidden; 
+    position: relative;
 }
 
 .post-list { 
@@ -659,27 +637,24 @@ body[data-theme="aetherial-light"] .share-fab:hover {
 }
 
 .post-list li {
-    /* 각 항목 사이의 간격은 li에 아주 약간만 줍니다. */
     margin-bottom: 2px;
 }
 .post-list li:last-child {
     margin-bottom: 0;
 }
 
-/* [핵심] a 태그에서 모든 박스 스타일과 과도한 패딩을 제거합니다. */
 .post-list a {
     display: flex; 
     justify-content: space-between; 
     align-items: center;
-    padding: 0.5rem 0.6rem; /* 패딩을 대폭 줄여 정보 밀도 향상 */
-    border-radius: 5px; /* 약간의 둥근 모서리는 유지하여 부드러운 느낌을 줌 */
+    padding: 0.5rem 0.6rem;
+    border-radius: 5px;
     transition: background-color var(--transition-speed), color var(--transition-speed);
     color: var(--secondary-text);
 }
 
-/* [변경] 호버 시 배경색이 아닌, 글자색만 변경합니다. */
 .post-list a:hover {
-    background-color: var(--dark-surface); /* 배경색은 아주 미미한 변화만 줌 */
+    background-color: var(--dark-surface);
     color: var(--mint-green);
 }
 
@@ -704,17 +679,15 @@ body[data-theme="aetherial-light"] .share-fab:hover {
 .pagination-arrow.disabled { color: var(--border-color); pointer-events: none; }
 .page-indicator { color: var(--light-text); }
 
-/* 스크롤 애니메이션 정의 */
 @keyframes scroll-left {
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
 }
 
-/* 태그 클라우드 메인 컨테이너 */
 .tag-cloud {
     display: flex;
     flex-direction: column;
-    gap: 0.3em; /* 두 행 사이의 간격 */
+    gap: 0.3em;
     margin-top: var(--spacing-md);
     overflow: hidden;
     mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
@@ -727,7 +700,6 @@ body[data-theme="aetherial-light"] .share-fab:hover {
 
 .tag-scroller {
     display: inline-block;
-    /* [수정] 두 행의 속도를 30초로 통일합니다. */
     animation: scroll-left 30s linear infinite;
 }
 
@@ -773,10 +745,9 @@ body[data-theme="aetherial-light"] #search-button {
 }
 #search-button:hover { background-color: var(--mint-green-darker); }
 
-/* 검색 결과 스타일 */
 #search-results {
     margin-top: var(--spacing-md);
-    max-height: 200px; /* 결과가 너무 길어지지 않도록 최대 높이 설정 */
+    max-height: 200px;
     overflow-y: auto;
 }
 
@@ -788,7 +759,7 @@ body[data-theme="aetherial-light"] #search-button {
 
 .search-result-list li a {
     display: block;
-    padding: 0.5rem 0.6rem; /* 'All Articles' 목록과 패딩 통일 */
+    padding: 0.5rem 0.6rem;
     border-radius: 5px;
     color: var(--secondary-text);
     transition: background-color var(--transition-speed), color var(--transition-speed);
@@ -799,7 +770,7 @@ body[data-theme="aetherial-light"] #search-button {
 
 .search-result-list li a:hover {
     background-color: var(--dark-bg);
-    color: var(--mint-green); /* 호버 시 글자색만 변경 */
+    color: var(--mint-green);
 }
 
 .no-results {
@@ -809,7 +780,6 @@ body[data-theme="aetherial-light"] #search-button {
     padding: var(--spacing-lg) 0;
 }
 
-/* 검색 결과 더 보기 링크 스타일 */
 .more-results-link {
     display: block;
     text-align: center;
@@ -894,13 +864,16 @@ body[data-theme="aetherial-light"] #search-button {
 
     .dashboard-container {
         grid-template-columns: 1fr;
-        /* 이 한 줄을 추가하여, 좌우에만 패딩을 줍니다. */
         padding: 0 var(--spacing-md);
     }
 
-     /* [추가] 모바일 화면에서 메인 페이지 글 목록의 날짜를 숨깁니다. */
     .post-list time {
         display: none;
+    }
+
+    .post-list-card {
+        aspect-ratio: 4 / 3;
+        min-height: 350px;
     }
 }
 
@@ -937,13 +910,13 @@ body[data-theme="aetherial-light"] #search-button {
 }
 
 .list-header {
-    text-align: center; /* 1. 가운데 정렬 적용 */
+    text-align: center;
     padding: var(--spacing-md) 0;
-    margin-bottom: var(--spacing-md); /* 2. 하단 여백을 줄임 */
+    margin-bottom: var(--spacing-md);
 }
 .list-title {
-    font-family: var(--font-heading); /* 3. 헤딩 폰트 적용 */
-    font-weight: 400; /* Paperlogy 폰트는 bold체가 없으므로 400으로 유지 */
+    font-family: var(--font-heading);
+    font-weight: 400;
     font-size: 2.2rem;
 }
 .list-title .post-count {
@@ -958,7 +931,6 @@ body[data-theme="aetherial-light"] #search-button {
 }
 .list-page-post-list li a {
     display: block;
-    /* [수정] padding 값을 상(1.2rem), 우(1.75rem), 하(1.5rem), 좌(1.75rem) 순서로 개별 지정합니다. */
     padding: 1.2rem var(--spacing-lg) 1.5rem var(--spacing-lg);
     margin-bottom: var(--spacing-md);
     border-radius: var(--border-radius-md);
@@ -987,7 +959,7 @@ body[data-theme="aetherial-light"] #search-button {
 }
 .list-page-post-meta .summary {
     line-height: 1.6;
-    text-align: justify; /* 이 한 줄을 추가합니다. */
+    text-align: justify;
 }
 
 /* --------------------------------------------------
@@ -1028,8 +1000,6 @@ body[data-theme="aetherial-light"] #search-button {
    15. PC용 읽기 영역 박스 스타일 (최종 복원)
    -------------------------------------------------- */
 @media (min-width: 1024px) {
-    /* [핵심] 모든 스타일을 다시 .post-body-container로 되돌립니다. */
-    /* 이것이 원래의 올바른 방식이며, 이제는 정상적으로 작동합니다. */
     .post-body-container {
         background-color: var(--dark-surface);
         border: 1px solid var(--border-color);
@@ -1060,7 +1030,6 @@ body[data-theme="aetherial-light"] #search-button {
     background-color: transparent;
     transition: all var(--transition-speed);
 }
-/* [추가] 고정형 버튼 내부의 SVG 크기를 텍스트 크기에 비례하도록 지정 */
 .static-share-button svg {
     width: 1.1em;
     height: 1.1em;
@@ -1100,23 +1069,19 @@ body[data-theme="aetherial-light"] .static-share-button:hover {
     background-color: var(--dark-surface);
 }
 
-/* [핵심 수정 1] '다음 글' 링크에만 position:relative와 margin-bottom을 적용합니다. */
 .nav-next {
-    position: relative; /* ::after 유사 요소를 배치하기 위한 기준점 */
-    margin-bottom: 0.2rem; /* 구분선을 위한 공간을 명확하게 확보 */
+    position: relative;
+    margin-bottom: 0.2rem;
 }
 
-/* [핵심 수정 2] ::after 유사 요소를 사용해 '다음 글' 아래에 독립적인 구분선을 만듭니다. */
 .nav-next::after {
     content: '';
     position: absolute;
-    
-    /* 위치: '다음 글' 영역의 바로 아래, margin으로 만든 공간의 중앙에 배치 */
     bottom: calc(0.2rem / -2);
     left: 50%;
     transform: translateX(-50%);
 
-    width: 96%; /* 가로 폭을 살짝 줄여 양 끝에 여백을 줌 */
+    width: 96%;
     height: 1px;
     background-color: var(--border-color);
 }
@@ -1159,9 +1124,6 @@ body[data-theme="aetherial-light"] .static-share-button:hover {
     content: '▼';
 }
 
-/* =============================================================
-   데스크탑용 스타일 (화면 너비 768px 이상)
-   ============================================================= */
 @media (min-width: 768px) {
     .post-navigation {
         max-width: 520px;
@@ -1175,10 +1137,10 @@ body[data-theme="aetherial-light"] .static-share-button:hover {
    18. 게시물 하단 태그 스타일 (텍스트 기반)
    -------------------------------------------------- */
 .post-tags-list {
-    margin-top: var(--spacing-lg); /* 본문 내용과 충분한 간격을 줍니다. */
+    margin-top: var(--spacing-lg);
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem 0.6rem; /* 태그 사이의 간격을 설정합니다. */
+    gap: 0.5rem 0.6rem;
     justify-content: center; 
 }
 
@@ -1194,4 +1156,85 @@ body[data-theme="aetherial-light"] .static-share-button:hover {
     color: var(--mint-green);
     text-decoration: underline;
     text-underline-offset: 5px;
+}
+
+/* --------------------------------------------------
+   19. 비동기 페이지네이션 애니메이션 (레이아웃 최종 수정)
+   -------------------------------------------------- */
+
+/* [핵심] 글 목록을 감싸는 컨테이너에 flex-grow를 주어 남은 공간을 모두 차지하게 함 */
+.post-list-container {
+    background-color: var(--dark-bg);
+    border-radius: var(--border-radius-md);
+    flex-grow: 1; /* << 핵심 */
+    position: relative;
+    overflow: hidden; /* 애니메이션을 위해 자식 요소를 숨김 */
+}
+
+/* [핵심] 래퍼는 애니메이션의 '무대' 역할만 합니다. */
+#post-list-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* [핵심] 실제 글 목록 ul에 모든 스타일과 스크롤 기능을 부여합니다. */
+#post-list-wrapper .post-list {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto; /* 목록이 길어지면 스크롤 */
+    
+    /* 요청하신 여백을 여기에 적용하여 레이아웃을 복원합니다. */
+    padding: var(--spacing-sm);
+    padding-top: 0.8rem;
+    
+    margin: 0;
+    list-style: none;
+}
+
+#post-list-wrapper .post-list.is-animating {
+    transition: transform 0.12s ease-in-out;
+}
+
+.slide-from-right { transform: translateX(100%); }
+.slide-from-left { transform: translateX(-100%); }
+.slide-to-right { transform: translateX(100%); }
+.slide-to-left { transform: translateX(-100%); }
+
+/* --------------------------------------------------
+   20. [BUG FIX] 모바일 Articles 카드 레이아웃 복원
+   -------------------------------------------------- */
+@media (max-width: 820px) {
+    /* 
+     * [핵심] 모바일에서 카드의 높이를 강제로 제한하던 속성을 제거합니다.
+     * 이제 카드는 내용물(글 목록 11개)의 높이에 맞춰 자동으로 늘어납니다.
+     */
+    .post-list-card {
+        aspect-ratio: unset;
+        min-height: unset;
+    }
+
+    /* 
+     * 애니메이션을 위해 내용물을 숨기던 속성을 해제합니다.
+     */
+    .post-list-container {
+        overflow: visible;
+    }
+
+    /* 
+     * 애니메이션의 '무대' 역할을 하던 래퍼와 실제 목록의
+     * position을 기본값(static)으로 되돌려 일반적인 문서 흐름에 복귀시킵니다.
+     * 이렇게 하면 여백(gap) 문제가 해결되고, 높이도 자동으로 계산됩니다.
+     */
+    #post-list-wrapper,
+    #post-list-wrapper .post-list {
+        position: static;
+        height: auto;
+        overflow-y: visible; /* 내부 스크롤을 완전히 비활성화합니다. */
+    }
 }

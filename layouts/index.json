@@ -1,7 +1,14 @@
 {{- $.Scratch.Add "index" slice -}}
 {{- range .Site.RegularPages -}}
-    {{- if eq .Section "reports" -}}
-        {{- $.Scratch.Add "index" (dict "title" .Title "tags" .Params.tags "permalink" .RelPermalink "content" (.Content | plainify)) -}}
+    {{- if and (eq .Section "reports") (ne .Params.exclude_from_list true) -}}
+        {{- $.Scratch.Add "index" (dict 
+            "title" .Title 
+            "tags" .Params.tags 
+            "permalink" .RelPermalink 
+            "summary" .Summary
+            "date" (.Date.Format "2006-01-02T15:04:05Z07:00")
+            "content" (.Content | plainify)
+        ) -}}
     {{- end -}}
 {{- end -}}
 {{- $.Scratch.Get "index" | jsonify -}}

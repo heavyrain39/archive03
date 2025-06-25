@@ -17,19 +17,19 @@
         <div class="post-content">
             {{ .Content }}
 
-            <!-- ========================[ 여기로 위치 이동 및 구조 변경 ]======================== -->
-            <!-- Front Matter에 tags가 있을 때만 이 섹션을 렌더링합니다. -->
             {{ if .Params.tags }}
             <div class="post-tags-list">
                 {{ range .Params.tags }}
-                    <!-- 각 태그에 대한 올바른 링크를 생성합니다. -->
                     <a href="{{ . | urlize | printf "tags/%s" | relURL }}">#{{ . }}</a>
                 {{ end }}
             </div>
             {{ end }}
-            <!-- ========================[ 여기까지 ]======================== -->
         </div>
     </div>
+
+    {{/* =================[ 여기부터 수정 ]================= */}}
+    {{/* exclude_from_list가 true가 아닐 때만 아래 내용을 렌더링합니다. */}}
+    {{ if not .Params.exclude_from_list }}
 
     <a href="#" id="share-fab" class="share-fab" title="Share this post" aria-label="Share this post">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" fill="currentColor">
@@ -66,6 +66,9 @@
         </nav>
     </div>
     {{ end }}
+
+    {{ end }}
+    {{/* =================[ 여기까지 수정 ]================= */}}
 
 </article>
 

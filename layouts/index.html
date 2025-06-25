@@ -16,7 +16,6 @@
             <img src="{{ (printf "images/thumbnails/%s" $randomThumbnail.Name) | relURL }}" alt="Random Thumbnail" class="latest-post-thumbnail">
         </div>
 
-        {{/* [최종 수정] 올바른 sort 함수 구문을 사용합니다. */}}
         {{ $allReportPages := sort (where .Site.RegularPages "Params.exclude_from_list" "ne" true) "Date" "desc" }}
 
         {{ $latestPost := (first 1 $allReportPages) }}
@@ -24,33 +23,37 @@
         {{ range $latestPost }}
             <div class="latest-post-content">
                 <h3 class="latest-post-title"><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
-                <p class="latest-post-summary">{{ .Summary | truncate 120 "..." }}</p>
+                <p class="latest-post-summary">{{ .Summary | truncate 115 "..." }}</p>
             </div>
         {{ end }}
 
     </section>
 
     <!-- ====================== 섹션 2: 우상단 (글 목록 + 페이지네이션) ====================== -->
-    <section class="dashboard-card post-list-card">
+    <section class="dashboard-card post-list-card" id="post-list-card-root">
         <h3 class="card-header">Articles</h3>
         
         <div class="post-list-container">
-            <ul class="post-list">
-                {{ $otherPosts := (after 1 $allReportPages) }}
-                {{ $paginator := .Paginate $otherPosts 11 }}
-                
-                {{ range $paginator.Pages }}
-                    <li>
-                        <a href="{{ .Permalink }}" title="{{ .Title }}">
-                            <span>{{ .Title }}</span>
-                            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "06.01.02" }}</time>
-                        </a>
-                    </li>
-                {{ end }}
-            </ul>
+            <div id="post-list-wrapper"> 
+                <ul class="post-list">
+                    {{ $otherPosts := (after 1 $allReportPages) }}
+                    {{ $paginator := .Paginate $otherPosts 11 }}
+                    
+                    {{ range $paginator.Pages }}
+                        <li>
+                            <a href="{{ .Permalink }}" title="{{ .Title }}">
+                                <span>{{ .Title }}</span>
+                                <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "06.01.02" }}</time>
+                            </a>
+                        </li>
+                    {{ end }}
+                </ul>
+            </div>
         </div>
         
-        {{ partial "pagination.html" . }}
+        <div id="pagination-nav-wrapper">
+             {{ partial "pagination.html" . }}
+        </div>
     </section>
 
     <!-- ====================== 섹션 3: 하단 좌측 (랜덤 태그) ====================== -->
@@ -69,26 +72,12 @@
             {{ $tags := .Site.Taxonomies.tags.ByCount }}
             {{ $shuffledTags := $tags | shuffle }}
             {{ $tagsToShow := first 30 $shuffledTags }}
-            
             {{ $tagsCount := len $tagsToShow }}
-            
             {{ $half := math.Ceil (div (float $tagsCount) 2.0) }}
-
             {{ $row1 := first (int $half) $tagsToShow }}
             {{ $row2 := after (int $half) $tagsToShow }}
-
-            <div class="tag-row">
-                <div class="tag-scroller">
-                    {{ range $row1 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title }}</a>{{ end }}
-                    {{ range $row1 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title }}</a>{{ end }}
-                </div>
-            </div>
-            <div class="tag-row tag-row-reverse">
-                <div class="tag-scroller">
-                    {{ range $row2 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title }}</a>{{ end }}
-                    {{ range $row2 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title }}</a>{{ end }}
-                </div>
-            </div>
+            <div class="tag-row"><div class="tag-scroller">{{ range $row1 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title }}</a>{{ end }}{{ range $row1 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title }}</a>{{ end }}</div></div>
+            <div class="tag-row tag-row-reverse"><div class="tag-scroller">{{ range $row2 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title }}</a>{{ end }}{{ range $row2 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title }}</a>{{ end }}</div></div>
         </div>
     </section>
 
@@ -98,9 +87,7 @@
         <div class="search-wrapper">
             <input type="search" id="search-input" placeholder="검색어를 입력하세요...">
             <button id="search-button" aria-label="Search">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/></svg>
             </button>
         </div>
         <div id="search-results"></div>
@@ -108,140 +95,183 @@
 
 </div>
 
-<!-- 태그 클라우드 동적 리프레시를 위한 JavaScript (최종 균등 배분 버전) -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const allTags = [
-        {{- range $i, $tagPage := .Site.Taxonomies.tags.ByCount -}}
-            {{- if $i -}},{{- end -}}
-            { "title": "{{ .Page.Title | safeJS }}", "permalink": "{{ .Page.Permalink | safeJS }}" }
-        {{- end -}}
+
+    const siteData = [
+        {{ $allReportPages := sort (where .Site.RegularPages "Params.exclude_from_list" "ne" true) "Date" "desc" }}
+        {{ range $i, $p := $allReportPages }}
+            {{ if $i }},{{ end }}
+            {
+                "title": "{{ .Title | safeJS }}",
+                "permalink": "{{ .Permalink | safeJS }}",
+                "date": "{{ .Date.Format "2006-01-02" }}",
+                "formattedDate": "{{ .Date.Format "06.01.02" }}",
+                "content": {{ .Content | plainify | jsonify }}
+            }
+        {{ end }}
     ];
 
+    // 태그 클라우드 스크립트
+    const allTags = [ {{- range $i, $tagPage := .Site.Taxonomies.tags.ByCount -}} {{- if $i -}},{{- end -}} { "title": "{{ .Page.Title | safeJS }}", "permalink": "{{ .Page.Permalink | safeJS }}" } {{- end -}} ];
     const tagCloudContainer = document.querySelector('.tag-cloud');
     const refreshButton = document.querySelector('.refresh-button');
-
-    if (!tagCloudContainer || !refreshButton || !allTags || allTags.length === 0) {
-        return; 
+    if (tagCloudContainer && refreshButton && allTags.length > 0) {
+        const shuffleArray = (array) => { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[array[i], array[j]] = [array[j], array[i]]; } return array; };
+        const createAnimatedTagCloudHTML = (tags) => { const half = Math.ceil(tags.length / 2); const row1Tags = tags.slice(0, half); const row2Tags = tags.slice(half); const createRowHTML = (tagArray) => tagArray.map(tag => `<a href="${tag.permalink}" class="tag-item">#${tag.title}</a>`).join(''); const row1Links = createRowHTML(row1Tags); const row2Links = createRowHTML(row2Tags); return `<div class="tag-row"><div class="tag-scroller">${row1Links}${row1Links}</div></div><div class="tag-row tag-row-reverse"><div class="tag-scroller">${row2Links}${row2Links}</div></div>`; };
+        refreshButton.addEventListener('click', (e) => { e.preventDefault(); const newShuffledTags = shuffleArray([...allTags]).slice(0, 30); const newHTML = createAnimatedTagCloudHTML(newShuffledTags); tagCloudContainer.innerHTML = newHTML; });
     }
 
-    const shuffleArray = (array) => {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    };
-
-    const createAnimatedTagCloudHTML = (tags) => {
-        const tagsCount = tags.length;
-        const half = Math.ceil(tagsCount / 2);
-
-        const row1Tags = tags.slice(0, half);
-        const row2Tags = tags.slice(half);
-
-        const createRowHTML = (tagArray) => 
-            tagArray.map(tag => `<a href="${tag.permalink}" class="tag-item">#${tag.title}</a>`).join('');
-
-        const row1Links = createRowHTML(row1Tags);
-        const row2Links = createRowHTML(row2Tags);
-
-        return `
-            <div class="tag-row">
-                <div class="tag-scroller">${row1Links}${row1Links}</div>
-            </div>
-            <div class="tag-row tag-row-reverse">
-                <div class="tag-scroller">${row2Links}${row2Links}</div>
-            </div>
-        `;
-    };
-
-    refreshButton.addEventListener('click', (e) => {
-        e.preventDefault(); 
-        
-        const newShuffledTags = shuffleArray([...allTags]).slice(0, 30);
-        const newHTML = createAnimatedTagCloudHTML(newShuffledTags);
-
-        tagCloudContainer.innerHTML = newHTML;
-    });
-});
-</script>
-
-<!-- 검색 기능을 위한 JavaScript (최종 버전) -->
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('search-input');
-    const searchButton = document.getElementById('search-button');
+    // 검색 스크립트
+    const searchInput = document.getElementById('search-input'); 
+    const searchButton = document.getElementById('search-button'); 
     const searchResults = document.getElementById('search-results');
-    let searchData = [];
-    let dataLoaded = false;
-
-    const loadSearchData = async () => {
-        try {
-            const response = await fetch('{{ (site.Home.OutputFormats.Get "JSON").RelPermalink }}');
-            if (!response.ok) throw new Error('데이터 로드 실패');
-            searchData = await response.json();
-            dataLoaded = true;
-        } catch (error) {
-            console.error(error);
-            searchResults.innerHTML = '<p>검색 기능을 사용할 수 없습니다.</p>';
-        }
-    };
-
-    const performSearch = (query) => {
-        if (!query || query.trim().length < 2) {
+    if (searchInput) {
+        const performSearch = (query) => {
+            if (!query || query.trim().length < 2) { searchResults.innerHTML = ''; return; }
+            const lowerCaseQuery = query.toLowerCase();
+            const results = siteData.filter(post => post.title.toLowerCase().includes(lowerCaseQuery) || post.content.toLowerCase().includes(lowerCaseQuery));
+            displayResults(results, query);
+        };
+        const displayResults = (results, query) => {
             searchResults.innerHTML = '';
-            return;
+            if (results.length === 0) { searchResults.innerHTML = '<p class="no-results">검색 결과가 없습니다.</p>'; return; }
+            const resultList = document.createElement('ul'); resultList.className = 'search-result-list';
+            results.slice(0, 3).forEach(post => { const listItem = document.createElement('li'); const link = document.createElement('a'); link.href = post.permalink; link.textContent = post.title; listItem.appendChild(link); resultList.appendChild(listItem); });
+            searchResults.appendChild(resultList);
+            if (results.length > 3) {
+                const moreLink = document.createElement('a');
+                moreLink.href = `{{ (.Site.GetPage "search.md").RelPermalink }}?q=${encodeURIComponent(query)}`;
+                moreLink.className = 'more-results-link';
+                moreLink.textContent = `전체 검색 결과 보기 (${results.length}개)`;
+                searchResults.appendChild(moreLink);
+            }
+        };
+        searchInput.addEventListener('input', (e) => performSearch(e.target.value));
+        searchButton.addEventListener('click', () => { const query = searchInput.value; if (query.trim()) { window.location.href = `{{ (.Site.GetPage "search.md").RelPermalink }}?q=${encodeURIComponent(query)}`; } });
+    }
+
+    // =========================================================================
+    // 페이지네이션 스크립트 (키보드 내비게이션 추가)
+    // =========================================================================
+    const postListRoot = document.getElementById('post-list-card-root');
+    if (postListRoot) {
+        const allPostsData = siteData.slice(1);
+        let currentPage = 1;
+        const itemsPerPage = 11;
+        const totalPages = Math.ceil(allPostsData.length / itemsPerPage);
+        let isLoading = false;
+
+        const postListWrapper = document.getElementById('post-list-wrapper');
+        const paginationNavWrapper = document.getElementById('pagination-nav-wrapper');
+        
+        const isMobile = window.matchMedia('(max-width: 820px)');
+
+        const renderPage = (page, direction) => {
+            if (isLoading || page < 1 || page > totalPages) {
+                isLoading = false;
+                return;
+            }
+            isLoading = true;
+
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageData = allPostsData.slice(start, end);
+
+            const newPostList = document.createElement('ul');
+            newPostList.className = 'post-list';
+            newPostList.innerHTML = pageData.map(post => 
+                `<li><a href="${post.permalink}" title="${post.title}"><span>${post.title}</span><time datetime="${post.date}">${post.formattedDate}</time></a></li>`
+            ).join('');
+            
+            const oldPostList = postListWrapper.querySelector('.post-list');
+
+            if (isMobile.matches) {
+                if (oldPostList) oldPostList.remove();
+                postListWrapper.appendChild(newPostList);
+                currentPage = page;
+                updatePaginationControls();
+                isLoading = false;
+            } else {
+                newPostList.classList.add('is-animating');
+                if (direction === 'next') { newPostList.classList.add('slide-from-right'); } 
+                else { newPostList.classList.add('slide-from-left'); }
+                postListWrapper.appendChild(newPostList);
+
+                setTimeout(() => {
+                    if (oldPostList) {
+                        oldPostList.classList.add('is-animating');
+                        if (direction === 'next') oldPostList.classList.add('slide-to-left');
+                        else oldPostList.classList.add('slide-to-right');
+                    }
+                    newPostList.classList.remove('slide-from-right', 'slide-from-left');
+                }, 10);
+
+                setTimeout(() => {
+                    if (oldPostList) oldPostList.remove();
+                    newPostList.classList.remove('is-animating');
+                    currentPage = page;
+                    updatePaginationControls();
+                    isLoading = false;
+                }, 310);
+            }
+        };
+
+        const updatePaginationControls = () => {
+            const prevDisabled = currentPage === 1 ? 'disabled' : '';
+            const nextDisabled = totalPages === 0 || currentPage === totalPages ? 'disabled' : '';
+            const pageToShow = isNaN(currentPage) ? 1 : currentPage;
+            const totalToShow = isNaN(totalPages) ? 1 : (totalPages > 0 ? totalPages : 1);
+
+            paginationNavWrapper.innerHTML = `
+                <nav class="pagination-nav">
+                    <a href="#" class="pagination-arrow prev ${prevDisabled}" data-page="${pageToShow - 1}">◀</a>
+                    <span class="page-indicator">${pageToShow} / ${totalToShow}</span>
+                    <a href="#" class="pagination-arrow next ${nextDisabled}" data-page="${pageToShow + 1}">▶</a>
+                </nav>
+            `;
+        };
+        
+        const handlePaginationClick = (e) => {
+            e.preventDefault();
+            const target = e.target.closest('a:not(.disabled)');
+            if (!target) return;
+            
+            const newPage = parseInt(target.dataset.page, 10);
+            if (isNaN(newPage)) return;
+
+            const direction = newPage > currentPage ? 'next' : 'prev';
+            renderPage(newPage, direction);
+        };
+
+        // ========================[ 여기부터 추가 ]========================
+        const handleKeydown = (e) => {
+            // 다른 입력 필드(예: 검색창)에 포커스 되어 있을 때는 작동하지 않도록 방지
+            if (document.activeElement.tagName === 'INPUT') return;
+
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                // '이전' 버튼을 직접 클릭하는 효과
+                const prevButton = paginationNavWrapper.querySelector('.pagination-arrow.prev:not(.disabled)');
+                if (prevButton) prevButton.click();
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                // '다음' 버튼을 직접 클릭하는 효과
+                const nextButton = paginationNavWrapper.querySelector('.pagination-arrow.next:not(.disabled)');
+                if (nextButton) nextButton.click();
+            }
+        };
+        // ========================[ 여기까지 추가 ]========================
+
+        paginationNavWrapper.addEventListener('click', handlePaginationClick);
+
+        // [핵심] 데스크톱 환경에서만 키보드 이벤트 리스너를 추가합니다.
+        if (!isMobile.matches) {
+            document.addEventListener('keydown', handleKeydown);
         }
-        if (!dataLoaded) return;
-        const lowerCaseQuery = query.toLowerCase();
-        const results = searchData.filter(post =>
-            post.title.toLowerCase().includes(lowerCaseQuery) ||
-            post.content.toLowerCase().includes(lowerCaseQuery)
-        );
-        displayResults(results, query);
-    };
-
-    const displayResults = (results, query) => {
-        searchResults.innerHTML = '';
-        if (results.length === 0) {
-            searchResults.innerHTML = '<p class="no-results">검색 결과가 없습니다.</p>';
-            return;
-        }
-        const resultList = document.createElement('ul');
-        resultList.className = 'search-result-list';
-        const itemsToShow = results.slice(0, 3);
-        itemsToShow.forEach(post => {
-            const listItem = document.createElement('li');
-            const link = document.createElement('a');
-            link.href = post.permalink;
-            link.textContent = post.title;
-            listItem.appendChild(link);
-            resultList.appendChild(listItem);
-        });
-        searchResults.appendChild(resultList);
-
-        if (results.length > 3) {
-            const moreLink = document.createElement('a');
-            moreLink.href = `{{ (.Site.GetPage "search.md").RelPermalink }}?q=${encodeURIComponent(query)}`;
-            moreLink.className = 'more-results-link';
-            moreLink.textContent = `전체 검색 결과 보기 (${results.length}개)`;
-            searchResults.appendChild(moreLink);
-        }
-    };
-
-    searchInput.addEventListener('input', (e) => {
-        performSearch(e.target.value);
-    });
-
-    searchButton.addEventListener('click', () => {
-        const query = searchInput.value;
-        if (query.trim()) {
-            window.location.href = `{{ (.Site.GetPage "search.md").RelPermalink }}?q=${encodeURIComponent(query)}`;
-        }
-    });
-
-    loadSearchData();
+        
+        updatePaginationControls();
+    }
 });
 </script>
 
