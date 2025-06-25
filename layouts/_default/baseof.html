@@ -103,9 +103,73 @@
         </div>
     </footer>
 
-    <!-- 원래의 정상 작동하던 스크립트로 완전 복구 -->
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // =====================================================================
+        // [FIXED] 트레이딩뷰 위젯 생성 및 관리 로직 (v2)
+        // =====================================================================
+        const createTVWidget = (container) => {
+            if (!container) return;
+
+            // 1. 컨테이너의 data 속성에서 차트 정보를 읽어옵니다.
+            const ticker = container.dataset.ticker;
+            const height = parseInt(container.dataset.height, 10);
+            const locale = container.dataset.locale;
+
+            // 2. 현재 웹사이트 테마에 맞춰 차트 테마와 색상을 결정합니다.
+            const siteTheme = document.body.dataset.theme || 'default';
+            let chartTheme, bgColor, gridColor;
+
+            if (siteTheme === 'aetherial-light') {
+                chartTheme = 'light';
+                bgColor = '#FFFFFF';
+                gridColor = 'rgba(0, 0, 0, 0.06)';
+            } else {
+                chartTheme = 'dark';
+                bgColor = '#1e2228';
+                gridColor = 'rgba(255, 255, 255, 0.06)';
+            }
+
+            // 3. TradingView 위젯 생성 스크립트를 동적으로 만들어 컨테이너에 바로 추가합니다.
+            //    스크립트가 자신의 위치를 기준으로 필요한 모든 내부 요소를 스스로 생성합니다.
+            const widgetScript = document.createElement('script');
+            widgetScript.type = 'text/javascript';
+            widgetScript.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+            widgetScript.async = true;
+            widgetScript.innerHTML = JSON.stringify({
+                "width": "100%",
+                "height": height,
+                "symbol": ticker,
+                "interval": "D",
+                "timezone": "Etc/UTC",
+                "theme": chartTheme,
+                "style": "1",
+                "locale": locale,
+                "enable_publishing": false,
+                "hide_side_toolbar": true,
+                "allow_symbol_change": true,
+                "save_image": true,
+                "calendar": false,
+                "hide_top_toolbar": false,
+                "hide_legend": false,
+                "backgroundColor": bgColor,
+                "gridColor": gridColor
+            });
+            
+            container.appendChild(widgetScript);
+        };
+
+        const reRenderAllTVWidgets = () => {
+            const allCharts = document.querySelectorAll('.tv-chart-container');
+            allCharts.forEach(chartContainer => {
+                chartContainer.innerHTML = '';
+                createTVWidget(chartContainer);
+            });
+        };
+
+        // =====================================================================
+        // 기존 테마 및 댓글 관리 로직 (변경 없음)
+        // =====================================================================
         const themeButtons = document.querySelectorAll('.theme-btn');
         const body = document.body;
         const giscusThemeMap = { 'default': 'dark_dimmed', 'cosmic-indigo': 'dark_dimmed', 'aetherial-light': 'light' };
@@ -114,7 +178,6 @@
             const giscusFrame = document.querySelector('iframe.giscus-frame');
             if (!giscusFrame) return;
             const giscusTheme = giscusThemeMap[themeName] || 'dark_dimmed';
-            // setTimeout을 추가하여 giscus 프레임이 메시지를 받을 준비가 될 때까지 약간의 시간을 줍니다.
             setTimeout(() => { 
                 giscusFrame.contentWindow.postMessage({ giscus: { setConfig: { theme: giscusTheme } } }, 'https://giscus.app');
             }, 100);
@@ -127,6 +190,7 @@
                 btn.classList.toggle('active', btn.dataset.theme === themeName); 
             });
             updateGiscusTheme(themeName);
+            reRenderAllTVWidgets();
         };
 
         const savedTheme = localStorage.getItem('archive03-theme') || 'default';
@@ -135,8 +199,8 @@
         themeButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const selectedTheme = button.dataset.theme;
-                applyTheme(selectedTheme);
                 localStorage.setItem('archive03-theme', selectedTheme);
+                applyTheme(selectedTheme);
             });
         });
 
@@ -150,7 +214,7 @@
                             const currentTheme = localStorage.getItem('archive03-theme') || 'default';
                             updateGiscusTheme(currentTheme);
                         } else {
-                            setTimeout(applyGiscusThemeOnLoad, 200); // 프레임이 없으면 0.2초 후 재시도
+                            setTimeout(applyGiscusThemeOnLoad, 200);
                         }
                     };
                     applyGiscusThemeOnLoad();

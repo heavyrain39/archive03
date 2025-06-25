@@ -1,0 +1,24 @@
+{{/*
+    TradingView 차트 생성을 위한 '설계도'를 만드는 숏코드 (v4)
+    JavaScript가 이 설계도를 읽어 실제 차트를 렌더링합니다.
+    - ticker: (필수) TradingView 심볼
+    - height: (선택) 차트 높이 (기본값: 400)
+    - locale: (선택) 언어 코드 (기본값: en)
+*/}}
+
+{{- $ticker := .Get "ticker" | default "NASDAQ:AAPL" -}}
+{{- $height := .Get "height" | default "400" -}}
+{{- $locale := .Get "locale" | default "en" -}}
+
+{{/* 각 위젯을 고유하게 식별하기 위한 ID 생성 */}}
+{{- $widgetId := printf "tv-widget-%d" (math.Counter) -}}
+
+<div 
+    id="{{ $widgetId }}"
+    class="tv-chart-container"
+    data-ticker="{{ $ticker }}"
+    data-height="{{ $height }}"
+    data-locale="{{ $locale }}"
+    style="height: {{ $height }}px; width: 100%;">
+    {{/* 내용은 비워둡니다. JavaScript가 채울 것입니다. */}}
+</div>

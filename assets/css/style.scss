@@ -1238,3 +1238,11 @@ body[data-theme="aetherial-light"] .static-share-button:hover {
         overflow-y: visible; /* 내부 스크롤을 완전히 비활성화합니다. */
     }
 }
+
+/* --------------------------------------------------
+   21. 트레이딩뷰 차트 컨테이너 스타일
+   -------------------------------------------------- */
+.tv-chart-container {
+    margin: var(--spacing-lg) 0;
+    position: relative; /* [핵심] 차트의 위치 기준점을 설정합니다. */
+}

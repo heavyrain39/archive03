@@ -57,6 +57,7 @@ tags: ["채권", "채권ETF", "금리", "TLT", "IEF", "SHY", "AGG", "자산배�
     </li>
 </ul>
 <p>한국 투자자라면 <strong>KODEX 국고채3년/10년</strong> 같은 국내 채권 ETF도 좋은 대안이 될 수 있다뮤. 데이터 브리핑은 여기까지다뮤.</p>
+{{< tv-chart ticker="TLT" >}}
 
 {{< briefing >}}
 <h3><strong>〔 최종 브리핑 〕</strong></h3>
