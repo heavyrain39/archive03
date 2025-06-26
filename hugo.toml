@@ -28,6 +28,10 @@ timeZone = "Asia/Seoul"
     theme = "dark_dimmed" 
     loading = "lazy"
 
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+
 # 4. 헤더 메뉴 설정
 [menu]
   [[menu.main]]
