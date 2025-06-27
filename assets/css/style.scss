@@ -1247,6 +1247,16 @@ body[data-theme="aetherial-light"] .static-share-button:hover {
         height: auto;
         overflow-y: visible; /* 내부 스크롤을 완전히 비활성화합니다. */
     }
+
+    /* 
+     * [BUG FIX] 페이지네이션 시 새 목록이 추가되면 이전 목록을 즉시 숨겨 점프 현상을 방지합니다.
+     * position:static 상태에서 두 목록이 잠시 공존하며 세로로 쌓이는 것을 막습니다.
+     * 이 코드는 새 목록(.post-list)이 추가되어 자식이 2개가 되는 순간,
+     * 첫 번째 자식(이전 목록)을 화면에서 즉시 숨깁니다.
+     */
+    #post-list-wrapper .post-list:first-child:not(:last-child) {
+        display: none;
+    }
 }
 
 /* --------------------------------------------------
