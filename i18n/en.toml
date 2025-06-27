@@ -25,3 +25,15 @@ other = "Share this post"
 other = "Next"
 [prev_post]
 other = "Prev"
+
+[search_no_query]
+other = "No search term provided."
+
+[search_results_title]
+other = "Results for \"{0}\""
+
+[search_data_load_fail]
+other = "Failed to load search data."
+
+[search_no_results_on_page]
+other = "No results found."

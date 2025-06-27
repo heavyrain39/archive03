@@ -87,14 +87,14 @@
             <!-- [핵심 수정] .Page.Title 뒤에 | lower 를 추가하여 모두 소문자로 만듭니다. -->
             <div class="tag-row">
                 <div class="tag-scroller">
-                    {{ range $row1 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title | lower }}</a>{{ end }}
-                    {{ range $row1 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title | lower }}</a>{{ end }}
+                    {{ range $row1 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ if eq $.Site.Language.Lang "ko" }}{{ .Page.Title }}{{ else }}{{ .Page.Title | lower }}{{ end }}</a>{{ end }}
+                    {{ range $row1 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ if eq $.Site.Language.Lang "ko" }}{{ .Page.Title }}{{ else }}{{ .Page.Title | lower }}{{ end }}</a>{{ end }}
                 </div>
             </div>
             <div class="tag-row tag-row-reverse">
                 <div class="tag-scroller">
-                    {{ range $row2 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title | lower }}</a>{{ end }}
-                    {{ range $row2 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title | lower }}</a>{{ end }}
+                    {{ range $row2 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ if eq $.Site.Language.Lang "ko" }}{{ .Page.Title }}{{ else }}{{ .Page.Title | lower }}{{ end }}</a>{{ end }}
+                    {{ range $row2 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ if eq $.Site.Language.Lang "ko" }}{{ .Page.Title }}{{ else }}{{ .Page.Title | lower }}{{ end }}</a>{{ end }}
                 </div>
             </div>
         </div>
@@ -125,11 +125,12 @@ document.addEventListener('DOMContentLoaded', () => {
         {{ end }}
     ];
     const allTags = [ {{- range $i, $tagPage := .Site.Taxonomies.tags.ByCount -}} {{- if $i -}},{{- end -}} { "title": "{{ .Page.Title | safeJS }}", "permalink": "{{ .Page.Permalink | safeJS }}" } {{- end -}} ];
+    const currentLang = '{{ .Site.Language.Lang }}';
     const tagCloudContainer = document.querySelector('.tag-cloud');
     const refreshButton = document.querySelector('.refresh-button');
     if (tagCloudContainer && refreshButton && allTags.length > 0) {
         const shuffleArray = (array) => { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[array[i], array[j]] = [array[j], array[i]]; } return array; };
-        const createAnimatedTagCloudHTML = (tags) => { const half = Math.ceil(tags.length / 2); const row1Tags = tags.slice(0, half); const row2Tags = tags.slice(half); const createRowHTML = (tagArray) => tagArray.map(tag => `<a href="${tag.permalink}" class="tag-item">#${tag.title.toLowerCase()}</a>`).join(''); const row1Links = createRowHTML(row1Tags); const row2Links = createRowHTML(row2Tags); return `<div class="tag-row"><div class="tag-scroller">${row1Links}${row1Links}</div></div><div class="tag-row tag-row-reverse"><div class="tag-scroller">${row2Links}${row2Links}</div></div>`; };
+        const createAnimatedTagCloudHTML = (tags) => { const half = Math.ceil(tags.length / 2); const row1Tags = tags.slice(0, half); const row2Tags = tags.slice(half); const createRowHTML = (tagArray) => tagArray.map(tag => `<a href="${tag.permalink}" class="tag-item">#${currentLang === 'ko' ? tag.title : tag.title.toLowerCase()}</a>`).join(''); const row1Links = createRowHTML(row1Tags); const row2Links = createRowHTML(row2Tags); return `<div class="tag-row"><div class="tag-scroller">${row1Links}${row1Links}</div></div><div class="tag-row tag-row-reverse"><div class="tag-scroller">${row2Links}${row2Links}</div></div>`; };
         refreshButton.addEventListener('click', (e) => { e.preventDefault(); const newShuffledTags = shuffleArray([...allTags]).slice(0, 30); const newHTML = createAnimatedTagCloudHTML(newShuffledTags); tagCloudContainer.innerHTML = newHTML; });
     }
     const searchInput = document.getElementById('search-input'); 
@@ -152,14 +153,18 @@ document.addEventListener('DOMContentLoaded', () => {
             searchResults.appendChild(resultList);
             if (results.length > 3) {
                 const moreLink = document.createElement('a');
-                moreLink.href = `{{ (.Site.GetPage "search.md").RelPermalink }}?q=${encodeURIComponent(query)}`;
+                moreLink.href = `{{ (.Site.GetPage "section" "search").RelPermalink }}?q=${encodeURIComponent(query)}`;
                 moreLink.className = 'more-results-link';
                 moreLink.textContent = tMoreResults.replace("{.count}", results.length);
                 searchResults.appendChild(moreLink);
             }
         };
         searchInput.addEventListener('input', (e) => performSearch(e.target.value));
-        searchButton.addEventListener('click', () => { const query = searchInput.value; if (query.trim()) { window.location.href = `{{ (.Site.GetPage "search.md").RelPermalink }}?q=${encodeURIComponent(query)}`; } });
+        const goToSearchPage = () => { const query = searchInput.value; if (query.trim()) { window.location.href = `{{ (.Site.GetPage "section" "search").RelPermalink }}?q=${encodeURIComponent(query)}`; } };
+        searchButton.addEventListener('click', goToSearchPage);
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); goToSearchPage(); }
+        });
     }
 
     // =========================================================================

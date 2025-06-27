@@ -18,29 +18,39 @@
 
     <!-- 검색 페이지 전용 JavaScript -->
     <script>
-    document.addEventListener('DOMContentLoaded', async () => {
+    document.addEventListener('DOMContentLoaded', () => {
+        // [수정] 다국어 지원을 위해 번역된 문자열을 객체로 가져옵니다.
+        const t = {
+            noQuery: '{{ T "search_no_query" | safeJS }}',
+            titleFormat: '{{ T "search_results_title" | safeJS }}',
+            loadFail: '{{ T "search_data_load_fail" | safeJS }}',
+            noResults: '{{ T "search_no_results_on_page" | safeJS }}'
+        };
+
         const titleEl = document.getElementById('search-page-title');
         const resultsEl = document.getElementById('search-page-results');
         const paginationEl = document.getElementById('search-page-pagination');
-        let searchData = [];
         const params = new URLSearchParams(window.location.search);
         const query = params.get('q');
         
+        // [수정] fetch를 사용하는 대신, Hugo 템플릿으로 검색 데이터를 직접 페이지에 삽입합니다.
+        // 이 방식은 네트워크 오류 없이 안정적으로 데이터를 로드하여, 제목 미표시 및 결과 중복 문제를 모두 해결합니다.
+        const searchData = [
+            // [수정] 다국어 지원을 위해, 현재 언어에 해당하는 페이지만 가져오도록 수정합니다.
+            {{ $allReportPages := where (where .Site.RegularPages "Lang" .Site.Language.Lang) "Params.exclude_from_list" "ne" true }}
+            {{ range $i, $p := $allReportPages }}
+                {{ if $i }},{{ end }}
+                { "title": "{{ .Title | safeJS }}", "permalink": "{{ .Permalink | safeJS }}", "content": {{ .Content | plainify | jsonify }}, "summary": {{ .Summary | truncate 70 "..." | plainify | jsonify }} }
+            {{ end }}
+        ];
+
         if (!query) {
-            titleEl.textContent = "검색어가 없습니다.";
+            titleEl.textContent = t.noQuery;
             return;
         }
 
         // 낫표(「」)와 함께 멋진 제목을 생성합니다.
-        titleEl.innerHTML = `「<span class="color-accent">${query}</span>」에 대한 검색 결과`;
-
-        try {
-            const response = await fetch('{{ (site.Home.OutputFormats.Get "JSON").RelPermalink }}');
-            searchData = await response.json();
-        } catch (e) {
-            resultsEl.innerHTML = "<p>검색 데이터를 불러오는 데 실패했습니다.</p>";
-            return;
-        }
+        titleEl.innerHTML = t.titleFormat.replace('{0}', `<span class="color-accent">${query}</span>`);
 
         const lowerCaseQuery = query.toLowerCase();
         const allResults = searchData.filter(post => 
@@ -58,7 +68,7 @@
             paginationEl.innerHTML = '';
 
             if (allResults.length === 0) {
-                resultsEl.innerHTML = '<p class="no-results" style="text-align: center; padding: 2rem 0;">검색 결과가 없습니다.</p>';
+                resultsEl.innerHTML = `<p class="no-results" style="text-align: center; padding: 2rem 0;">${t.noResults}</p>`;
                 return;
             }
 
@@ -73,7 +83,7 @@
             pageResults.forEach(post => {
                 const li = document.createElement('li');
                 // 태그 목록 페이지와 동일한 HTML 구조를 사용합니다.
-                li.innerHTML = `<a href="${post.permalink}"><span class="list-page-post-title">${post.title}</span><div class="list-page-post-meta"><span class="summary">${post.content.substring(0, 70)}...</span></div></a>`;
+                li.innerHTML = `<a href="${post.permalink}"><span class="list-page-post-title">${post.title}</span><div class="list-page-post-meta"><span class="summary">${post.summary}</span></div></a>`;
                 resultList.appendChild(li);
             });
             resultsEl.appendChild(resultList);
