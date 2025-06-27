@@ -1,5 +1,5 @@
 # ==========================================================
-# 1. 다국어 설정 (수정됨)
+# 1. 다국어 설정 (최종 완성 버전)
 # ==========================================================
 defaultContentLanguage = 'ko'
 
@@ -8,10 +8,12 @@ defaultContentLanguage = 'ko'
     languageName = '한국어'
     weight = 1
     title = 'Archive 03'
+    [languages.ko.outputs]
+      home = ["HTML", "JSON", "RSS"]
+      section = ["HTML", "RSS"]
     [languages.ko.params]
       subtitle = '세 명의 인외 소녀가 전하는 투자 인사이트'
       dateFormat = "2006년 1월 2일"
-    # [핵심] 한국어 메뉴는 한국어 설정 블록 안에 위치해야 합니다.
     [[languages.ko.menu.main]]
       identifier = "article"
       name = "HOME"
@@ -27,10 +29,12 @@ defaultContentLanguage = 'ko'
     languageName = 'English'
     weight = 2
     title = 'Archive 03'
+    [languages.en.outputs]
+      home = ["HTML", "JSON", "RSS"]
+      section = ["HTML", "RSS"]
     [languages.en.params]
       subtitle = 'Financial Insights from 3 Non-human Girls'
       dateFormat = "January 2, 2006"
-    # [핵심] 영어 메뉴는 영어 설정 블록 안에 위치해야 합니다.
     [[languages.en.menu.main]]
       identifier = "article"
       name = "HOME"
@@ -49,7 +53,7 @@ defaultContentLanguage = 'ko'
   reports = '/:year/:month/:slug/'
 
 # ==========================================================
-# 3. 기존 설정
+# 3. 기존 설정 (일부 삭제됨)
 # ==========================================================
 languageCode = 'ko-KR'
 timeZone = "Asia/Seoul"
@@ -87,15 +91,6 @@ timeZone = "Asia/Seoul"
 [mediaTypes]
   [mediaTypes."text/css"]
     suffixes = ["css"]
-
-[outputFormats]
-  [outputFormats.CSS]
-    mediaType = "text/css"
-    baseName = "style"
-
-[outputs]
-  home = ["HTML", "JSON", "RSS"]
-  section = ["HTML", "RSS"]
 
 [outputFormats.JSON]
   baseName = "index"
