@@ -638,8 +638,7 @@ body[data-theme="aetherial-light"] .share-fab:hover {
 .post-list-container {
     background-color: var(--dark-bg);
     border-radius: var(--border-radius-md);
-    flex-grow: 1;
-    overflow-y: hidden; 
+    /* flex-grow와 overflow를 제거하여 높이가 자동으로 잡히게 함 */
     position: relative;
 }
 
@@ -1175,13 +1174,13 @@ body[data-theme="aetherial-light"] .static-share-button:hover {
    19. 비동기 페이지네이션 애니메이션 (레이아웃 최종 수정)
    -------------------------------------------------- */
 
-/* [핵심] 글 목록을 감싸는 컨테이너에 flex-grow를 주어 남은 공간을 모두 차지하게 함 */
 .post-list-container {
     background-color: var(--dark-bg);
     border-radius: var(--border-radius-md);
-    flex-grow: 1; /* << 핵심 */
+    flex-grow: 1;
     position: relative;
-    overflow: hidden; /* 애니메이션을 위해 자식 요소를 숨김 */
+    overflow: hidden; /* 자식 요소인 애니메이션을 보여주기 위해 필수 */
+    /* min-height는 이제 JS가 관리하므로 제거합니다. */
 }
 
 /* [핵심] 래퍼는 애니메이션의 '무대' 역할만 합니다. */
@@ -1193,21 +1192,19 @@ body[data-theme="aetherial-light"] .static-share-button:hover {
     height: 100%;
 }
 
-/* [핵심] 실제 글 목록 ul에 모든 스타일과 스크롤 기능을 부여합니다. */
 #post-list-wrapper .post-list {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    overflow-y: auto; /* 목록이 길어지면 스크롤 */
-    
-    /* 요청하신 여백을 여기에 적용하여 레이아웃을 복원합니다. */
+    overflow-y: hidden; /* [핵심] auto에서 hidden으로 변경하여 스크롤바를 영구히 비활성화 */
     padding: var(--spacing-sm);
     padding-top: 0.8rem;
-    
     margin: 0;
     list-style: none;
+    background-color: var(--dark-bg);
+    transition: transform 0.25s ease-in-out;
 }
 
 #post-list-wrapper .post-list.is-animating {

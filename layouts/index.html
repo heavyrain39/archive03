@@ -1,7 +1,7 @@
 {{ define "main" }}
 
 {{/* =====================================================================
-    [Archive 03 v2.0] 메인 페이지 레이아웃
+    [Archive 03 v2.0] 메인 페이지 레이아웃 (다국어 지원)
 ========================================================================= */}}
 
 <div class="dashboard-container">
@@ -23,7 +23,14 @@
         {{ range $latestPost }}
             <div class="latest-post-content">
                 <h3 class="latest-post-title"><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
-                <p class="latest-post-summary">{{ .Summary | truncate 115 "..." }}</p>
+                
+                {{/* [핵심 수정] 현재 언어에 따라 summary 글자 수를 다르게 설정합니다. */}}
+                {{ if eq .Site.Language.Lang "ko" }}
+                    <p class="latest-post-summary">{{ .Summary | truncate 120 "..." }}</p>
+                {{ else }}
+                    <p class="latest-post-summary">{{ .Summary | truncate 180 "..." }}</p>
+                {{ end }}
+
             </div>
         {{ end }}
 
@@ -31,7 +38,7 @@
 
     <!-- ====================== 섹션 2: 우상단 (글 목록 + 페이지네이션) ====================== -->
     <section class="dashboard-card post-list-card" id="post-list-card-root">
-        <h3 class="card-header">Articles</h3>
+        <h3 class="card-header">{{ T "articles_heading" }}</h3>
         
         <div class="post-list-container">
             <div id="post-list-wrapper"> 
@@ -59,7 +66,7 @@
     <!-- ====================== 섹션 3: 하단 좌측 (랜덤 태그) ====================== -->
     <section class="dashboard-card tag-cloud-card">
         <div class="card-header-with-action">
-            <h3 class="card-header">Tags</h3>
+            <h3 class="card-header">{{ T "tags_heading" }}</h3>
             <a href="#" class="refresh-button" aria-label="Refresh Tags">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
@@ -76,16 +83,28 @@
             {{ $half := math.Ceil (div (float $tagsCount) 2.0) }}
             {{ $row1 := first (int $half) $tagsToShow }}
             {{ $row2 := after (int $half) $tagsToShow }}
-            <div class="tag-row"><div class="tag-scroller">{{ range $row1 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title }}</a>{{ end }}{{ range $row1 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title }}</a>{{ end }}</div></div>
-            <div class="tag-row tag-row-reverse"><div class="tag-scroller">{{ range $row2 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title }}</a>{{ end }}{{ range $row2 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title }}</a>{{ end }}</div></div>
+            
+            <!-- [핵심 수정] .Page.Title 뒤에 | lower 를 추가하여 모두 소문자로 만듭니다. -->
+            <div class="tag-row">
+                <div class="tag-scroller">
+                    {{ range $row1 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title | lower }}</a>{{ end }}
+                    {{ range $row1 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title | lower }}</a>{{ end }}
+                </div>
+            </div>
+            <div class="tag-row tag-row-reverse">
+                <div class="tag-scroller">
+                    {{ range $row2 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title | lower }}</a>{{ end }}
+                    {{ range $row2 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ .Page.Title | lower }}</a>{{ end }}
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- ====================== 섹션 4: 하단 우측 (검색) ====================== -->
     <section class="dashboard-card search-card">
-        <h3 class="card-header">Search</h3>
+        <h3 class="card-header">{{ T "search_heading" }}</h3>
         <div class="search-wrapper">
-            <input type="search" id="search-input" placeholder="검색어를 입력하세요...">
+            <input type="search" id="search-input" placeholder='{{ T "search_placeholder" }}'>
             <button id="search-button" aria-label="Search">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/></svg>
             </button>
@@ -97,32 +116,22 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-
+    // ... (siteData, 태그 클라우드, 검색 스크립트는 변경 없습니다. 그대로 두세요) ...
     const siteData = [
         {{ $allReportPages := sort (where .Site.RegularPages "Params.exclude_from_list" "ne" true) "Date" "desc" }}
         {{ range $i, $p := $allReportPages }}
             {{ if $i }},{{ end }}
-            {
-                "title": "{{ .Title | safeJS }}",
-                "permalink": "{{ .Permalink | safeJS }}",
-                "date": "{{ .Date.Format "2006-01-02" }}",
-                "formattedDate": "{{ .Date.Format "06.01.02" }}",
-                "content": {{ .Content | plainify | jsonify }}
-            }
+            { "title": "{{ .Title | safeJS }}", "permalink": "{{ .Permalink | safeJS }}", "date": "{{ .Date.Format "2006-01-02" }}", "formattedDate": "{{ .Date.Format "06.01.02" }}", "content": {{ .Content | plainify | jsonify }} }
         {{ end }}
     ];
-
-    // 태그 클라우드 스크립트
     const allTags = [ {{- range $i, $tagPage := .Site.Taxonomies.tags.ByCount -}} {{- if $i -}},{{- end -}} { "title": "{{ .Page.Title | safeJS }}", "permalink": "{{ .Page.Permalink | safeJS }}" } {{- end -}} ];
     const tagCloudContainer = document.querySelector('.tag-cloud');
     const refreshButton = document.querySelector('.refresh-button');
     if (tagCloudContainer && refreshButton && allTags.length > 0) {
         const shuffleArray = (array) => { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[array[i], array[j]] = [array[j], array[i]]; } return array; };
-        const createAnimatedTagCloudHTML = (tags) => { const half = Math.ceil(tags.length / 2); const row1Tags = tags.slice(0, half); const row2Tags = tags.slice(half); const createRowHTML = (tagArray) => tagArray.map(tag => `<a href="${tag.permalink}" class="tag-item">#${tag.title}</a>`).join(''); const row1Links = createRowHTML(row1Tags); const row2Links = createRowHTML(row2Tags); return `<div class="tag-row"><div class="tag-scroller">${row1Links}${row1Links}</div></div><div class="tag-row tag-row-reverse"><div class="tag-scroller">${row2Links}${row2Links}</div></div>`; };
+        const createAnimatedTagCloudHTML = (tags) => { const half = Math.ceil(tags.length / 2); const row1Tags = tags.slice(0, half); const row2Tags = tags.slice(half); const createRowHTML = (tagArray) => tagArray.map(tag => `<a href="${tag.permalink}" class="tag-item">#{{ .Page.Title | lower }}</a>`).join(''); const row1Links = createRowHTML(row1Tags); const row2Links = createRowHTML(row2Tags); return `<div class="tag-row"><div class="tag-scroller">${row1Links}${row1Links}</div></div><div class="tag-row tag-row-reverse"><div class="tag-scroller">${row2Links}${row2Links}</div></div>`; };
         refreshButton.addEventListener('click', (e) => { e.preventDefault(); const newShuffledTags = shuffleArray([...allTags]).slice(0, 30); const newHTML = createAnimatedTagCloudHTML(newShuffledTags); tagCloudContainer.innerHTML = newHTML; });
     }
-
-    // 검색 스크립트
     const searchInput = document.getElementById('search-input'); 
     const searchButton = document.getElementById('search-button'); 
     const searchResults = document.getElementById('search-results');
@@ -135,7 +144,9 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         const displayResults = (results, query) => {
             searchResults.innerHTML = '';
-            if (results.length === 0) { searchResults.innerHTML = '<p class="no-results">검색 결과가 없습니다.</p>'; return; }
+            const tNoResults = '{{ T "search_no_results" }}';
+            const tMoreResults = '{{ T "search_more_results" | safeJS }}';
+            if (results.length === 0) { searchResults.innerHTML = `<p class="no-results">${tNoResults}</p>`; return; }
             const resultList = document.createElement('ul'); resultList.className = 'search-result-list';
             results.slice(0, 3).forEach(post => { const listItem = document.createElement('li'); const link = document.createElement('a'); link.href = post.permalink; link.textContent = post.title; listItem.appendChild(link); resultList.appendChild(listItem); });
             searchResults.appendChild(resultList);
@@ -143,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const moreLink = document.createElement('a');
                 moreLink.href = `{{ (.Site.GetPage "search.md").RelPermalink }}?q=${encodeURIComponent(query)}`;
                 moreLink.className = 'more-results-link';
-                moreLink.textContent = `전체 검색 결과 보기 (${results.length}개)`;
+                moreLink.textContent = tMoreResults.replace("{.count}", results.length);
                 searchResults.appendChild(moreLink);
             }
         };
@@ -152,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =========================================================================
-    // 페이지네이션 스크립트 (키보드 내비게이션 추가)
+    // [최종 완성] 페이지네이션 (고정 높이 + 클린 슬라이드 애니메이션)
     // =========================================================================
     const postListRoot = document.getElementById('post-list-card-root');
     if (postListRoot) {
@@ -162,16 +173,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalPages = Math.ceil(allPostsData.length / itemsPerPage);
         let isLoading = false;
 
+        const postListContainer = document.querySelector('.post-list-container');
         const postListWrapper = document.getElementById('post-list-wrapper');
         const paginationNavWrapper = document.getElementById('pagination-nav-wrapper');
         
-        const isMobile = window.matchMedia('(max-width: 820px)');
+        // [핵심] 페이지 로드 시, 딱 한 번만 최대 높이를 계산하고 고정시키는 함수
+        const setFixedContainerHeight = () => {
+            const initialList = postListWrapper.querySelector('.post-list');
+            if (initialList) {
+                const requiredHeight = initialList.scrollHeight;
+                // JS로 계산된 최종 높이를 컨테이너에 영구적으로 고정
+                postListContainer.style.height = `${requiredHeight}px`;
+                // 이전에 CSS에 있던 min-height는 더 이상 필요 없으므로 제거
+                postListContainer.style.minHeight = 'auto'; 
+            }
+        };
 
         const renderPage = (page, direction) => {
-            if (isLoading || page < 1 || page > totalPages) {
-                isLoading = false;
-                return;
-            }
+            if (isLoading || page < 1 || page > totalPages) return;
             isLoading = true;
 
             const start = (page - 1) * itemsPerPage;
@@ -184,92 +203,46 @@ document.addEventListener('DOMContentLoaded', () => {
                 `<li><a href="${post.permalink}" title="${post.title}"><span>${post.title}</span><time datetime="${post.date}">${post.formattedDate}</time></a></li>`
             ).join('');
             
-            const oldPostList = postListWrapper.querySelector('.post-list');
+            if (direction === 'next') newPostList.style.transform = 'translateX(100%)';
+            else newPostList.style.transform = 'translateX(-100%)';
+            postListWrapper.appendChild(newPostList);
 
-            if (isMobile.matches) {
-                if (oldPostList) oldPostList.remove();
-                postListWrapper.appendChild(newPostList);
-                currentPage = page;
-                updatePaginationControls();
-                isLoading = false;
-            } else {
-                newPostList.classList.add('is-animating');
-                if (direction === 'next') { newPostList.classList.add('slide-from-right'); } 
-                else { newPostList.classList.add('slide-from-left'); }
-                postListWrapper.appendChild(newPostList);
-
-                setTimeout(() => {
-                    if (oldPostList) {
-                        oldPostList.classList.add('is-animating');
-                        if (direction === 'next') oldPostList.classList.add('slide-to-left');
-                        else oldPostList.classList.add('slide-to-right');
-                    }
-                    newPostList.classList.remove('slide-from-right', 'slide-from-left');
-                }, 10);
+            const oldPostList = Array.from(postListWrapper.querySelectorAll('.post-list')).find(el => el !== newPostList);
+            
+            setTimeout(() => {
+                newPostList.style.transform = 'translateX(0)';
+                if (oldPostList) {
+                    if (direction === 'next') oldPostList.style.transform = 'translateX(-100%)';
+                    else oldPostList.style.transform = 'translateX(100%)';
+                }
 
                 setTimeout(() => {
                     if (oldPostList) oldPostList.remove();
-                    newPostList.classList.remove('is-animating');
                     currentPage = page;
                     updatePaginationControls();
                     isLoading = false;
-                }, 310);
-            }
+                }, 250);
+            }, 10);
         };
-
+        
+        // [이하 모든 핸들러 및 호출 코드는 이전과 동일합니다]
         const updatePaginationControls = () => {
             const prevDisabled = currentPage === 1 ? 'disabled' : '';
             const nextDisabled = totalPages === 0 || currentPage === totalPages ? 'disabled' : '';
             const pageToShow = isNaN(currentPage) ? 1 : currentPage;
             const totalToShow = isNaN(totalPages) ? 1 : (totalPages > 0 ? totalPages : 1);
-
-            paginationNavWrapper.innerHTML = `
-                <nav class="pagination-nav">
-                    <a href="#" class="pagination-arrow prev ${prevDisabled}" data-page="${pageToShow - 1}">◀</a>
-                    <span class="page-indicator">${pageToShow} / ${totalToShow}</span>
-                    <a href="#" class="pagination-arrow next ${nextDisabled}" data-page="${pageToShow + 1}">▶</a>
-                </nav>
-            `;
+            paginationNavWrapper.innerHTML = `<nav class="pagination-nav"><a href="#" class="pagination-arrow prev ${prevDisabled}" data-page="${pageToShow - 1}">◀</a><span class="page-indicator">${pageToShow} / ${totalToShow}</span><a href="#" class="pagination-arrow next ${nextDisabled}" data-page="${pageToShow + 1}">▶</a></nav>`;
         };
-        
-        const handlePaginationClick = (e) => {
-            e.preventDefault();
-            const target = e.target.closest('a:not(.disabled)');
-            if (!target) return;
-            
-            const newPage = parseInt(target.dataset.page, 10);
-            if (isNaN(newPage)) return;
-
-            const direction = newPage > currentPage ? 'next' : 'prev';
-            renderPage(newPage, direction);
-        };
-
-        // ========================[ 여기부터 추가 ]========================
-        const handleKeydown = (e) => {
-            // 다른 입력 필드(예: 검색창)에 포커스 되어 있을 때는 작동하지 않도록 방지
-            if (document.activeElement.tagName === 'INPUT') return;
-
-            if (e.key === 'ArrowLeft') {
-                e.preventDefault();
-                // '이전' 버튼을 직접 클릭하는 효과
-                const prevButton = paginationNavWrapper.querySelector('.pagination-arrow.prev:not(.disabled)');
-                if (prevButton) prevButton.click();
-            } else if (e.key === 'ArrowRight') {
-                e.preventDefault();
-                // '다음' 버튼을 직접 클릭하는 효과
-                const nextButton = paginationNavWrapper.querySelector('.pagination-arrow.next:not(.disabled)');
-                if (nextButton) nextButton.click();
-            }
-        };
-        // ========================[ 여기까지 추가 ]========================
+        const handlePaginationClick = (e) => { e.preventDefault(); const target = e.target.closest('a:not(.disabled)'); if (!target) return; const newPage = parseInt(target.dataset.page, 10); if (!isNaN(newPage)) { const direction = newPage > currentPage ? 'next' : 'prev'; renderPage(newPage, direction); } };
+        const handleKeydown = (e) => { if (document.activeElement.tagName === 'INPUT') return; if (e.key === 'ArrowLeft') { e.preventDefault(); const prevButton = paginationNavWrapper.querySelector('.pagination-arrow.prev:not(.disabled)'); if (prevButton) prevButton.click(); } else if (e.key === 'ArrowRight') { e.preventDefault(); const nextButton = paginationNavWrapper.querySelector('.pagination-arrow.next:not(.disabled)'); if (nextButton) nextButton.click(); } };
 
         paginationNavWrapper.addEventListener('click', handlePaginationClick);
-
-        // [핵심] 데스크톱 환경에서만 키보드 이벤트 리스너를 추가합니다.
-        if (!isMobile.matches) {
+        if (!window.matchMedia('(max-width: 820px)').matches) {
             document.addEventListener('keydown', handleKeydown);
         }
         
+        // [핵심] 페이지 첫 로드 시에만 높이를 계산하여 고정
+        setFixedContainerHeight();
         updatePaginationControls();
     }
 });

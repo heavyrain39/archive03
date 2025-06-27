@@ -1,15 +1,63 @@
-# 1. 기본 사이트 설정
-baseURL = '/'
+# ==========================================================
+# 1. 다국어 설정 (수정됨)
+# ==========================================================
+defaultContentLanguage = 'ko'
+
+[languages]
+  [languages.ko]
+    languageName = '한국어'
+    weight = 1
+    title = 'Archive 03'
+    [languages.ko.params]
+      subtitle = '세 명의 인외 소녀가 전하는 투자 인사이트'
+      dateFormat = "2006년 1월 2일"
+    # [핵심] 한국어 메뉴는 한국어 설정 블록 안에 위치해야 합니다.
+    [[languages.ko.menu.main]]
+      identifier = "article"
+      name = "HOME"
+      url = "/"
+      weight = 10
+    [[languages.ko.menu.main]]
+      identifier = "about"
+      name = "ABOUT"
+      pageRef = "/about.ko.md"
+      weight = 20
+
+  [languages.en]
+    languageName = 'English'
+    weight = 2
+    title = 'Archive 03'
+    [languages.en.params]
+      subtitle = 'Financial Insights from 3 Non-human Girls'
+      dateFormat = "January 2, 2006"
+    # [핵심] 영어 메뉴는 영어 설정 블록 안에 위치해야 합니다.
+    [[languages.en.menu.main]]
+      identifier = "article"
+      name = "HOME"
+      url = "/en/"
+      weight = 10
+    [[languages.en.menu.main]]
+      identifier = "about"
+      name = "ABOUT"
+      pageRef = "/about.en.md"
+      weight = 20
+
+# ==========================================================
+# 2. URL 구조 설정
+# ==========================================================
+[permalinks]
+  reports = '/:year/:month/:slug/'
+
+# ==========================================================
+# 3. 기존 설정
+# ==========================================================
 languageCode = 'ko-KR'
-title = 'Archive 03'
 timeZone = "Asia/Seoul"
 
 [pagination]
   pagerSize = 5
 
-# 3. 사이트 전체에서 사용할 추가 정보 (Params)
 [params]
-  subtitle = '세 명의 인외 소녀가 전하는 투자 인사이트'
   author = '야차완'
   description = "Archive 03은 세 명의 인외(人外) 소녀가 최신 데이터를 바탕으로 투자에 대한 인사이트를 전하는 연재형 블로그입니다."
   favicon = "/favicon.ico"
@@ -24,38 +72,18 @@ timeZone = "Asia/Seoul"
     reactionsEnabled = "0"
     emitMetadata = "0"
     inputPosition = "bottom"
-    lang = "ko"
     theme = "dark_dimmed" 
     loading = "lazy"
 
-[taxonomies]
-  tag = "tags"
-  category = "categories"
-
-# 4. 헤더 메뉴 설정
-[menu]
-  [[menu.main]]
-    identifier = "article"
-    name = "HOME"
-    url = "/"
-    weight = 10
-  [[menu.main]]
-    identifier = "about"
-    name = "ABOUT"
-    url = "/about/"
-    weight = 20
-
-# [수정] 아래 Goldmark 설정을 추가 또는 수정합니다. 이것이 핵심입니다.
+# Goldmark 설정
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]
-      # 이 옵션을 true로 설정해야 .md 파일 안의 HTML 코드가 그대로 렌더링됩니다.
       unsafe = true
   [markup.highlight]
-    # 코드 하이라이팅 스타일 설정 (선택 사항)
     style = "monokai"
 
-# 8. 미디어 타입 및 출력 포맷 설정
+# 미디어 타입 및 출력 포맷 설정
 [mediaTypes]
   [mediaTypes."text/css"]
     suffixes = ["css"]
@@ -65,12 +93,10 @@ timeZone = "Asia/Seoul"
     mediaType = "text/css"
     baseName = "style"
 
-# 6. 홈페이지(Home)의 출력 포맷 설정
 [outputs]
-  home = ["HTML", "JSON", "RSS"] # RSS를 추가하면 더 좋습니다.
+  home = ["HTML", "JSON", "RSS"]
   section = ["HTML", "RSS"]
 
-# 7. JSON 포맷의 세부 설정
 [outputFormats.JSON]
   baseName = "index"
   isPlainText = true

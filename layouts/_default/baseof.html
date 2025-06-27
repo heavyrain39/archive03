@@ -63,9 +63,9 @@
     <header id="main-header">
         <div class="container">
             <div class="logo">
-                <a href="{{ "/" | relURL }}">
+                <a href="{{ .Site.Home.RelPermalink }}">
                     <span class="logo-main">{{ .Site.Title }}</span>
-                    <span class="logo-sub">{{ .Site.Params.subtitle }}</span>
+                    <span class="logo-sub">{{ .Site.Language.Params.subtitle }}</span>
                 </a>
             </div>
             <nav>
@@ -90,7 +90,10 @@
         <div class="container">
             <div class="footer-info">
                 <p>© {{ now.Format "2006" }} {{ .Site.Title }}. All Rights Reserved.</p>
-                <a href="{{ (.Site.GetPage "privacy.html").RelPermalink }}" class="footer-privacy-link">개인정보처리방침</a>
+                {{ $privacyPagePath := printf "privacy.%s.html" .Site.Language.Lang }}
+                {{ with .Site.GetPage $privacyPagePath }}
+                    <a href="{{ .RelPermalink }}" class="footer-privacy-link">{{ T "privacy_policy_link" }}</a>
+                {{ end }}
             </div>
             
             <div class="footer-theme-selector">

@@ -117,7 +117,7 @@
                     <a href="{{ .Permalink }}">
                         <span class="list-page-post-title">{{ .Title }}</span>
                         <div class="list-page-post-meta">
-                            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006년 1월 2일" }}</time>
+                            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format .Site.Language.Params.dateFormat }}</time>
                             <span class="summary">{{ .Summary | truncate 70 "..." }}</span>
                         </div>
                     </a>

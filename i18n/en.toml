@@ -1,0 +1,27 @@
+[articles_heading]
+other = "Articles"
+
+[tags_heading]
+other = "Tags"
+
+[search_heading]
+other = "Search"
+
+[search_placeholder]
+other = "Search..."
+
+[search_no_results]
+other = "No results found."
+
+[search_more_results]
+other = "View all results ({.count})"
+
+[privacy_policy_link]
+other = "Privacy Policy"
+
+[share_this_post]
+other = "Share this post"
+[next_post]
+other = "Next"
+[prev_post]
+other = "Prev"

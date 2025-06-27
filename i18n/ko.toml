@@ -1,0 +1,27 @@
+[articles_heading]
+other = "Articles"
+
+[tags_heading]
+other = "Tags"
+
+[search_heading]
+other = "Search"
+
+[search_placeholder]
+other = "검색어를 입력하세요..."
+
+[search_no_results]
+other = "검색 결과가 없습니다."
+
+[search_more_results]
+other = "전체 검색 결과 보기 ({.count}개)"
+
+[privacy_policy_link]
+other = "개인정보처리방침"
+
+[share_this_post]
+other = "이 글 공유하기"
+[next_post]
+other = "다음글"
+[prev_post]
+other = "이전글"
