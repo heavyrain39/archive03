@@ -1,6 +1,8 @@
 # ==========================================================
 # 1. 다국어 설정 (최종 완성 버전)
 # ==========================================================
+baseURL = "https://archive03.online/" # [추가] 사이트의 기본 URL. 가장 중요한 설정입니다.
+
 defaultContentLanguage = 'ko'
 
 [languages]
@@ -11,6 +13,7 @@ defaultContentLanguage = 'ko'
     [languages.ko.outputs]
       home = ["HTML", "JSON", "RSS"]
       section = ["HTML", "RSS"]
+      page = ["HTML"]
     [languages.ko.params]
       subtitle = '세 명의 인외 소녀가 전하는 투자 인사이트'
       dateFormat = "2006년 1월 2일"
@@ -32,6 +35,7 @@ defaultContentLanguage = 'ko'
     [languages.en.outputs]
       home = ["HTML", "JSON", "RSS"]
       section = ["HTML", "RSS"]
+      page = ["HTML"]
     [languages.en.params]
       subtitle = 'Financial Insights from 3 Non-human Girls'
       dateFormat = "January 2, 2006"
@@ -48,31 +52,21 @@ defaultContentLanguage = 'ko'
 
 # ==========================================================
 # 2. URL 구조 설정
+# [수정] permalinks와 slug 조합 대신, cascade에서 url을 직접 생성하여 모든 문제를 해결합니다.
+# [최종 수정] 반복적인 실패를 겪은 /:year/:month/:slug/ 구조 대신,
+# 더 안정적이고 간결한 /reports/:slug/ 구조로 변경합니다.
+# Hugo의 permalinks 기능으로 구조를 정의하고, cascade는 slug 생성에만 집중시켜 안정성을 높입니다.
 # ==========================================================
-[permalinks]
-  reports = '/:year/:month/:slug/'
-
-# ==========================================================
-# [추가] 한국어 'reports' 포스트에 대해 slug를 자동으로 생성하는 규칙
-# ==========================================================
-
-[[cascade]]
-  [cascade._target]
-    lang = "ko"
-    path = "/reports/**"
-  # 파일명(예: 2025-06-17-reits-light-and-shadow)에서 날짜(2025-06-17-)를 제거하여 slug로 사용
-  slug = '{{ .File.ContentBaseName | replaceRE "^\\d{4}-\\d{2}-\\d{2}-" "" }}'
-
-[[cascade]]
-  [cascade._target]
-    lang = "en"
-    path = "/reports/**"
-  slug = '{{ .File.ContentBaseName | replaceRE "^\\d{4}-\\d{2}-\\d{2}-" "" }}'
+# [최종 수정] 모든 복잡한 규칙을 제거하고, 제안해 주신 대로 파일명을 URL의 기준으로 삼습니다.
+# 이 방식이 가장 단순하고 안정적이며, 한글 URL 문제를 완벽하게 해결합니다.
+[languages.ko.permalinks]
+  reports = '/reports/:filename/'
+[languages.en.permalinks]
+  reports = '/reports/:filename/'
 
 # ==========================================================
 # 3. 기존 설정 (일부 삭제됨)
 # ==========================================================
-languageCode = 'ko-KR'
 timeZone = "Asia/Seoul"
 
 [pagination]
