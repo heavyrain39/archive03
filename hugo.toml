@@ -53,6 +53,23 @@ defaultContentLanguage = 'ko'
   reports = '/:year/:month/:slug/'
 
 # ==========================================================
+# [추가] 한국어 'reports' 포스트에 대해 slug를 자동으로 생성하는 규칙
+# ==========================================================
+
+[[cascade]]
+  [cascade._target]
+    lang = "ko"
+    path = "/reports/**"
+  # 파일명(예: 2025-06-17-reits-light-and-shadow)에서 날짜(2025-06-17-)를 제거하여 slug로 사용
+  slug = '{{ .File.ContentBaseName | replaceRE "^\\d{4}-\\d{2}-\\d{2}-" "" }}'
+
+[[cascade]]
+  [cascade._target]
+    lang = "en"
+    path = "/reports/**"
+  slug = '{{ .File.ContentBaseName | replaceRE "^\\d{4}-\\d{2}-\\d{2}-" "" }}'
+
+# ==========================================================
 # 3. 기존 설정 (일부 삭제됨)
 # ==========================================================
 languageCode = 'ko-KR'
