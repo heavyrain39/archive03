@@ -12,7 +12,7 @@ echo -e "\033[0;32mDeploying updates to GitHub...\033[0m"
 # Step 1: Hugo로 사이트를 빌드합니다.
 # 빌드된 결과물은 이미 'gh-pages' 브랜치의 복사본인 'public' 폴더 안으로 들어갑니다.
 echo "Building site with Hugo..."
-hugo --cleanDestinationDir # hugo v0.112.0+ 에서는 hugo --gc 와 동일
+hugo --cleanDestinationDir --minify # --minify 플래그를 추가하여 빌드 결과물을 압축합니다.
 
 # Step 2: 배포 폴더(서브모듈)로 이동합니다.
 cd public || { echo "'public' directory not found. Exiting."; exit 1; }

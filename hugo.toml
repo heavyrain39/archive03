@@ -59,10 +59,13 @@ defaultContentLanguage = 'ko'
 # ==========================================================
 # [최종 수정] 모든 복잡한 규칙을 제거하고, 제안해 주신 대로 파일명을 URL의 기준으로 삼습니다.
 # 이 방식이 가장 단순하고 안정적이며, 한글 URL 문제를 완벽하게 해결합니다.
-[languages.ko.permalinks]
-  reports = '/reports/:filename/'
-[languages.en.permalinks]
-  reports = '/reports/:filename/'
+# [진짜 최종 수정] 빌드 결과(sitemap.xml) 확인 결과, permalinks 규칙이 aliases 및 다른 규칙과 충돌하여 옛 한글 주소가 등록되는 문제를 발견.
+# 이를 해결하기 위해, 우선순위가 가장 높은 'url' 필드를 cascade로 직접 생성하여 주입합니다.
+# 이 방식은 다른 모든 규칙을 덮어쓰므로 가장 확실하고 안정적입니다.
+[[cascade]]
+  [cascade._target]
+    path = "reports/**"
+  url = '{{ printf "/reports/%s/" .File.TranslationBaseName }}'
 
 # ==========================================================
 # 3. 기존 설정 (일부 삭제됨)

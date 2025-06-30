@@ -1192,6 +1192,9 @@ body[data-theme="aetherial-light"] .static-share-button:hover {
     height: 100%;
 }
 
+/* ========================================================== */
+/* [핵심 수정] 이 부분을 아래 코드로 교체하세요.                 */
+/* ========================================================== */
 #post-list-wrapper .post-list {
     position: absolute;
     top: 0;
@@ -1205,7 +1208,13 @@ body[data-theme="aetherial-light"] .static-share-button:hover {
     list-style: none;
     background-color: var(--dark-bg);
     transition: transform 0.12s ease-in-out;
+
+    /* [추가] Flexbox를 이용해 내부 li 항목들을 세로 중앙 정렬합니다. */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
+/* ========================================================== */
 
 #post-list-wrapper .post-list.is-animating {
     transition: transform 0.12s ease-in-out;
