@@ -37,3 +37,6 @@ other = "Failed to load search data."
 
 [search_no_results_on_page]
 other = "No results found."
+
+[link_reference_prefix]
+other = "» See also:"

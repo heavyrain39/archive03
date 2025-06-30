@@ -1,0 +1,12 @@
+{{/*
+  사용법: {{< post-link "파일경로.md" >}}
+  기능: 파일 경로를 받아, 현지화된 '참고:' 접두사와 함께 링크를 자동 생성.
+*/}}
+
+{{- $path := .Get 0 -}}
+{{- with .Site.GetPage $path -}}
+  {{ T "link_reference_prefix" }} <a href="{{ .RelPermalink }}"><strong>{{ .Title }}</strong></a>
+{{- else -}}
+  {{- /* 페이지를 찾지 못했을 때 에러 메시지 출력 */ -}}
+  <span style="color: red; font-weight: bold;">[POST LINK ERROR: '{{ $path }}' not found]</span>
+{{- end -}}
