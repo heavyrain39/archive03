@@ -1,6 +1,6 @@
 ---
 title: "Why Did Trump Call Powell 'Stupid'?"
-date: 2025-06-20
+date: 2025-06-20T00:00:00+09:00
 draft: false
 summary: "President Trump has publicly criticized Fed Chair Powell, pressuring him to cut interest rates. Mew, Kurumi, and Mikael sharply analyze the current situation, where the hope for a short-term market boost clashes with the immense risk of undermining the central bank's independence."
 tags: ["trump", "powell", "fomc", "interest-rates", "federal-reserve", "inflation"]

@@ -1,6 +1,6 @@
 ---
 title: "How to Start Investing in Bonds: Your Ally in a Bear Market?"
-date: 2025-06-21
+date: 2025-06-21T00:00:00+09:00
 draft: false
 summary: "Are bonds truly a safe haven when the stock market is volatile? From their negative correlation with stocks and predictable cash flow to the risks of interest rates and opportunity costs. Three unique characters break down everything you need to know about bond investing, including key ETFs like TLT, IEF, and AGG."
 tags: ["bonds", "bond-etf", "interest-rates", "tlt", "ief", "shy", "agg", "asset-allocation", "us-stocks"]

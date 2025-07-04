@@ -1,6 +1,6 @@
 ---
 title: "Bitcoin: Is It Really a Valuable Asset?"
-date: 2025-06-21
+date: 2025-06-21T00:00:00+09:00
 draft: false
 summary: "Is Bitcoin an innovative asset or a speculative bubble? Kurumi's optimism about 'Digital Gold' clashes with Mikael's skepticism, who warns of its lack of intrinsic value and regulatory risks. Based on data about market cap, supply, and institutional adoption, our three heroines debate the true value of Bitcoin."
 tags: ["bitcoin", "cryptocurrency", "digital-gold", "store-of-value", "etf"]

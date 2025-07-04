@@ -1,6 +1,6 @@
 ---
 title: "The SCHD and QQQ Combo: Is It Really That Powerful? (A Deep Dive into the Pros and Cons)"
-date: 2025-06-17
+date: 2025-06-17T00:00:00+09:00
 draft: false
 summary: "QQQ, the standard-bearer for growth stocks, and SCHD, the symbol of value. Is this the perfect combination? From the synergy of explosive growth and stable cash flow to the risks of US-only exposure and value traps, three unique characters break it all down."
 tags: ["etf", "schd", "qqq", "us-stocks", "portfolio"]

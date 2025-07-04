@@ -1,6 +1,6 @@
 ---
 title: "The Dawn of the Digital Won: What a KRW Stablecoin Means for Investors"
-date: 2025-06-25
+date: 2025-06-25T00:00:00+09:00
 draft: false
 summary: "The launch of a Korean Won stablecoin: Will it be the next STO craze or a new investment frontier? Kurumi bets on the explosive growth of issuer stocks and mainnet tokens, while Mikael warns of priced-in hype and the limits of a domestic-only market. We analyze the opportunities and pitfalls of owning a piece of future financial infrastructure."
 tags: ["stablecoin", "kaia", "kakao", "naver", "virtual-assets", "crypto"]

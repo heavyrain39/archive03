@@ -1,6 +1,6 @@
 ---
 title: "XRP Down 40%: Time to Buy the Dip or Abandon Ship?"
-date: 2025-06-27
+date: 2025-06-27T00:00:00+09:00
 draft: false
 summary: "Your friend bought Ripple (XRP) at the top and is now facing a huge loss. Is averaging down now an opportunity or a trap? Kurumi's hope, fueled by the expected end of the SEC lawsuit, clashes with Mikael's stark warning about extreme volatility and remaining risks. The three heroines provide an urgent diagnosis to save your friend's portfolio."
 tags: ["ripple", "xrp", "sec", "cryptocurrency", "buying-the-dip"]

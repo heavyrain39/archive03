@@ -1,6 +1,6 @@
 ---
 title: "Is Crypto About to Explode? Decoding the Bullish News for July"
-date: 2025-06-30
+date: 2025-06-30T00:00:00+09:00
 draft: false
 summary: "With July just around the corner, the crypto market is buzzing. Rumors of a US government BTC roadmap, infrastructure build-outs, and Trump's expected signature on a stablecoin bill have sparked unprecedented hype. Kurumi cheers for the dawn of a new era, while Mikael delivers a cold warning about the dangers of unrealized expectations. See the clash of opinions."
 tags: ["crypto", "bitcoin", "us-government", "stablecoin", "regulation", "trump"]

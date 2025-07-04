@@ -1,6 +1,6 @@
 ---
 title: "JEPI's 7% Yield: A Retirement Dream or a Total Return Trap?"
-date: 2025-06-22
+date: 2025-06-22T00:00:00+09:00
 draft: false
 summary: "JEPI ETF offers a high distribution yield of over 7%, like monthly rent. Three unique characters fiercely debate the allure of its covered call strategy against its fatal flaws, including underperformance in bull markets and the risk of principal erosion. Is JEPI truly the best choice for those preparing for retirement?"
 tags: ["jepi", "etf", "dividend", "covered-call", "monthly-dividend", "us-stocks"]

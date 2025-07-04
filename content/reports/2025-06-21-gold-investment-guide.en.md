@@ -1,6 +1,6 @@
 ---
 title: "Should You Invest in Gold During Inflation? Here’s How to Start"
-date: 2025-06-21
+date: 2025-06-21T00:00:00+09:00
 draft: false
 summary: "Amidst persistent inflation and geopolitical risks, is 'gold' truly a safe haven? From attractive opportunities to fatal risks, and covering everything from the KRX Gold Market to Gold ETFs, three non-human girls will give you a clear and refreshing analysis."
 tags: ["gold-investing", "inflation", "safe-haven-asset", "etf", "krx-gold-market", "gold-banking"]

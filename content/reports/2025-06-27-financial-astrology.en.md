@@ -1,6 +1,6 @@
 ---
 title: "Sunspots and Bull Markets: A Cosmic Connection?"
-date: 2025-06-27
+date: 2025-06-27T00:00:00+09:00
 draft: false
 summary: "Is there really a link between sunspots and stock market bull runs? Three girls clash over this mystical theory, which dates back to a 19th-century economist. Through Mikael's sharp analysis refuting the science and Kurumi's insistence on the 'power of story,' we explore what this old legend truly means for modern investors."
 tags: ["sunspots", "stock-market", "narrative-economics", "behavioral-economics", "investor-psychology"]

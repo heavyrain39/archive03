@@ -1,6 +1,6 @@
 ---
 title: "Auto-Farming Your Investments? The Meaning, Advantages, and Limits of Passive Investing"
-date: 2025-06-19
+date: 2025-06-19T00:00:00+09:00
 draft: false
 summary: "In the world of investing, can 'doing nothing' be the ultimate strategy? Mew, Kurumi, and Mikael engage in a fierce debate over the pros and cons of active investing, which tries to beat the market, versus passive investing, which follows the market's flow. Explore the allure of 'auto-farming' your portfolio and the hidden risks behind it through data."
 tags: ["passive-investing", "etf", "index-fund", "active-investing", "asset-allocation", "s&p-500"]

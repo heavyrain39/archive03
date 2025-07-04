@@ -1,6 +1,6 @@
 ---
 title: "Google ($GOOGL) is 'Historically Cheap'—Is It Time to Buy?"
-date: 2025-06-24
+date: 2025-06-24T00:00:00+09:00
 draft: false
 summary: "Google ($GOOGL) has entered a historically undervalued range. Kurumi's optimism about its explosive growth potential in AI and Cloud clashes head-on with Mikael's pessimism, who warns of massive antitrust legal risks. Is investing in Google now a wise choice?"
 tags: ["google", "googl", "alphabet", "ai", "cloud", "us-stocks", "undervalued"]

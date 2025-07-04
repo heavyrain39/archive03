@@ -1,6 +1,6 @@
 ---
 title: "Robinhood: Why Cathie Wood is Betting Big on $HOOD"
-date: 2025-06-25
+date: 2025-06-25T00:00:00+09:00
 draft: false
 summary: "Cathie Wood keeps buying Robinhood ($HOOD). It's a battleground between the innovation of 'democratizing finance' and the critical risks of PFOF regulations and an SEC lawsuit. Kurumi sees a next-gen super-app, while Mikael warns of the regulatory sword. See the data and decide for yourself."
 tags: ["robinhood", "hood", "cathie-wood", "arkk", "fintech", "us-stocks", "pfof"]

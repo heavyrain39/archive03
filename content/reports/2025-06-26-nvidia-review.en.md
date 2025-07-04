@@ -1,6 +1,6 @@
 ---
 title: "Nvidia Hits All-Time Highs: Bubble or Just the Beginning?"
-date: 2025-06-26
+date: 2025-06-26T00:00:00+09:00
 draft: false
 summary: "Nvidia has shattered its all-time high. Is this a celebration of the AI era, or a dangerous bubble? Kurumi's optimism, fueled by the AI market's structural growth and the powerful CUDA ecosystem, clashes head-on with Mikael's warnings of extreme valuations and intensifying competition. Three unique characters engage in a fierce debate over Nvidia's future."
 tags: ["nvidia", "nvda", "ai", "semiconductors", "us-stocks", "cuda"]

@@ -1,6 +1,6 @@
 ---
 title: "Why the Stock Market Isn't a Zero-Sum Game"
-date: 2025-06-25
+date: 2025-06-25T00:00:00+09:00
 draft: false
 summary: "Did you think stock investing was a game of taking someone else's money? From the theory that it's a 'positive-sum game' where the whole pie grows thanks to corporate value creation, to the reality that short-term trading has the brutal nature of a 'zero-sum game'—our three experts clearly define the true nature of investing."
 tags: ["stock-investing", "zero-sum-game", "non-zero-sum-game", "value-investing", "long-term-investing"]

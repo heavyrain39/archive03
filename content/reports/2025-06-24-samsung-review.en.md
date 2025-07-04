@@ -1,6 +1,6 @@
 ---
 title: "Is It Time to Buy the Dip on Samsung Electronics?"
-date: 2025-06-24
+date: 2025-06-24T00:00:00+09:00
 draft: false
 summary: "Samsung Electronics faces both hopes for a semiconductor industry turnaround and the challenge of securing its HBM competitiveness. Is its ₩60,000 stock price undervalued, or a reasonable reflection of its risks? Three unique characters engage in a fierce debate about Samsung's present and future."
 tags: ["samsung-electronics", "hbm", "semiconductor", "stock-outlook", "foundry", "undervalued"]

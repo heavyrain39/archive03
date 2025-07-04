@@ -1,6 +1,6 @@
 ---
 title: "Earning 'Rent' with a Small Investment? The Light and Shadow of REITs Investing"
-date: 2025-06-16
+date: 2025-06-16T00:00:00+09:00
 draft: false
 summary: "The dream of becoming a landlord and collecting rent with a small investment—is it possible with REITs? From the high dividend yields to the hidden interest rate risks and potential for principal loss, three unique characters delve into everything about REITs investing."
 tags: ["reits", "real-estate", "vnq", "us-stocks", "dividends", "etf"]

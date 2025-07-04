@@ -1,6 +1,6 @@
 ---
 title: "Is an 'Alt Season' Coming in the Second Half of 2025? The Hopeful vs. the Despairing View"
-date: 2025-06-18
+date: 2025-06-18T00:00:00+09:00
 draft: false
 summary: "Kurumi's fiery optimism about Wall Street money flowing into RWA and AI themes clashes head-on with Mikael's cold pessimism, which warns of macroeconomic uncertainty and regulatory risks. Will altcoin investors have reason to smile in the second half of 2025?"
 tags: ["altcoin", "cryptocurrency", "rwa", "ai", "depin", "bitcoin", "alt-season"]

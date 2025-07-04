@@ -1,6 +1,6 @@
 ---
 title: "Glenn Gould's Forte: The Pianist's Secret to Winning at the Market"
-date: 2025-06-30
+date: 2025-06-30T00:00:00+09:00
 draft: false
 summary: "Discover the surprising investing prowess of legendary pianist Glenn Gould. How did he tune out market noise to become a successful long-term investor? Three unique characters analyze his investment philosophy and portfolio, exploring the two sides of his genius: disciplined, emotion-free principles and a profound belief in what he loved."
 tags: ["glenn-gould", "value-investing", "long-term-investing", "canada", "stocks", "investment-philosophy"]

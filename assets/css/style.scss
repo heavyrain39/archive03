@@ -1203,7 +1203,6 @@ body[data-theme="aetherial-light"] .static-share-button:hover {
     height: 100%;
     overflow-y: hidden; /* [핵심] auto에서 hidden으로 변경하여 스크롤바를 영구히 비활성화 */
     padding: var(--spacing-sm);
-    padding-top: 0.8rem;
     margin: 0;
     list-style: none;
     background-color: var(--dark-bg);
