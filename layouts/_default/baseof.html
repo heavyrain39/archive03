@@ -15,10 +15,23 @@
     <link rel="stylesheet" href="{{ $style.Permalink }}">
 
     <style>
-      /* 모바일에서 광고 등으로 인해 가로 스크롤이 생기는 것을 방지합니다. */
-      html, body {
+      /* [최종 해결책] body를 flex 컨테이너로 만들어 레이아웃을 방어합니다. */
+      html {
+        height: 100%;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
         width: 100%;
-        overflow-x: hidden;
+        overflow-x: hidden; /* 만약을 위해 body에도 유지합니다. */
+        margin: 0; /* 브라우저 기본 마진 제거 */
+      }
+      .page-wrapper {
+        flex: 1 0 auto; /* body의 flex 아이템으로서, 남은 공간을 모두 차지하도록 설정 */
+        width: 100%;
+        overflow-x: hidden; /* 핵심: wrapper 내부에서 발생하는 스크롤을 방지 */
+        position: relative; 
       }
     </style>
 
@@ -60,69 +73,67 @@
 </head>
 <body data-theme="default" class="{{ if and .File (eq .File.BaseFileName "search") }}is-search-page{{ end }}">
 
-    <header id="main-header">
-        <div class="container">
-            <div class="logo">
-                <a href="{{ .Site.Home.RelPermalink }}">
-                    <span class="logo-main">{{ .Site.Title }}</span>
-                    <span class="logo-sub">{{ .Site.Language.Params.subtitle }}</span>
-                </a>
+    <!-- 모든 보이는 콘텐츠를 .page-wrapper DIV로 감싸는 구조는 그대로 유지합니다. -->
+    <div class="page-wrapper">
+
+        <header id="main-header">
+            <div class="container">
+                <div class="logo">
+                    <a href="{{ .Site.Home.RelPermalink }}">
+                        <span class="logo-main">{{ .Site.Title }}</span>
+                        <span class="logo-sub">{{ .Site.Language.Params.subtitle }}</span>
+                    </a>
+                </div>
+                <nav>
+                    <ul>
+                        {{ range .Site.Menus.main }}
+                        <li>
+                            <a href="{{ .URL | relURL }}" {{ if .Params.target }}target="{{ .Params.target }}" rel="noopener noreferrer"{{ end }}>
+                                {{ .Name }}
+                            </a>
+                        </li>
+                        {{ end }}
+                    </ul>
+                </nav>
             </div>
-            <nav>
-                <ul>
-                    {{ range .Site.Menus.main }}
-                    <li>
-                        <a href="{{ .URL | relURL }}" {{ if .Params.target }}target="{{ .Params.target }}" rel="noopener noreferrer"{{ end }}>
-                            {{ .Name }}
-                        </a>
-                    </li>
+        </header>
+
+        <main>
+            {{ block "main" . }}{{ end }}
+        </main>
+
+        <footer id="main-footer">
+            <div class="container">
+                <div class="footer-info">
+                    <p>© {{ now.Format "2006" }} {{ .Site.Title }}. All Rights Reserved.</p>
+                    {{ $privacyPagePath := printf "privacy.%s.html" .Site.Language.Lang }}
+                    {{ with .Site.GetPage $privacyPagePath }}
+                        <a href="{{ .RelPermalink }}" class="footer-privacy-link">{{ T "privacy_policy_link" }}</a>
                     {{ end }}
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <main>
-        {{ block "main" . }}{{ end }}
-    </main>
-
-    <footer id="main-footer">
-        <div class="container">
-            <div class="footer-info">
-                <p>© {{ now.Format "2006" }} {{ .Site.Title }}. All Rights Reserved.</p>
-                {{ $privacyPagePath := printf "privacy.%s.html" .Site.Language.Lang }}
-                {{ with .Site.GetPage $privacyPagePath }}
-                    <a href="{{ .RelPermalink }}" class="footer-privacy-link">{{ T "privacy_policy_link" }}</a>
-                {{ end }}
-            </div>
-            
-            <div class="footer-theme-selector">
-                <div class="theme-buttons">
-                    <button class="theme-btn" data-theme="default" aria-label="Default Theme"><span class="color-patch" style="background-color: #282c34;"></span><span class="color-patch" style="background-color: #64F0C8;"></span></button>
-                    <button class="theme-btn" data-theme="cosmic-indigo" aria-label="Cosmic Indigo Theme"><span class="color-patch" style="background-color: #1A182F;"></span><span class="color-patch" style="background-color: #F0C419;"></span></button>
-                    <button class="theme-btn" data-theme="aetherial-light" aria-label="Aetherial Light Theme"><span class="color-patch" style="background-color: #F8F9FA;"></span><span class="color-patch" style="background-color: #A0D2DB;"></span></button>
+                </div>
+                
+                <div class="footer-theme-selector">
+                    <div class="theme-buttons">
+                        <button class="theme-btn" data-theme="default" aria-label="Default Theme"><span class="color-patch" style="background-color: #282c34;"></span><span class="color-patch" style="background-color: #64F0C8;"></span></button>
+                        <button class="theme-btn" data-theme="nordic-noir" aria-label="Nordic Noir Theme"><span class="color-patch" style="background-color: #2E3440;"></span><span class="color-patch" style="background-color: #88C0D0;"></span></button>
+                        <button class="theme-btn" data-theme="aetherial-light" aria-label="Aetherial Light Theme"><span class="color-patch" style="background-color: #F8F9FA;"></span><span class="color-patch" style="background-color: #A0D2DB;"></span></button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </footer>
+        </footer>
+
+    </div> <!-- .page-wrapper의 닫는 태그 -->
 
     <script>
+    // 자바스크립트는 변경할 필요가 없습니다.
     document.addEventListener('DOMContentLoaded', () => {
-        // =====================================================================
-        // [FIXED] 트레이딩뷰 위젯 생성 및 관리 로직 (v2)
-        // =====================================================================
         const createTVWidget = (container) => {
             if (!container) return;
-
-            // 1. 컨테이너의 data 속성에서 차트 정보를 읽어옵니다.
             const ticker = container.dataset.ticker;
             const height = parseInt(container.dataset.height, 10);
             const locale = container.dataset.locale;
-
-            // 2. 현재 웹사이트 테마에 맞춰 차트 테마와 색상을 결정합니다.
             const siteTheme = document.body.dataset.theme || 'default';
             let chartTheme, bgColor, gridColor;
-
             if (siteTheme === 'aetherial-light') {
                 chartTheme = 'light';
                 bgColor = '#FFFFFF';
@@ -132,36 +143,15 @@
                 bgColor = '#1e2228';
                 gridColor = 'rgba(255, 255, 255, 0.06)';
             }
-
-            // 3. TradingView 위젯 생성 스크립트를 동적으로 만들어 컨테이너에 바로 추가합니다.
-            //    스크립트가 자신의 위치를 기준으로 필요한 모든 내부 요소를 스스로 생성합니다.
             const widgetScript = document.createElement('script');
             widgetScript.type = 'text/javascript';
             widgetScript.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
             widgetScript.async = true;
             widgetScript.innerHTML = JSON.stringify({
-                "width": "100%",
-                "height": height,
-                "symbol": ticker,
-                "interval": "D",
-                "timezone": "Etc/UTC",
-                "theme": chartTheme,
-                "style": "1",
-                "locale": locale,
-                "enable_publishing": false,
-                "hide_side_toolbar": true,
-                "allow_symbol_change": true,
-                "save_image": true,
-                "calendar": false,
-                "hide_top_toolbar": false,
-                "hide_legend": false,
-                "backgroundColor": bgColor,
-                "gridColor": gridColor
+                "width": "100%", "height": height, "symbol": ticker, "interval": "D", "timezone": "Etc/UTC", "theme": chartTheme, "style": "1", "locale": locale, "enable_publishing": false, "hide_side_toolbar": true, "allow_symbol_change": true, "save_image": true, "calendar": false, "hide_top_toolbar": false, "hide_legend": false, "backgroundColor": bgColor, "gridColor": gridColor
             });
-            
             container.appendChild(widgetScript);
         };
-
         const reRenderAllTVWidgets = () => {
             const allCharts = document.querySelectorAll('.tv-chart-container');
             allCharts.forEach(chartContainer => {
@@ -169,14 +159,9 @@
                 createTVWidget(chartContainer);
             });
         };
-
-        // =====================================================================
-        // 기존 테마 및 댓글 관리 로직 (변경 없음)
-        // =====================================================================
         const themeButtons = document.querySelectorAll('.theme-btn');
         const body = document.body;
-        const giscusThemeMap = { 'default': 'dark_dimmed', 'cosmic-indigo': 'dark_dimmed', 'aetherial-light': 'light' };
-        
+        const giscusThemeMap = { 'default': 'dark_dimmed', 'nordic-noir': 'dark_dimmed', 'aetherial-light': 'light' };
         const updateGiscusTheme = (themeName) => {
             const giscusFrame = document.querySelector('iframe.giscus-frame');
             if (!giscusFrame) return;
@@ -185,7 +170,6 @@
                 giscusFrame.contentWindow.postMessage({ giscus: { setConfig: { theme: giscusTheme } } }, 'https://giscus.app');
             }, 100);
         };
-        
         const applyTheme = (themeName) => {
             if (!themeName) return;
             body.setAttribute('data-theme', themeName);
@@ -195,10 +179,8 @@
             updateGiscusTheme(themeName);
             reRenderAllTVWidgets();
         };
-
         const savedTheme = localStorage.getItem('archive03-theme') || 'default';
         applyTheme(savedTheme);
-
         themeButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const selectedTheme = button.dataset.theme;
@@ -206,7 +188,6 @@
                 applyTheme(selectedTheme);
             });
         });
-
         const commentsSection = document.querySelector('.post-comments');
         if (commentsSection) {
             const observer = new IntersectionObserver((entries, obs) => {

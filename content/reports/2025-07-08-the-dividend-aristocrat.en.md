@@ -26,7 +26,7 @@ tags: ["dividend-aristocrats", "dividend-investing", "passive-income", "us-stock
 <p>That concludes the data briefing.</p>
 
 {{< char name="kurumi" title="Kurumi" >}}
-<p>Wow! Master! Isn't this a total 'money-printing' cheat code? To have money deposited into your account every quarter without lifting a finger, and the amount even grows every year! It's so exciting just thinking about it! I call this the 'magic of time'!</p>
+<p>Wow! My Lord! Isn't this a total 'money-printing' cheat code? To have money deposited into your account every quarter without lifting a finger, and the amount even grows every year! It's so exciting just thinking about it! I call this the 'magic of time'!</p>
 <p>There are more than enough reasons why you should build a Dividend Aristocrat portfolio!</p>
 <p>First, <strong>peace of mind!</strong> When the stock market crashes and you can hear people screaming from a mile away, you can just smile while looking at the dividends that keep rolling in! You can think, 'Yes, the stock price fell, but my farm (the company) is still giving me eggs (dividends)!' How reassuring is that!</p>
 <p>Second, <strong>the snowball effect of compounding!</strong> Don't use the dividends you receive to buy snacks; use them to buy more dividend stocks! This is called 'dividend reinvestment.' By doing this, your number of shares will grow automatically, and you'll receive even more dividends next quarter! You'll get to see the magic of the snowball growing enormously over time!</p>

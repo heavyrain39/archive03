@@ -36,11 +36,11 @@ body[data-theme="default"] {
     --button-active-bg: #1A1D22;
 }
 
-body[data-theme="cosmic-indigo"] {
-    --mint-green: #F0C419; --mint-green-darker: #D8A80E; --dark-bg: #1A182F;
-    --dark-surface: #2C2A4A; --light-text: #E0D8F0; --secondary-text: #A0A0B8;
-    --border-color: #403E5F; --overlay-color: rgba(26, 24, 47, 0.75);
-    --button-active-bg: #131122;
+body[data-theme="nordic-noir"] {
+    --mint-green: #88C0D0; --mint-green-darker: #70A9BF; --dark-bg: #2E3440;
+    --dark-surface: #3B4252; --light-text: #ECEFF4; --secondary-text: #D8DEE9;
+    --border-color: #4C566A; --overlay-color: rgba(46, 52, 64, 0.75);
+    --button-active-bg: #292E39;
 }
 
 body[data-theme="aetherial-light"] {
