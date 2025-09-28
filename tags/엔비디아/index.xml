@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>엔비디아 on Archive 03</title>
+    <link>https://archive03.online/tags/%EC%97%94%EB%B9%84%EB%94%94%EC%95%84/</link>
+    <description>Recent content in 엔비디아 on Archive 03</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ko</language>
+    <lastBuildDate>Mon, 01 Sep 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://archive03.online/tags/%EC%97%94%EB%B9%84%EB%94%94%EC%95%84/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>엔비디아($NVDA), 다음 먹거리는 휴머노이드 로봇?</title>
+      <link>https://archive03.online/reports/2025-09-01-nvidia-nvda-is/</link>
+      <pubDate>Mon, 01 Sep 2025 00:00:00 +0000</pubDate>
+      <guid>https://archive03.online/reports/2025-09-01-nvidia-nvda-is/</guid>
+      <description>AI 칩의 제왕 엔비디아가 휴머노이드 로봇 시장에 본격적으로 뛰어들고 있습니다. 로봇의 훈련과 실행 양면에서 수익을 창출하는 엔비디아의 원대한 계획과, 실제 매출로 이어지기까지 넘어야 할 기술 및 안전성의 허들이라는 잠재적 리스크를 놓고 세 명의 전문가가 심도 깊은 토론을 펼칩니다.</description>
+    </item>
+    <item>
+      <title>&#39;신고가 달성&#39; 엔비디아, 앞으로 가격 전망은?</title>
+      <link>https://archive03.online/reports/2025-06-26-nvidia-review/</link>
+      <pubDate>Thu, 26 Jun 2025 00:00:00 +0900</pubDate>
+      <guid>https://archive03.online/reports/2025-06-26-nvidia-review/</guid>
+      <description>역사적 신고가를 경신한 엔비디아, AI 시대의 축포일까, 아니면 위험한 거품일까? AI 시장의 구조적 성장과 강력한 CUDA 생태계라는 쿠루미의 낙관론과, 극단적인 밸류에이션과 경쟁 심화를 경고하는 미카엘의 비관론이 정면으로 충돌합니다. 세 명의 소녀가 엔비디아의 미래를 놓고 벌이는 치열한 토론.</description>
+    </item>
+  </channel>
+</rss>
