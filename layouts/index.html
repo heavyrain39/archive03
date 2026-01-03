@@ -1,40 +1,43 @@
 {{ define "main" }}
 
 {{/* =====================================================================
-    [Archive 03 v2.0] 메인 페이지 레이아웃 (다국어 지원)
+[Archive 03 v2.0] 메인 페이지 레이아웃 (다국어 지원)
 ========================================================================= */}}
 
 <div class="dashboard-container">
 
     <!-- ====================== 섹션 1: 좌상단 (랜덤 섬네일 + 최신글) ====================== -->
     <section class="dashboard-card latest-post-card">
-        
+
         {{ $thumbnails := readDir "static/images/thumbnails" }}
         {{ $randomThumbnail := index ($thumbnails | shuffle) 0 }}
 
         <div class="latest-post-thumbnail-wrapper">
-            <img src="{{ (printf "images/thumbnails/%s" $randomThumbnail.Name) | relURL }}" alt="Random Thumbnail" class="latest-post-thumbnail">
+            {{/* [FIX] 이미지 경로 앞 공백 제거 (확실하게 수정) */}}
+            <img src="{{ printf "images/thumbnails/%s" $randomThumbnail.Name | relURL }}" alt="Random Thumbnail"
+                class="latest-post-thumbnail">
         </div>
 
         {{/* [핵심 수정 1/2] 현재 언어에 해당하는 페이지만 필터링합니다. */}}
         {{/* [최종 수정] 전역 변수 대신, 현재 언어의 'reports' 섹션을 명시적으로 지정하여 페이지를 가져옵니다. */}}
         {{ $reportSection := .Site.GetPage "section" "reports" }}
-        {{ $allReportPages := sort (where $reportSection.Pages "Params.exclude_from_list" "ne" true) "Date" "desc" }}
+        {{ $filteredReports := where $reportSection.Pages "Params.exclude_from_list" "ne" true }}
+        {{ $allReportPages := sort $filteredReports "Date" "desc" }}
 
-        {{ $latestPost := (first 1 $allReportPages) }}
+        {{ $latestPost := first 1 $allReportPages }}
 
         {{ range $latestPost }}
-            <div class="latest-post-content">
-                <h3 class="latest-post-title"><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
-                
-                {{/* [핵심 수정] 현재 언어에 따라 summary 글자 수를 다르게 설정합니다. */}}
-                {{ if eq .Site.Language.Lang "ko" }}
-                    <p class="latest-post-summary">{{ .Summary | truncate 120 "..." }}</p>
-                {{ else }}
-                    <p class="latest-post-summary">{{ .Summary | truncate 180 "..." }}</p>
-                {{ end }}
+        <div class="latest-post-content">
+            <h3 class="latest-post-title"><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
 
-            </div>
+            {{/* [핵심 수정] 현재 언어에 따라 summary 글자 수를 다르게 설정합니다. */}}
+            {{ if eq .Site.Language.Lang "ko" }}
+            <p class="latest-post-summary">{{ .Summary | truncate 120 "..." }}</p>
+            {{ else }}
+            <p class="latest-post-summary">{{ .Summary | truncate 180 "..." }}</p>
+            {{ end }}
+
+        </div>
         {{ end }}
 
     </section>
@@ -42,27 +45,27 @@
     <!-- ====================== 섹션 2: 우상단 (글 목록 + 페이지네이션) ====================== -->
     <section class="dashboard-card post-list-card" id="post-list-card-root">
         <h3 class="card-header">{{ T "articles_heading" }}</h3>
-        
+
         <div class="post-list-container">
-            <div id="post-list-wrapper"> 
+            <div id="post-list-wrapper">
                 <ul class="post-list">
                     {{ $otherPosts := after 1 $allReportPages }}
                     {{ $paginator := .Paginate $otherPosts 11 }}
-                    
+
                     {{ range $paginator.Pages }}
-                        <li>
-                            <a href="{{ .Permalink }}" title="{{ .Title }}">
-                                <span>{{ .Title }}</span>
-                                <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "06.01.02" }}</time>
-                            </a>
-                        </li>
+                    <li>
+                        <a href="{{ .Permalink }}" title="{{ .Title }}">
+                            <span>{{ .Title }}</span>
+                            <time datetime="{{ .Date.Format " 2006-01-02" }}">{{ .Date.Format "06.01.02" }}</time>
+                        </a>
+                    </li>
                     {{ end }}
                 </ul>
             </div>
         </div>
-        
+
         <div id="pagination-nav-wrapper">
-             {{ partial "pagination.html" . }}
+            {{ partial "pagination.html" . }}
         </div>
     </section>
 
@@ -72,8 +75,9 @@
             <h3 class="card-header">{{ T "tags_heading" }}</h3>
             <a href="#" class="refresh-button" aria-label="Refresh Tags">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
-                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
+                    <path
+                        d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
                 </svg>
             </a>
         </div>
@@ -86,18 +90,22 @@
             {{ $half := math.Ceil (div (float $tagsCount) 2.0) }}
             {{ $row1 := first (int $half) $tagsToShow }}
             {{ $row2 := after (int $half) $tagsToShow }}
-            
+
             <!-- [핵심 수정] .Page.Title 뒤에 | lower 를 추가하여 모두 소문자로 만듭니다. -->
             <div class="tag-row">
                 <div class="tag-scroller">
-                    {{ range $row1 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ if eq $.Site.Language.Lang "ko" }}{{ .Page.Title }}{{ else }}{{ .Page.Title | lower }}{{ end }}</a>{{ end }}
-                    {{ range $row1 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ if eq $.Site.Language.Lang "ko" }}{{ .Page.Title }}{{ else }}{{ .Page.Title | lower }}{{ end }}</a>{{ end }}
+                    {{ range $row1 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ if eq $.Site.Language.Lang
+                        "ko" }}{{ .Page.Title }}{{ else }}{{ .Page.Title | lower }}{{ end }}</a>{{ end }}
+                    {{ range $row1 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ if eq $.Site.Language.Lang
+                        "ko" }}{{ .Page.Title }}{{ else }}{{ .Page.Title | lower }}{{ end }}</a>{{ end }}
                 </div>
             </div>
             <div class="tag-row tag-row-reverse">
                 <div class="tag-scroller">
-                    {{ range $row2 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ if eq $.Site.Language.Lang "ko" }}{{ .Page.Title }}{{ else }}{{ .Page.Title | lower }}{{ end }}</a>{{ end }}
-                    {{ range $row2 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ if eq $.Site.Language.Lang "ko" }}{{ .Page.Title }}{{ else }}{{ .Page.Title | lower }}{{ end }}</a>{{ end }}
+                    {{ range $row2 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ if eq $.Site.Language.Lang
+                        "ko" }}{{ .Page.Title }}{{ else }}{{ .Page.Title | lower }}{{ end }}</a>{{ end }}
+                    {{ range $row2 }}<a href="{{ .Page.Permalink }}" class="tag-item">#{{ if eq $.Site.Language.Lang
+                        "ko" }}{{ .Page.Title }}{{ else }}{{ .Page.Title | lower }}{{ end }}</a>{{ end }}
                 </div>
             </div>
         </div>
@@ -109,7 +117,10 @@
         <div class="search-wrapper">
             <input type="search" id="search-input" placeholder='{{ T "search_placeholder" }}'>
             <button id="search-button" aria-label="Search">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path
+                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                </svg>
             </button>
         </div>
         <div id="search-results"></div>
@@ -117,20 +128,38 @@
 
 </div>
 
+<script id="tag-cloud-data" type="application/json">
+[
+    {{ range $i, $t := .Site.Taxonomies.tags.ByCount }}
+    {{ if $i }},{{ end }}
+    { "title": "{{ .Page.Title | safeJS }}", "permalink": "{{ .Page.Permalink | safeJS }}" }
+    {{ end }}
+]
+</script>
+
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    // ... (siteData, 태그 클라우드, 검색 스크립트는 변경 없습니다. 그대로 두세요) ...
-    const siteData = [
-        {{/* [핵심 수정 2/2] Javascript용 데이터 생성 시에도 현재 언어 페이지만 필터링합니다. */}}
-        {{/* [최종 수정] Javascript용 데이터 생성 시에도 동일하게 'reports' 섹션을 명시적으로 지정합니다. */}}
-        {{ $reportSectionJS := .Site.GetPage "section" "reports" }}
-        {{ $allReportPagesForJS := sort (where $reportSectionJS.Pages "Params.exclude_from_list" "ne" true) "Date" "desc" }}
-        {{ range $i, $p := $allReportPagesForJS }}
-            {{ if $i }},{{ end }}
+    document.addEventListener('DOMContentLoaded', () => {
+        const siteData = [
+            {{ $reportSectionJS:= .Site.GetPage "section" "reports" }}
+            {{ $filteredReportsJS:= where $reportSectionJS.Pages "Params.exclude_from_list" "ne" true }}
+            {{ $allReportPagesForJS:= sort $filteredReportsJS "Date" "desc" }}
+            {{ range $i, $p:= $allReportPagesForJS }}
+            {{ if $i }}, {{ end }}
             { "title": "{{ .Title | safeJS }}", "permalink": "{{ .Permalink | safeJS }}", "date": "{{ .Date.Format "2006-01-02" }}", "formattedDate": "{{ .Date.Format "06.01.02" }}", "content": {{ .Content | plainify | jsonify }} }
-        {{ end }}
-    ];
-    const allTags = [ {{- range $i, $tagPage := .Site.Taxonomies.tags.ByCount -}} {{- if $i -}},{{- end -}} { "title": "{{ .Page.Title | safeJS }}", "permalink": "{{ .Page.Permalink | safeJS }}" } {{- end -}} ];
+            {{ end }}
+        ];
+
+    // 태그 클라우드 로직
+    let allTags = [];
+    try {
+        const tagDataEl = document.getElementById('tag-cloud-data');
+        if (tagDataEl) {
+            allTags = JSON.parse(tagDataEl.textContent);
+        }
+    } catch (e) {
+        console.error("Failed to parse tag data", e);
+    }
+
     const currentLang = '{{ .Site.Language.Lang }}';
     const tagCloudContainer = document.querySelector('.tag-cloud');
     const refreshButton = document.querySelector('.refresh-button');
@@ -139,8 +168,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const createAnimatedTagCloudHTML = (tags) => { const half = Math.ceil(tags.length / 2); const row1Tags = tags.slice(0, half); const row2Tags = tags.slice(half); const createRowHTML = (tagArray) => tagArray.map(tag => `<a href="${tag.permalink}" class="tag-item">#${currentLang === 'ko' ? tag.title : tag.title.toLowerCase()}</a>`).join(''); const row1Links = createRowHTML(row1Tags); const row2Links = createRowHTML(row2Tags); return `<div class="tag-row"><div class="tag-scroller">${row1Links}${row1Links}</div></div><div class="tag-row tag-row-reverse"><div class="tag-scroller">${row2Links}${row2Links}</div></div>`; };
         refreshButton.addEventListener('click', (e) => { e.preventDefault(); const newShuffledTags = shuffleArray([...allTags]).slice(0, 30); const newHTML = createAnimatedTagCloudHTML(newShuffledTags); tagCloudContainer.innerHTML = newHTML; });
     }
-    const searchInput = document.getElementById('search-input'); 
-    const searchButton = document.getElementById('search-button'); 
+
+    // 검색 로직
+    const searchInput = document.getElementById('search-input');
+    const searchButton = document.getElementById('search-button');
     const searchResults = document.getElementById('search-results');
     if (searchInput) {
         const performSearch = (query) => {
@@ -174,31 +205,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =========================================================================
-    // [최종 완성] 페이지네이션 (고정 높이 + 클린 슬라이드 애니메이션)
+    // [JS Refactor] Sync Grid Height (Top 15px, Bottom 10px Padding)
     // =========================================================================
     const postListRoot = document.getElementById('post-list-card-root');
     if (postListRoot) {
+
+        // 1. Pagination Logic
         const allPostsData = siteData.slice(1);
         let currentPage = 1;
         const itemsPerPage = 11;
         const totalPages = Math.ceil(allPostsData.length / itemsPerPage);
         let isLoading = false;
+        
+        // [사용자 설정] 리스트 상단/하단 여백 설정
+        const LIST_TOP_PADDING = 15;
+        const LIST_BOTTOM_PADDING = 10;
 
         const postListContainer = document.querySelector('.post-list-container');
         const postListWrapper = document.getElementById('post-list-wrapper');
         const paginationNavWrapper = document.getElementById('pagination-nav-wrapper');
-        
-        // [핵심] 페이지 로드 시, 딱 한 번만 최대 높이를 계산하고 고정시키는 함수
-        const setFixedContainerHeight = () => {
-            const initialList = postListWrapper.querySelector('.post-list');
-            if (initialList) {
-                const requiredHeight = initialList.scrollHeight;
-                // JS로 계산된 최종 높이를 컨테이너에 영구적으로 고정
-                postListContainer.style.height = `${requiredHeight}px`;
-                // 이전에 CSS에 있던 min-height는 더 이상 필요 없으므로 제거
-                postListContainer.style.minHeight = 'auto'; 
-            }
-        };
 
         const renderPage = (page, direction) => {
             if (isLoading || page < 1 || page > totalPages) return;
@@ -210,16 +235,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const newPostList = document.createElement('ul');
             newPostList.className = 'post-list';
-            newPostList.innerHTML = pageData.map(post => 
+            newPostList.innerHTML = pageData.map(post =>
                 `<li><a href="${post.permalink}" title="${post.title}"><span>${post.title}</span><time datetime="${post.date}">${post.formattedDate}</time></a></li>`
             ).join('');
-            
+
             if (direction === 'next') newPostList.style.transform = 'translateX(100%)';
             else newPostList.style.transform = 'translateX(-100%)';
+            
+            // [Style] 상단/하단 여백 적용
+            newPostList.style.justifyContent = 'flex-start';
+            newPostList.style.paddingTop = `${LIST_TOP_PADDING}px`;
+            newPostList.style.paddingBottom = `${LIST_BOTTOM_PADDING}px`;
+            
             postListWrapper.appendChild(newPostList);
 
             const oldPostList = Array.from(postListWrapper.querySelectorAll('.post-list')).find(el => el !== newPostList);
-            
+
+            requestAnimationFrame(() => {
+                 syncGridHeight(); 
+            });
+
             setTimeout(() => {
                 newPostList.style.transform = 'translateX(0)';
                 if (oldPostList) {
@@ -232,11 +267,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     currentPage = page;
                     updatePaginationControls();
                     isLoading = false;
+                    syncGridHeight(); 
                 }, 250);
             }, 10);
         };
-        
-        // [이하 모든 핸들러 및 호출 코드는 이전과 동일합니다]
+
         const updatePaginationControls = () => {
             const prevDisabled = currentPage === 1 ? 'disabled' : '';
             const nextDisabled = totalPages === 0 || currentPage === totalPages ? 'disabled' : '';
@@ -251,10 +286,83 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!window.matchMedia('(max-width: 820px)').matches) {
             document.addEventListener('keydown', handleKeydown);
         }
-        
-        // [핵심] 페이지 첫 로드 시에만 높이를 계산하여 고정
-        setFixedContainerHeight();
         updatePaginationControls();
+
+        // 2. HEIGHT SYNC LOGIC (With Dual Padding Calculation)
+        function syncGridHeight() {
+            if (window.matchMedia('(max-width: 820px)').matches) {
+                const gridContainer = document.querySelector('.dashboard-container');
+                const rightCard = document.querySelector('.post-list-card');
+                if(gridContainer) gridContainer.style.gridTemplateRows = ''; 
+                if(rightCard) rightCard.style.height = 'auto';
+                return;
+            }
+
+            const rightCard = document.querySelector('.post-list-card');
+            const leftCard = document.querySelector('.latest-post-card');
+            const gridContainer = document.querySelector('.dashboard-container');
+            const header = rightCard ? rightCard.querySelector('.card-header') : null;
+            const footer = document.getElementById('pagination-nav-wrapper');
+            const postListWrapper = document.getElementById('post-list-wrapper');
+
+            if (!rightCard || !leftCard || !gridContainer || !postListWrapper) return;
+
+            const currentList = postListWrapper.querySelector('.post-list');
+            
+            let itemHeight = 0;
+            if (currentList) {
+                // [Style] 상단/하단 여백 동기화
+                currentList.style.justifyContent = 'flex-start';
+                currentList.style.paddingTop = `${LIST_TOP_PADDING}px`;
+                currentList.style.paddingBottom = `${LIST_BOTTOM_PADDING}px`;
+
+                const firstItem = currentList.querySelector('li');
+                if (firstItem) {
+                    const style = window.getComputedStyle(firstItem);
+                    const marginTop = parseFloat(style.marginTop) || 0;
+                    const marginBottom = parseFloat(style.marginBottom) || 0;
+                    itemHeight = firstItem.getBoundingClientRect().height + marginTop + marginBottom;
+                }
+            }
+
+            if (itemHeight < 30) itemHeight = 46; 
+
+            // 11 items
+            const pureListHeight = itemHeight * 11;
+
+            const headerHeight = header ? header.getBoundingClientRect().height : 30;
+            const headerStyle = header ? window.getComputedStyle(header) : null;
+            const headerMargin = headerStyle ? (parseFloat(headerStyle.marginBottom) || 0) : 0;
+            
+            const footerHeight = footer ? footer.getBoundingClientRect().height : 60;
+            const footerStyle = window.getComputedStyle(footer);
+            const footerMargin = (parseFloat(footerStyle.marginTop) || 0);
+
+            const cardStyle = window.getComputedStyle(rightCard);
+            const cardPadding = (parseFloat(cardStyle.paddingTop) || 0) + (parseFloat(cardStyle.paddingBottom) || 0);
+
+            // [Calc] 최종 높이 계산: 상단 여백 + 하단 여백 추가
+            const snugHeight = Math.ceil(
+                cardPadding + 
+                headerHeight + headerMargin + 
+                pureListHeight + LIST_TOP_PADDING + LIST_BOTTOM_PADDING + 
+                footerMargin + footerHeight + 
+                5 // 안전 버퍼
+            );
+
+            console.log(`[SnugFit] Padding Top:${LIST_TOP_PADDING}, Bottom:${LIST_BOTTOM_PADDING}. Total: ${snugHeight}px`);
+
+            rightCard.style.height = `${snugHeight}px`;
+            leftCard.style.height = `${snugHeight}px`;
+            leftCard.style.maxHeight = `${snugHeight}px`;
+            gridContainer.style.gridTemplateRows = `${snugHeight}px auto`;
+        }
+
+        window.addEventListener('load', syncGridHeight);
+        window.addEventListener('resize', syncGridHeight);
+        document.fonts.ready.then(syncGridHeight);
+        setTimeout(syncGridHeight, 200);
+        setTimeout(syncGridHeight, 1000);
     }
 });
 </script>
