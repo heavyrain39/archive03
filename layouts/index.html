@@ -346,11 +346,8 @@
                 cardPadding + 
                 headerHeight + headerMargin + 
                 pureListHeight + LIST_TOP_PADDING + LIST_BOTTOM_PADDING + 
-                footerMargin + footerHeight + 
-                5 // 안전 버퍼
+                footerMargin + footerHeight 
             );
-
-            console.log(`[SnugFit] Padding Top:${LIST_TOP_PADDING}, Bottom:${LIST_BOTTOM_PADDING}. Total: ${snugHeight}px`);
 
             rightCard.style.height = `${snugHeight}px`;
             leftCard.style.height = `${snugHeight}px`;

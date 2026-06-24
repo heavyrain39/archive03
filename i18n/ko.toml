@@ -4,6 +4,12 @@ other = "Articles"
 [tags_heading]
 other = "Tags"
 
+[home]
+other = "Home"
+
+[reports]
+other = "Reports"
+
 [search_heading]
 other = "Search"
 

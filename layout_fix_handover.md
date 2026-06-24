@@ -75,3 +75,42 @@
 ---
 
 **결론**: "계산된 높이(524px)"가 "실제 필요한 높이"보다 작다는 것이 거의 확실해 보입니다. 다음 세션에서는 **'왜 클론의 높이가 실제보다 작게 나오는가?'**에 집중하거나, 아예 **'아이템 개수 × 고정 높이(예: 65px)'** 같은 산술적 방식(Heuristic)으로 선회하는 것도 고려해 볼 만합니다.
+
+---
+
+## 🟢 [RESOLVED] 레이아웃 높이 잘림 문제 해결 (2026-01-03)
+
+**상태:** 해결 완료 (Resolved)
+**핵심 원인:** Grid의 `align-items: start` 속성과 `position: absolute` 자식 요소 간의 충돌.
+
+### 1. 원인 분석 (Root Cause Analysis)
+*   **현상:** JavaScript가 Grid Row의 높이를 800px 이상으로 정확히 계산하여 늘렸음에도, 우측 'Articles' 카드는 늘어나지 않고 `min-height` (460px)에 머물러 콘텐츠가 7개만 보이고 잘림.
+*   **이유:**
+    1.  `.dashboard-container`에 **`align-items: start`**가 적용되어 있어, Grid Item(카드)들이 Row 높이에 맞춰 늘어나지 않고(stretch) 자신의 콘텐츠 크기만큼만 차지함.
+    2.  리스트 내부 (`ul.post-list`)가 애니메이션을 위해 **`position: absolute`**로 설정됨.
+    3.  브라우저는 우측 카드의 콘텐츠 높이를 '0'으로 인식하고, CSS에 지정된 최소 높이(460px)까지만 렌더링함.
+    4.  결국 Row 높이는 늘어났으나, 카드는 늘어나지 않아 시각적 불일치 발생.
+
+### 2. 최종 해결책: "Snug Fit Strategy" (정밀 맞춤 전략)
+단순히 Grid Row만 늘리는 것이 아니라, **우측 카드 자체의 높이를 강제로 주입**하여 해결함.
+
+*   **로직 변경:**
+    1.  **Clone 폐기:** 복제본 측정 방식은 부정확하여 폐기.
+    2.  **Live Item 측정:** 실제 렌더링된 `li` 아이템 하나를 `getBoundingClientRect`로 정밀 측정. (약 46px 내외)
+    3.  **여백 확보:** 시각적 균형을 위해 `padding-top: 15px`, `padding-bottom: 10px`을 JS로 강제 주입하고 계산식에 포함.
+    4.  **강제 주입 (Force Injection):** 계산된 `snugHeight`를 다음 세 곳에 모두 적용.
+        *   Grid Container (`gridTemplateRows`)
+        *   Left Card (`style.height` -> 이미지 크롭 유도)
+        *   **Right Card (`style.height` -> ★핵심 솔루션)**
+
+### 3. 향후 유지보수 시 주의사항 (To Future Maintainers)
+이 코드를 수정할 때 다음 사항을 절대 건드리지 마십시오.
+
+1.  **우측 카드의 높이 강제 설정을 삭제하지 말 것:**
+    ```javascript
+    rightCard.style.height = `${snugHeight}px`; // 이거 지우면 다시 7개만 나옴
+    ```
+2.  **CSS `align-items` 속성 주의:** 만약 CSS에서 `align-items: stretch`로 변경한다면 이 JS 로직이 필요 없을 수도 있으나, 썸네일 이미지 비율이 깨질 위험이 있음. 현재의 JS 제어 방식이 가장 안전함.
+3.  **패딩 수정 시:** JS 코드 내 `LIST_TOP_PADDING`과 `LIST_BOTTOM_PADDING` 상수를 함께 수정해야 계산이 틀어지지 않음.
+
+---

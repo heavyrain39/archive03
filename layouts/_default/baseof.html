@@ -11,8 +11,8 @@
     <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ if .IsPage }}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
     <meta name="author" content="{{ .Site.Params.author }}">
     
-    {{ $style := resources.Get "css/style.scss" | resources.ExecuteAsTemplate "style.scss.tpl" . | toCSS | resources.Minify | resources.Fingerprint }}
-    <link rel="stylesheet" href="{{ $style.Permalink }}">
+    {{ $style := partialCached "style-resource.html" . }}
+    <link rel="stylesheet" href="{{ $style.RelPermalink }}">
 
     <style>
       /* [최종 해결책] body를 flex 컨테이너로 만들어 레이아웃을 방어합니다. */
@@ -28,9 +28,10 @@
         margin: 0; /* 브라우저 기본 마진 제거 */
       }
       .page-wrapper {
-        flex: 1 0 auto; /* body의 flex 아이템으로서, 남은 공간을 모두 차지하도록 설정 */
+        flex: 1 0 auto; 
+        display: flex;
+        flex-direction: column;
         width: 100%;
-        overflow-x: hidden; /* 핵심: wrapper 내부에서 발생하는 스크롤을 방지 */
         position: relative; 
       }
     </style>
@@ -39,39 +40,34 @@
       <link rel="shortcut icon" type="image/x-icon" href="{{ "favicon.ico" | relURL }}">
       <!-- [추가] 오픈그래프(OG) 및 트위터 카드 메타 태그 -->
 
-    <meta property="og:site_name" content="{{ .Site.Title }}">
-    {{ if .IsHome }}
-        <meta property="og:title" content="{{ .Site.Title }}">
-        <meta property="og:type" content="website">
-    {{ else }}
-        <meta property="og:title" content="{{ .Title }} | {{ .Site.Title }}">
-        <meta property="og:type" content="article">
-    {{ end }}
-    <meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{ if .IsPage }}{{ .Summary | plainify | truncate 160 "..." }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
-    <meta property="og:url" content="{{ .Permalink }}">
-    {{ $ogImage := "" }}
-    {{ if .Params.image }}
-        {{ $ogImage = resources.Get .Params.image }}
-    {{ end }}
-    {{ if not $ogImage }}
-        {{ $ogImage = resources.Get "images/og-default.png" }}
-    {{ end }}
-    {{ with $ogImage }}
-        <meta property="og:image" content="{{ .Permalink }}">
-        <meta property="og:image:width" content="{{ .Width }}">
-        <meta property="og:image:height" content="{{ .Height }}">
-    {{ end }}
+    {{ partial "seo.html" . }}
 
-    <!-- 트위터 카드 태그 (OG와 대부분 동일한 정보를 사용합니다) -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
-    <meta name="twitter:description" content="{{ with .Description }}{{ . }}{{ else }}{{ if .IsPage }}{{ .Summary | plainify | truncate 160 "..." }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
-    {{ with $ogImage }}
-        <meta name="twitter:image" content="{{ .Permalink }}">
-    {{ end }}
-    <!-- [끝] 오픈그래프(OG) 및 트위터 카드 메타 태그 -->
+    <!-- 자동 다국어 분기 처리 브라우저 스크립트 (수정됨) -->
+    <script>
+      (function() {
+        // 이미 언어 분기 처리를 받은 흔적이 있는지 확인
+        if (!sessionStorage.getItem('archive03-lang-checked')) {
+          var currentPath = window.location.pathname;
+          
+          // 사용자가 명시적으로 /en/이나 /reports/ 링크를 타고 온 경우는 개입하지 않고
+          // 오로지 "아무것도 없는 루트 도메인(/)"으로 최초 접속했을 때만 분기 처리!
+          if (currentPath === '{{ .Site.Home.RelPermalink }}' || currentPath === '{{ .Site.Home.RelPermalink }}index.html') {
+            sessionStorage.setItem('archive03-lang-checked', 'true');
+            
+            var userLang = navigator.language || window.navigator.userLanguage;
+            var isKorean = userLang.toLowerCase().startsWith('ko');
+            
+            // 한국어가 아닌 글로벌 사용자라면 영어판으로 자연스럽게 안내
+            if (!isKorean) {
+              window.location.replace('{{ "en/" | relURL }}');
+            }
+            // 한국어 사용자는 그대로 / (한국어판) 유지
+          }
+        }
+      })();
+    </script>
 </head>
-<body data-theme="default" class="{{ if and .File (eq .File.BaseFileName "search") }}is-search-page{{ end }}">
+<body data-theme="default" class="{{ if .IsHome }}home-page{{ end }} {{ if and .File (eq .File.BaseFileName "search") }}is-search-page{{ end }}">
 
     <!-- 모든 보이는 콘텐츠를 .page-wrapper DIV로 감싸는 구조는 그대로 유지합니다. -->
     <div class="page-wrapper">
@@ -93,6 +89,23 @@
                             </a>
                         </li>
                         {{ end }}
+                        
+                        <!-- 언어 토글 추가 -->
+                        <li>
+                            {{ if .IsTranslated }}
+                                {{ range .Translations }}
+                                <a href="{{ .RelPermalink }}" onclick="sessionStorage.setItem('archive03-lang-checked', 'true');">
+                                    {{ if eq .Language.Lang "en" }}EN{{ else }}KO{{ end }}
+                                </a>
+                                {{ end }}
+                            {{ else }}
+                                {{ if eq .Site.Language.Lang "ko" }}
+                                    <a href="{{ "en/" | relURL }}" onclick="sessionStorage.setItem('archive03-lang-checked', 'true');">EN</a>
+                                {{ else }}
+                                    <a href="{{ .Site.Home.RelPermalink }}" onclick="sessionStorage.setItem('archive03-lang-checked', 'true');">KO</a>
+                                {{ end }}
+                            {{ end }}
+                        </li>
                     </ul>
                 </nav>
             </div>

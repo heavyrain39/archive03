@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://archive03.online/sitemap.xml
+Sitemap: https://heavyrain39.github.io/archive03/sitemap.xml

@@ -5,7 +5,7 @@
    -------------------------------------------------- */
 @font-face {
     font-family: 'Paperlogy';
-    src: url('{{ "fonts/Paperlogy-4Regular.woff2" | relURL }}') format('woff2');
+    src: url('../fonts/Paperlogy-4Regular.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -13,7 +13,7 @@
 
 @font-face {
     font-family: 'Pretendard Variable';
-    src: url('{{ "fonts/PretendardVariable.woff2" | relURL }}') format('woff2-variations');
+    src: url('../fonts/PretendardVariable.woff2') format('woff2-variations');
     font-weight: 100 900;
     font-style: normal;
     font-display: swap;
@@ -194,8 +194,27 @@ h6 {
     border-bottom-color: var(--mint-green);
 }
 
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
 main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     padding-top: var(--spacing-md);
+}
+
+body.home-page {
+    padding-bottom: 0;
+}
+
+/* [복구] 메인 대시보드 수직 중앙 정렬 (푸터 오프셋 보정) */
+body.home-page main {
+    padding-top: 0;
+    padding-bottom: 80px; /* 고정 푸터 높이만큼 보정하여 시각적 중앙 정렬 */
+    justify-content: center;
 }
 
 #main-footer {
@@ -304,6 +323,38 @@ main {
     margin-bottom: var(--spacing-md);
 }
 
+.post-breadcrumbs {
+    margin-bottom: var(--spacing-md);
+    font-size: 0.8rem;
+    color: var(--secondary-text);
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    opacity: 0.4;
+    font-weight: 300;
+
+    a {
+        color: inherit;
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: all var(--transition-speed);
+
+        &:hover {
+            color: var(--mint-green);
+            border-bottom-color: var(--mint-green);
+            opacity: 1;
+        }
+    }
+
+    .separator {
+        opacity: 0.5;
+    }
+
+    .current {
+        color: var(--secondary-text);
+    }
+}
+
 .post-meta {
     color: var(--secondary-text);
     font-size: 0.95rem;
@@ -319,6 +370,28 @@ main {
     margin-bottom: var(--spacing-lg);
     padding-left: 1.4em;
     text-align: justify;
+}
+
+.post-content li {
+    margin-bottom: 0.8rem;
+}
+
+.post-content li:last-child {
+    margin-bottom: 0;
+}
+
+.post-link-reference {
+    display: block;
+    margin: 0.35rem 0;
+    line-height: 1.55;
+}
+
+.post-link-reference + .post-link-reference {
+    margin-top: 0.15rem;
+}
+
+.post-link-reference .post-link-prefix {
+    color: var(--light-text);
 }
 
 .post-content ul ul,
@@ -588,11 +661,6 @@ main {
     gap: var(--spacing-xl);
 }
 
-.cast-card-horizontal:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
 .cast-identity {
     flex-shrink: 0;
     width: 150px;
@@ -695,6 +763,48 @@ main {
     text-align: justify;
 }
 
+.process-card {
+    background-color: var(--dark-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-xl);
+}
+
+.process-intro {
+    color: var(--secondary-text);
+    line-height: 1.8;
+    margin-bottom: var(--spacing-lg);
+    text-align: justify;
+}
+
+.process-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--spacing-md);
+}
+
+.process-item {
+    background-color: var(--dark-bg);
+    border: 1px solid color-mix(in srgb, var(--border-color) 80%, transparent);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-lg);
+}
+
+.process-item h3 {
+    color: var(--mint-green);
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.process-item p {
+    color: var(--secondary-text);
+    font-size: 0.95rem;
+    line-height: 1.65;
+    margin: 0;
+    text-align: left;
+}
+
 /* --------------------------------------------------
    8. Operator 섹션 스타일
    -------------------------------------------------- */
@@ -746,7 +856,6 @@ main {
     background-color: var(--mint-green);
     color: var(--dark-bg);
     border-color: var(--mint-green);
-    transform: translateY(-3px);
 }
 
 body[data-theme="aetherial-light"] .button-with-icon:hover {
@@ -1289,7 +1398,6 @@ body[data-theme="aetherial-light"] #search-button {
 }
 
 .list-page-post-list li a:hover {
-    transform: translateY(-5px);
     border-color: var(--mint-green);
     color: var(--light-text);
 }

@@ -2,7 +2,7 @@
 
 > Financial Insights from 3 Non-human Girls
 
-[![Website](https://img.shields.io/badge/Website-Live-brightgreen?style=for-the-badge)](https://archive03.online/)
+[![Website](https://img.shields.io/badge/Website-Live-brightgreen?style=for-the-badge)](https://heavyrain39.github.io/archive03/)
 
 ![Archive 03 Banner](static/images/mew-kurumi-mikael-banner.webp)
 
@@ -40,7 +40,7 @@
 
 > 세 명의 인외(人外) 소녀가 전하는 투자 인사이트
 
-[![Website](https://img.shields.io/badge/Website-Live-brightgreen?style=for-the-badge)](https://archive03.online/)
+[![Website](https://img.shields.io/badge/Website-Live-brightgreen?style=for-the-badge)](https://heavyrain39.github.io/archive03/)
 
 ![Archive 03 Banner](static/images/mew-kurumi-mikael-banner.webp)
 

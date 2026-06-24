@@ -6,7 +6,7 @@
 
 echo -e "\033[0;32mDeploying updates to GitHub...\033[0m"
 
-readonly BASE_URL="https://archive03.online/"
+readonly BASE_URL="https://heavyrain39.github.io/archive03/"
 
 # [핵심 수정!] Step 0: 기존 빌드 폴더(public)를 깨끗하게 삭제합니다.
 # 이 과정을 통해, 로컬에서 삭제된 파일이 배포 브랜치에 유령처럼 남는 문제를
@@ -16,7 +16,7 @@ rm -rf public
 
 # Step 1: 깨끗한 상태에서 사이트를 새로 빌드합니다.
 echo "Building site with Hugo..."
-hugo -b "$BASE_URL"
+hugo -b "$BASE_URL" --noTimes --noChmod --noBuildLock
 
 # Step 2: 빌드된 public 폴더로 이동합니다.
 cd public || { echo "Hugo build failed. 'public' directory not found."; exit 1; }

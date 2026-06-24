@@ -50,7 +50,17 @@
         }
 
         // 낫표(「」)와 함께 멋진 제목을 생성합니다.
-        titleEl.innerHTML = t.titleFormat.replace('{0}', `<span class="color-accent">${query}</span>`);
+        const renderSearchTitle = () => {
+            const parts = t.titleFormat.split('{0}');
+            titleEl.textContent = '';
+            titleEl.appendChild(document.createTextNode(parts[0] || ''));
+            const querySpan = document.createElement('span');
+            querySpan.className = 'color-accent';
+            querySpan.textContent = query;
+            titleEl.appendChild(querySpan);
+            titleEl.appendChild(document.createTextNode(parts.slice(1).join('{0}') || ''));
+        };
+        renderSearchTitle();
 
         const lowerCaseQuery = query.toLowerCase();
         const allResults = searchData.filter(post => 
@@ -82,8 +92,24 @@
             
             pageResults.forEach(post => {
                 const li = document.createElement('li');
-                // 태그 목록 페이지와 동일한 HTML 구조를 사용합니다.
-                li.innerHTML = `<a href="${post.permalink}"><span class="list-page-post-title">${post.title}</span><div class="list-page-post-meta"><span class="summary">${post.summary}</span></div></a>`;
+                const link = document.createElement('a');
+                link.href = post.permalink;
+
+                const title = document.createElement('span');
+                title.className = 'list-page-post-title';
+                title.textContent = post.title;
+
+                const meta = document.createElement('div');
+                meta.className = 'list-page-post-meta';
+
+                const summary = document.createElement('span');
+                summary.className = 'summary';
+                summary.textContent = post.summary;
+
+                meta.appendChild(summary);
+                link.appendChild(title);
+                link.appendChild(meta);
+                li.appendChild(link);
                 resultList.appendChild(li);
             });
             resultsEl.appendChild(resultList);

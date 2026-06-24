@@ -1,5 +1,7 @@
 # Hugo-generated files
 /resources/
+/.hugo_build.lock
+/tmp/
 /node_modules/
 
 # OS-generated files

@@ -1,0 +1,1 @@
+{{ return (resources.Get "css/style.scss" | toCSS | resources.Minify | resources.Fingerprint) }}

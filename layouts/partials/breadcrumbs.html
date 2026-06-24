@@ -1,0 +1,7 @@
+<nav class="post-breadcrumbs" aria-label="Breadcrumb">
+  <a href="{{ .Site.BaseURL | relLangURL }}">{{ T "home" | default "Home" }}</a>
+  <span class="separator">/</span>
+  <a href="{{ "reports/" | relLangURL }}">{{ T "reports" | default "Reports" }}</a>
+  <span class="separator">/</span>
+  <span class="current">{{ .Title }}</span>
+</nav>

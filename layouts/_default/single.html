@@ -15,6 +15,7 @@
 
     <div class="container post-body-container">
         <div class="post-content">
+            {{ partial "breadcrumbs.html" . }}
             {{ .Content }}
 
             {{ if .Params.tags }}

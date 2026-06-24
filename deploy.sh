@@ -12,10 +12,15 @@ echo -e "\033[0;32mDeploying updates to GitHub...\033[0m"
 # Step 1: Hugo로 사이트를 빌드합니다.
 # 빌드된 결과물은 이미 'gh-pages' 브랜치의 복사본인 'public' 폴더 안으로 들어갑니다.
 echo "Building site with Hugo..."
-hugo --cleanDestinationDir --minify # --minify 플래그를 추가하여 빌드 결과물을 압축합니다.
+hugo --cleanDestinationDir --minify --noTimes --noChmod --noBuildLock # Windows 환경의 파일 메타데이터/락 문제를 피하면서 빌드 결과물을 압축합니다.
 
 # Step 2: 배포 폴더(서브모듈)로 이동합니다.
 cd public || { echo "'public' directory not found. Exiting."; exit 1; }
+
+# Keep Hugo-generated HTML/CSS/JS as LF inside the gh-pages submodule.
+# This prevents noisy Windows Git warnings during `git add`.
+git config core.autocrlf false
+git config core.eol lf
 
 # Step 3: 변경 사항이 있는지 확인하고, 없다면 스크립트를 종료합니다.
 if [[ -z $(git status -s) ]]; then
